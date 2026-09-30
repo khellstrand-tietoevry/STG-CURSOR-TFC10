@@ -1,0 +1,60 @@
+      *################################################################*00010000
+      *                                                                 00020000
+      * FD Trade Finance                                                00030000
+      *                                                                 00040000
+      * Copy-area R115L040.                                             00050005
+      *                                                                 00060000
+      * Module which will update statuslist                             00070005
+      *                                                                 00200000
+      * An ordinary call may look like this:                            00210001
+      *                                                                 00220000
+      *    Initialize                          R115L040-Gen-Contract-No 00230005
+      *    Set   R115L040-Version        To    True                     00240005
+      *    Set   R115L040-In-Select      To    True                     00250005
+      *    Move  &Fin-inst-id            To    R115L040-In-Fin-Inst-Id  00270007
+      *    Move  &contract-type          To    R115L040-In-Contract-Type00270007
+      *    Move  &operation-type               R115L040-In-Operationtype00270007
+      *                                                                 00290000
+      *    Call  'F115L040'              Using R115L040-Count-Statuslist00300005
+      *                                        R7919999-Error           00310000
+      *    End-Call                                                     00320000
+      *                                                                 00330000
+      *    Evaluate True                                                00340000
+      *      When R7919999-Retur-Abend                                  00350000
+      *        Move  '&&&&'              To    R7919999-Paragraf        00360000
+      *        Perform Z900-Abend                                       00370000
+      *                                                                 00380000
+      *      When R7919999-Retur-Feil                                   00390000
+      *        ...not found...                                          00400000
+      *                                                                 00410000
+      *      When R7919999-Retur-OK                                     00420000
+      *        ...found...                                              00430000
+      *                                                                 00440000
+      *    End-Evaluate                                                 00450000
+      *                                                                 00460000
+      *################################################################*00470000
+      * Date ! Si! Change description                            ! 3A ! 00480000
+      *------+---+-----------------------------------------------+----+ 00490000
+      *250900!NDL! New copy area                                 !LR02! 00500003
+      *################################################################*00510000
+      *                                                                 00520000
+         03  R115L040-Count-Statuslist.                                 00530005
+      *                                                                 00540000
+           05  R115L040-Version-No              Pic  X(08).             00550005
+             88  R115L040-Version                    Value '20000925'.  00560005
+      *                                                                 00570000
+      *----------------------------------------------------------------*00580000
+      *                                                                 00690020
+           05  R115L040-Qualification.                                  00690100
+      *                                                                 00690200
+             10  R115L040-In-Key.                                       00860005
+      *                                                                 00870001
+               15  R115L040-In-Fin-Inst-No      Pic  X(18).             00890005
+               15  R115L040-In-Contract-Type    Pic  X(03).             00890005
+               15  R115L040-In-Operationtype    Pic  X(35).             00890005
+      *                                                                 01140000
+      *----------------------------------------------------------------*01150000
+      *                                                                 01160000
+           05  R115L040-Data.                                           01170005
+      *                                                                 01180000
+             10  R115L140-Dummy                 Pic  X(01).                     

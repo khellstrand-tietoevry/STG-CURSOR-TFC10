@@ -1,0 +1,1472 @@
+      *<META FTFCK100>                                                  00010000
+       Identification Division.                                         00020000
+       Program-Id. FTFCK100.                                            00030000
+       Author. Z3216TW                                                  00040000
+      *################################################################*00050000
+      * Servo - logic-level / K-module - Control module.               *00060000
+      * Uses STG, in accordance with new Servo Standards.              *00070000
+      *                                                                *00080000
+      * TFU10 / 01 - Endre hovedkontrakt                               *00090000
+      *                                                                *00100000
+      * Code between <META> and </META> tags must not be modified. Do  *00110000
+      * your modifications in the specified user sections !            *00120000
+      *                                                                *00130000
+      *################################################################*00140000
+      * Date ! Si! Type of change                                ! 3A !*00150000
+      *------+---+-----------------------------------------------+----+*00160000
+      *161205!HF !Det er tidligere blitt hardkodet inn 'M' som   !    !*00170012
+      *      !   !lovlig kode i item 045- dette har så blitt     !    !*00170012
+      *      !   !kopiert over. Nå er det ordnet ved å endre på  !    !*00170012
+      *      !   !selve stg-funksjonen - slik det skal gjøres.   !    !*00170012
+      *------+---+-----------------------------------------------+----+*00160000
+      *140319!KR !Automatisk provisjonsbelastning garantier      !LO18!*00170012
+      *------+---+-----------------------------------------------+----+*00170112
+      *110323!NDL!Fra brukerforum: ELC utløpsdato                !LO18!*00170212
+      *------+---+-----------------------------------------------+----+*00170312
+      *091126!NDL!'M' is valid in Confirmed                      !LO18!*00170412
+      *------+---+-----------------------------------------------+----+*00170512
+      *090805!NDL!Check on Due Date                              !LO18!*00170612
+      *------+---+-----------------------------------------------+----+*00171000
+      *030703!NDL!Added Silent Confirmation                      !LY15!*00172000
+      *------+---+-----------------------------------------------+----+*00180000
+      *010913!NDL!Expiry-date can not be back in time (Susanne)  !LO18!*00190000
+      *------+---+-----------------------------------------------+----+*00200000
+      *000616!NDL!Expiry-date can be back in time                !LO18!*00210000
+      *------+---+-----------------------------------------------+----+*00220000
+      *990318!&&&!New Module                                     !&&&&!*00230000
+      *################################################################*00240000
+       Environment Division.                                            00250000
+       Configuration Section.                                           00260000
+       Special-Names.                                                   00270000
+           Decimal-Point Is Comma.                                      00280000
+      *################################################################*00290000
+       Data Division.                                                   00300000
+       Working-Storage Section.                                         00310000
+      *                                                                 00320000
+       01  W-Work-Fields.                                               00330000
+      *                                                                 00340000
+      *<META WA-START>                                                  00350000
+           05  Filler                     Pic   X(08) Value 'WA-START'. 00360000
+      *</META>                                                          00370000
+      *                                                                 00380000
+           05  Ws-Tenor                   Pic   X(06).                  00390000
+           05  Filler                     Redefines Ws-Tenor.           00400000
+               10  Ws-Tenor-DM            Pic   X(01).                  00410000
+               10  Ws-Tenor-No-Of-DM      Pic   9(03).                  00420000
+               10  Ws-Tenor-Code          Pic   9(02).                  00430000
+      *                                                                 00440000
+      *                                                                 00450000
+      *<META WA-STOP>                                                   00460000
+           05  Filler                     Pic   X(08) Value 'WA-STOP '. 00470000
+      *</META>                                                          00480000
+      *                                                                 00490000
+      *----------------------------------------------------------------*00500000
+      *                                                                 00510000
+      * Misc. copy books :                                              00520000
+      *                                                                 00530000
+      *<META MISC-COPY1>                                                00540000
+           Copy R7919040.                                               00550000
+      *</META>                                                          00560000
+      *01  Filler.                                                      00570000
+      *                                                                 00580000
+      *                                                                 00590000
+      *<META MISC-COPY2>                                                00600000
+      *</META>                                                          00610000
+      *                                                                 00620000
+       01  Filler.                                                      00630000
+           Copy R115ISC0.                                               00640000
+       01  Filler.                                                      00650000
+           Copy R115ISR0.                                               00660000
+       01  Filler.                                                      00670000
+           Copy R115L050.                                               00680000
+      *                                                                 00690000
+           Copy R7919010.                                               00691001
+           Copy R7918030.                                               00700000
+           Copy R115X000.                                               00710000
+      *                                                                 00720000
+      *################################################################*00730000
+       Linkage Section.                                                 00740000
+      *                                                                 00750000
+      * Fixed header from STG                                           00760000
+      *                                                                 00770000
+       01  L-STG-Header.                                                00780000
+           Copy R400CH02.                                               00790000
+      *                                                                 00800000
+      * Function data                                                   00810000
+      *                                                                 00820000
+       01  L-Data.                                                      00830000
+           Copy RTFCE100.                                               00840000
+      *                                                                 00850000
+      * Standard error area                                             00860000
+      *                                                                 00870000
+       Copy  R7919999.                                                  00880000
+      *                                                                 00890000
+      *################################################################*00900000
+       Procedure Division                Using L-Stg-Header             00910000
+                                               L-Data                   00920000
+                                               R7919999-Error.          00930000
+      *                                                                 00940000
+      *<META A000-MAIN>                                                 00950000
+       A000-Main                         Section.                       00960000
+      *                                                                 00970000
+           Perform B000-Initialize                                      00980000
+      *                                                                 00990000
+           Perform C000-Input-Control                                   01000000
+           Perform D000-Prepare-DB-Read                                 01010000
+           Perform E000-Control-Base                                    01020000
+           .                                                            01030000
+      *                                                                 01040000
+       A000-Main-Ex.                                                    01050000
+           Goback.                                                      01060000
+      *</META>                                                          01070000
+                                                                        01080000
+      *################################################################*01090000
+      * Initialize necessary work fields                               *01100000
+      *                                                                *01110000
+      *----------------------------------------------------------------*01120000
+      *<META B000-INITIAIZE>                                            01130000
+       B000-Initialize                   Section.                       01140000
+      *                                                                 01150000
+           Set  R7919999-Retur-Ok        To    True                     01160000
+           Initialize                          W-Work-Fields            01170000
+      *</META>                                                          01180000
+      *                                                                 01190000
+      *    User initialisaztion should be placed here                   01200000
+      *                                                                 01210000
+           .                                                            01220000
+      *                                                                 01230000
+      *<META B000-INITIALIZE-EX>                                        01240000
+       B000-Initialize-Ex.                                              01250000
+           Exit.                                                        01260000
+      *</META>                                                          01270000
+                                                                        01280000
+      *################################################################*01290000
+      * Perform the required input controls                            *01300000
+      *                                                                *01310000
+      *----------------------------------------------------------------*01320000
+      *<META C000-INPUT-CONTROL>                                        01330000
+       C000-Input-Control                Section.                       01340000
+      *                                                                 01350000
+           Perform C110-Mandatory-Fields-UB                             01360000
+           Perform C100-Mandatory-Fields                                01370000
+           Perform C120-Mandatory-Fields-UA                             01380000
+           Perform C210-Out-Fields-UB                                   01390000
+           Perform C200-Out-Fields                                      01400000
+           Perform C220-Out-Fields-UA                                   01410000
+           Perform C310-Permitted-Values-UB                             01420000
+           Perform C300-Permitted-Values                                01430000
+           Perform C320-Permitted-Values-UA                             01440000
+           Perform C410-Default-Values-UB                               01450000
+           Perform C400-Default-Values                                  01460000
+           Perform C420-Default-Values-UA                               01470000
+           Perform C510-Dependencies-UB                                 01480000
+           Perform C500-Dependencies                                    01490000
+           Perform C520-Dependencies-UA                                 01500000
+           .                                                            01510000
+      *                                                                 01520000
+       C000-Input-Control-Ex.                                           01530000
+           Exit.                                                        01540000
+      *</META>                                                          01550000
+                                                                        01560000
+      *################################################################*01570000
+      * We have to make sure we have all required input fields         *01580000
+      *                                                                *01590000
+      *----------------------------------------------------------------*01600000
+       C100-Mandatory-Fields             Section.                       01610000
+      *                                                                 01620000
+      *  This code is maintained by the codegenerator. Any user changes 01630000
+      *  between the META tags will be lost. Any user code should be    01640000
+      *  placed in the C110.... or C120..... sections                   01650000
+      *                                                                 01660000
+      *<META C100-MANDATORY-FIELDS>                                     01670000
+      *                                                                         
+      *     Fin-Inst-No must be present                                         
+      *                                                                         
+           If  RTFCE100-I-Fin-Inst-No-I  Not = 'U'                              
+               Move  'F'                 To    RTFCE100-I-Fin-Inst-No-O         
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Fin-Inst-No'       To    R400CH01-Message-Data(1)         
+               Move  'GL-ANGI-FELT&'     To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-If                                                               
+      *                                                                         
+      *     Kontrakt-Type must be present                                       
+      *                                                                         
+           If  RTFCE100-I-Contract-Type-I                                       
+                                         Not = 'U'                              
+               Move  'F'                 To                                     
+                                         RTFCE100-I-Contract-Type-O             
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Kontrakt-Type'     To    R400CH01-Message-Data(1)         
+               Move  'GL-ANGI-FELT&'     To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-If                                                               
+      *                                                                         
+      *     Operasjons-Art must be present                                      
+      *                                                                         
+           If  RTFCE100-I-Operation-Type-I                                      
+                                         Not = 'U'                              
+               Move  'F'                 To                                     
+                                         RTFCE100-I-Operation-Type-O            
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Operasjons-Art'    To    R400CH01-Message-Data(1)         
+               Move  'GL-MISSING-FIELD&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-If                                                               
+      *</META>                                                          02020000
+      *                                                                 02030000
+           Continue                                                     02040000
+           .                                                            02050000
+      *                                                                 02060000
+      *<META C100-MANDATORY-FIELDS-EX>                                  02070000
+       C100-Mandatory-Fields-Ex.                                        02080000
+           Exit.                                                        02090000
+      *</META>                                                          02100000
+                                                                        02110000
+      *################################################################*02120000
+      * We have to make sure we have all required input fields         *02130000
+      * (User Code to execute before generated code)                   *02140000
+      *----------------------------------------------------------------*02150000
+      *<META C110-MANDATORY-FIELDS-UB>                                  02160000
+       C110-Mandatory-Fields-UB          Section.                       02170000
+      *                                                                 02180000
+      *</META>                                                          02190000
+      *                                                                 02200000
+           Continue                                                     02210000
+      *                                                                 02220000
+           .                                                            02230000
+      *                                                                 02240000
+      *<META C110-MANDATORY-FIELDS-UB-EX>                               02250000
+       C110-Mandatory-Fields-UB-Ex.                                     02260000
+           Exit.                                                        02270000
+      *</META>                                                          02280000
+                                                                        02290000
+      *################################################################*02300000
+      * We have to make sure we have all required input fields         *02310000
+      * (User Code to execute after generated code)                    *02320000
+      *----------------------------------------------------------------*02330000
+      *<META C120-MANDATORY-FIELDS-UA>                                  02340000
+       C120-Mandatory-Fields-UA          Section.                       02350000
+      *                                                                 02360000
+      *</META>                                                          02370000
+      *                                                                 02380000
+           Continue                                                     02390000
+      *                                                                 02400000
+           .                                                            02410000
+      *                                                                 02420000
+      *<META C120-MANDATORY-FIELDS-UA-EX>                               02430000
+       C120-Mandatory-Fields-UA-Ex.                                     02440000
+           Exit.                                                        02450000
+      *</META>                                                          02460000
+                                                                        02470000
+      *################################################################*02480000
+      * Output fields can not be part of the input data                *02490000
+      *                                                                *02500000
+      *----------------------------------------------------------------*02510000
+       C200-Out-Fields                   Section.                       02520000
+      *                                                                 02530000
+      *  This code is maintained by the codegenerator. Any user changes 02540000
+      *  between the META tags will be lost. Any user code should be    02550000
+      *  placed in the C210... or C220.... sections.                    02560000
+      *                                                                 02570000
+      *<META C200-OUT-FIELDS>                                           02580000
+      *                                                                         
+      *    Utregnet-Max-Beløp is an output field                                
+      *                                                                         
+           If  RTFCE100-O-Calc-Max-Amount-I                                     
+                                         =     'U'                              
+               Move  'F'                 To                                     
+                                         RTFCE100-O-Calc-Max-Amount-O           
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Utregnet-Max-Beløp'                                       
+                                         To    R400CH01-Message-Data(1)         
+               Move  'GL-UTFELT-UTFYLT&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-If                                                               
+      *</META>                                                          02720000
+           Continue                                                     02730000
+           .                                                            02740000
+      *                                                                 02750000
+      *<META C200-OUT-FIELDS-EX>                                        02760000
+       C200-Out-Fields-Ex.                                              02770000
+           Exit.                                                        02780000
+      *</META>                                                          02790000
+                                                                        02800000
+      *################################################################*02810000
+      * Output fields can not be part of the input data                *02820000
+      * (User Code to execute before generated code)                   *02830000
+      *----------------------------------------------------------------*02840000
+      *<META C210-OUT-FIELDS-UB>                                        02850000
+       C210-Out-Fields-UB                Section.                       02860000
+      *                                                                 02870000
+      *</META>                                                          02880000
+           Continue                                                     02890000
+           .                                                            02900000
+      *                                                                 02910000
+      *<META C210-OUT-FIELDS-UB-EX>                                     02920000
+       C210-Out-Fields-UB-Ex.                                           02930000
+           Exit.                                                        02940000
+      *</META>                                                          02950000
+                                                                        02960000
+      *################################################################*02970000
+      * Output fields can not be part of the input data                *02980000
+      * (User Code to execute after  generated code)                   *02990000
+      *----------------------------------------------------------------*03000000
+      *<META C220-OUT-FIELDS-UA>                                        03010000
+       C220-Out-Fields-UA                Section.                       03020000
+      *                                                                 03030000
+      *</META>                                                          03040000
+      *                                                                 03050000
+           Continue                                                     03060000
+      *                                                                 03070000
+           .                                                            03080000
+      *                                                                 03090000
+      *<META C220-OUT-FIELDS-UA-EX>                                     03100000
+       C220-Out-Fields-UA-Ex.                                           03110000
+           Exit.                                                        03120000
+      *</META>                                                          03130000
+                                                                        03140000
+      *################################################################*03150000
+      * Test permitted values                                          *03160000
+      *                                                                *03170000
+      *----------------------------------------------------------------*03180000
+       C300-Permitted-Values             Section.                       03190000
+      *                                                                 03200000
+      *  This code is maintained by the codegenerator. Any user changes 03210000
+      *  between the META tags will be lost. Any user code should be    03220000
+      *  placed in the C310-... or C320... sections                     03230000
+      *                                                                 03240000
+      *<META C300-PERMITTED-VALUES>                                     03250000
+      *                                                                         
+      *    Kontrakt-Nr must be numeric if present.                              
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-B-Contract-No-I                                     
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-B-Contract-No-D                                     
+                                         Not Numeric                            
+               Move  'F'                 To    RTFCE100-B-Contract-No-O         
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Kontrakt-Nr'       To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Validating permitted values for Silent-Confirmation                  
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Silent-Confr-I                                    
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Silent-Confr-D                                    
+                                         Not = 'Y'                              
+              And  RTFCE100-I-Silent-Confr-D                                    
+                                         Not = 'N'                              
+               Move  'F'                 To    RTFCE100-I-Silent-Confr-O        
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Silent-Confirmation'                                      
+                                         To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Validating permitted values for Bekreftet/Ubekreftet                 
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Confirmed-I                                       
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Confirmed-D                                       
+                                         Not = 'Y'                              
+              And  RTFCE100-I-Confirmed-D                                       
+                                         Not = 'N'                              
+              And  RTFCE100-I-Confirmed-D                                       
+                                         Not = 'M'                              
+               Move  'F'                 To    RTFCE100-I-Confirmed-O           
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Bekreftet/Ubekreftet'                                     
+                                         To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Oppfølgningsdato must be numeric if present.                         
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Follow-Up-Date-I                                  
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Follow-Up-Date-D                                  
+                                         Not Numeric                            
+               Move  'F'                 To                                     
+                                         RTFCE100-I-Follow-Up-Date-O            
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Oppfølgningsdato'  To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+             When Other                                                         
+      *                                                                         
+      *    Oppfølgningsdato må inneholde gyldig dato.                           
+      *                                                                         
+               Initialize                R7919040-Validate-Date                 
+               Set  R7919040-Version     To    True                             
+               Move  RTFCE100-I-Follow-Up-Date-D                                
+                                         To    R7919040-In-Date                 
+               Call  'F7919040'          Using R7919040-Validate-Date           
+                                               R7919999-Error                   
+               End-Call                                                         
+                                                                                
+               If  Not R7919999-Return-Ok                                       
+                   Move  'F'             To                                     
+                                         RTFCE100-I-Follow-Up-Date-O            
+                   Move  'FELT1'         To    R400CH01-Message-Key(1)          
+                   Move  'Oppfølgningsdato'                                     
+                                         To    R400CH01-Message-Data(1)         
+                   Move  'GL-UGYLDIG-VERDI&'                                    
+                                         To    R400CH01-Message-Code            
+                   Perform  Z700-Error-AE                                       
+               End-If                                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Forfallsdato must be numeric if present.                             
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Due-Date-I Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Due-Date-D Not Numeric                            
+               Move  'F'                 To    RTFCE100-I-Due-Date-O            
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Forfallsdato'      To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+             When Other                                                         
+      *                                                                         
+      *    Forfallsdato må inneholde gyldig dato.                               
+      *                                                                         
+               Initialize                R7919040-Validate-Date                 
+               Set  R7919040-Version     To    True                             
+               Move  RTFCE100-I-Due-Date-D                                      
+                                         To    R7919040-In-Date                 
+               Call  'F7919040'          Using R7919040-Validate-Date           
+                                               R7919999-Error                   
+               End-Call                                                         
+                                                                                
+               If  Not R7919999-Return-Ok                                       
+                   Move  'F'             To    RTFCE100-I-Due-Date-O            
+                   Move  'FELT1'         To    R400CH01-Message-Key(1)          
+                   Move  'Forfallsdato'  To    R400CH01-Message-Data(1)         
+                   Move  'GL-UGYLDIG-VERDI&'                                    
+                                         To    R400CH01-Message-Code            
+                   Perform  Z700-Error-AE                                       
+               End-If                                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Utløpsdato must be numeric if present.                               
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Expiry-Date-I                                     
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Expiry-Date-D                                     
+                                         Not Numeric                            
+               Move  'F'                 To    RTFCE100-I-Expiry-Date-O         
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Utløpsdato'        To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+             When Other                                                         
+      *                                                                         
+      *    Utløpsdato må inneholde gyldig dato.                                 
+      *                                                                         
+               Initialize                R7919040-Validate-Date                 
+               Set  R7919040-Version     To    True                             
+               Move  RTFCE100-I-Expiry-Date-D                                   
+                                         To    R7919040-In-Date                 
+               Call  'F7919040'          Using R7919040-Validate-Date           
+                                               R7919999-Error                   
+               End-Call                                                         
+                                                                                
+               If  Not R7919999-Return-Ok                                       
+                   Move  'F'             To    RTFCE100-I-Expiry-Date-O         
+                   Move  'FELT1'         To    R400CH01-Message-Key(1)          
+                   Move  'Utløpsdato'    To    R400CH01-Message-Data(1)         
+                   Move  'GL-UGYLDIG-VERDI&'                                    
+                                         To    R400CH01-Message-Code            
+                   Perform  Z700-Error-AE                                       
+               End-If                                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Utstedt-Dato must be numeric if present.                             
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Issued-Date-I                                     
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Issued-Date-D                                     
+                                         Not Numeric                            
+               Move  'F'                 To    RTFCE100-I-Issued-Date-O         
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Utstedt-Dato'      To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+             When Other                                                         
+      *                                                                         
+      *    Utstedt-Dato må inneholde gyldig dato.                               
+      *                                                                         
+               Initialize                R7919040-Validate-Date                 
+               Set  R7919040-Version     To    True                             
+               Move  RTFCE100-I-Issued-Date-D                                   
+                                         To    R7919040-In-Date                 
+               Call  'F7919040'          Using R7919040-Validate-Date           
+                                               R7919999-Error                   
+               End-Call                                                         
+                                                                                
+               If  Not R7919999-Return-Ok                                       
+                   Move  'F'             To    RTFCE100-I-Issued-Date-O         
+                   Move  'FELT1'         To    R400CH01-Message-Key(1)          
+                   Move  'Utstedt-Dato'  To    R400CH01-Message-Data(1)         
+                   Move  'GL-UGYLDIG-VERDI&'                                    
+                                         To    R400CH01-Message-Code            
+                   Perform  Z700-Error-AE                                       
+               End-If                                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Kontraktsbeløp must be numeric if present.                           
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Orig-Amount-I                                     
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Orig-Amount-D                                     
+                                         Not Numeric                            
+               Move  'F'                 To    RTFCE100-I-Orig-Amount-O         
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Kontraktsbeløp'    To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Max-Prosent-Toleranse must be numeric if present.                    
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Max-Pst-Tolerance-I                               
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Max-Pst-Tolerance-D                               
+                                         Not Numeric                            
+               Move  'F'                 To                                     
+                                         RTFCE100-I-Max-Pst-Tolerance-O         
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Max-Prosent-Toleranse'                                    
+                                         To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-Evaluate                                                         
+      *                                                                         
+      *    Min-Prosent-Tolerance must be numeric if present.                    
+      *                                                                         
+           Evaluate True                                                        
+             When  RTFCE100-I-Min-Pst-Tolerance-I                               
+                                         Not = 'U'                              
+               Continue                                                         
+             When  RTFCE100-I-Min-Pst-Tolerance-D                               
+                                         Not Numeric                            
+               Move  'F'                 To                                     
+                                         RTFCE100-I-Min-Pst-Tolerance-O         
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Min-Prosent-Tolerance'                                    
+                                         To    R400CH01-Message-Data(1)         
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-Evaluate                                                         
+      *</META>                                                          05670000
+           Continue                                                     05680000
+           .                                                            05690000
+      *                                                                 05700000
+      *<META C300-PERMITTED-VALUES-EX>                                  05710000
+       C300-Permitted-Values-Ex.                                        05720000
+           Exit.                                                        05730000
+      *</META>                                                          05740000
+                                                                        05750000
+      *################################################################*05760000
+      * Test permitted values                                          *05770000
+      * (User Code to execute before generated code)                   *05780000
+      *----------------------------------------------------------------*05790000
+      *<META C310-PERMITTED-VALUES-UB>                                  05800000
+       C310-Permitted-Values-UB          Section.                       05810000
+      *                                                                 05820000
+      *</META>                                                          05830000
+      *                                                                 05840000
+           Continue                                                     05850000
+      *                                                                 05860000
+           .                                                            05870000
+      *                                                                 05880000
+      *<META C310-PERMITTED-VALUES-UB-EX>                               05890000
+       C310-Permitted-Values-UB-Ex.                                     05900000
+           Exit.                                                        05910000
+      *</META>                                                          05920000
+                                                                        05930000
+      *################################################################*05940000
+      * Test permitted values                                          *05950000
+      * (User Code to execute after  generated code)                   *05960000
+      *----------------------------------------------------------------*05970000
+      *<META C320-PERMITTED-VALUES-UA>                                  05980000
+       C320-Permitted-Values-UA          Section.                       05990000
+      *                                                                 06000000
+      *</META>                                                          06010000
+      *                                                                 06020000
+           Evaluate True                                                06030000
+             When  RTFCE100-I-Follow-Up-Date-I = 'U'                    06040000
+              And  RTFCE100-I-Follow-Up-Date-D < R400CH01-System-Date   06050000
+               Move  'F'                 To    RTFCE100-I-Due-Date-O    06060000
+               Move  'FELT1'             To    R400CH01-Message-Key(1)  06070000
+               Move  'Oppfølgingsdato'   To    R400CH01-Message-Data(1) 06080000
+               Move  'FELT2'             To    R400CH01-Message-Key(2)  06090000
+               Move  'Dagens dato'       To    R400CH01-Message-Data(2) 06100000
+               Move  'GL-FELT1<FELT2&'   To    R400CH01-Message-Code    06110000
+               Perform  Z700-Error-AE                                   06120000
+                                                                        06130000
+             When  RTFCE100-I-Due-Date-I = 'U'                          06140000
+              And  RTFCE100-I-Due-Date-D < R400CH01-System-Date         06150000
+               Move  'F'                 To    RTFCE100-I-Due-Date-O    06160000
+               Move  'FELT1'             To    R400CH01-Message-Key(1)  06170000
+               Move  'Forfallsdato'      To    R400CH01-Message-Data(1) 06180000
+               Move  'FELT2'             To    R400CH01-Message-Key(2)  06190000
+               Move  'Dagens dato'       To    R400CH01-Message-Data(2) 06200000
+               Move  'GL-FELT1<FELT2&'   To    R400CH01-Message-Code    06210000
+               Perform  Z700-Error-AE                                   06220000
+                                                                        06230000
+             When  RTFCE100-I-Expiry-Date-I = 'U'                       06240000
+              And  RTFCE100-I-Expiry-Date-D < R400CH01-System-Date      06250000
+ndlfix* ønsket etter brukerforum mars 2011                              06251007
+              If   RTFCE100-I-Contract-Type-D  Not = 'ELC '             06252007
+                Move  'F'                To    RTFCE100-I-Due-Date-O    06260007
+                Move  'FELT1'            To    R400CH01-Message-Key(1)  06270007
+                Move  'Utløpsdato'       To    R400CH01-Message-Data(1) 06280007
+                Move  'FELT2'            To    R400CH01-Message-Key(2)  06290007
+                Move  'Dagens dato'      To    R400CH01-Message-Data(2) 06300007
+                Move  'GL-FELT1<FELT2&'  To    R400CH01-Message-Code    06310007
+                Perform  Z700-Error-AE                                  06320007
+              End-If                                                    06330007
+           End-Evaluate                                                 06331007
+      *                                                                 06340000
+           Initialize                          R115ISC0-Sys-Code        06350000
+           Set   R115ISC0-Version        To    True                     06360000
+           Set   R115ISC0-In-Select      To    True                     06370000
+      *                                                                 06380000
+           Move  RTFCE100-I-Fin-Inst-No-D                               06390000
+                                         To    R115ISC0-In-Fin-Inst-No  06400000
+           Move  'CONTRACT-TYPE'         To    R115ISC0-In-ST-Type      06410000
+           Move  RTFCE100-I-Contract-Type-D                             06420000
+                                         To    R115ISC0-In-SC-Code      06430000
+      *                                                                 06440000
+           Call  'F115ISC0'              Using R115ISC0-Sys-Code        06450000
+                                               R7919999-Error-Area      06460000
+           End-Call                                                     06470000
+      *                                                                 06480000
+           Evaluate True                                                06490000
+             When R7919999-Return-Abend                                 06500000
+               Move  'C321'              To    R7919999-Paragraph       06510000
+               Move  'FM'                To    R400CH01-Message-Code    06520000
+               Perform Z900-Abend                                       06530000
+                                                                        06540000
+             When R7919999-Return-Error                                 06550000
+               Move  'F'                 To   RTFCE100-I-Contract-Type-O06560000
+               Move  'FELT1'             To    R400CH01-Message-Key(1)  06570000
+               Move  'Kontrakt-Type'     To    R400CH01-Message-Data(1) 06580000
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code    06590000
+               Perform  Z700-Error-AE                                   06600000
+                                                                        06610000
+             When R7919999-Return-OK                                    06620000
+               Continue                                                 06630000
+                                                                        06640000
+           End-Evaluate                                                 06650000
+      *                                                                 06660000
+      *                                                                 06670000
+      *    Silent-Confirmation must be space, Y or N if present.        06680000
+      *                                                                 06690000
+           Evaluate True                                                06700000
+             When  RTFCE100-I-Silent-Confr-I                            06710000
+                                         Not = 'U'                      06720000
+               Continue                                                 06730000
+             When  RTFCE100-I-Silent-Confr-D                            06740000
+                                         Not = 'Y'                      06750000
+             And   RTFCE100-I-Silent-Confr-D                            06760000
+                                         Not = 'N'                      06770000
+             And   RTFCE100-I-Silent-Confr-D                            06780000
+                                         Not = Spaces                   06790000
+               Move  'F'                 To   RTFCE100-I-Silent-Confr-O 06800000
+               Move  'FELT1'             To    R400CH01-Message-Key(1)  06810000
+               Move  'Silent Confirmation'                              06820000
+                                         To    R400CH01-Message-Data(1) 06830000
+               Move  'GL-UGYLDIG-VERDI&' To    R400CH01-Message-Code    06840000
+               Perform  Z700-Error-AE                                   06850000
+           End-Evaluate                                                 06860000
+      *                                                                 06861009
+           .                                                            06861109
+      *                                                                 06861209
+      *<META C320-PERMITTED-VALUES-UA-EX>                               06861309
+       C320-Permitted-Values-UA-Ex.                                     06861409
+           Exit.                                                        06861509
+      *</META>                                                          06861609
+                                                                        06862009
+      *                                                                 06871709
+                                                                        06930000
+      *################################################################*06940000
+      * We make sure that input fields that are not mandatory, gets    *06950000
+      * valid default values if not received.                          *06960000
+      *----------------------------------------------------------------*06970000
+       C400-Default-Values               Section.                       06980000
+      *                                                                 06990000
+      *  This code is maintained by the codegenerator. Any user changes 07000000
+      *  between the META tags will be lost. Any user code should be    07010000
+      *  placed in the C410... or C420.. sections.                      07020000
+      *                                                                 07030000
+      *<META C400-DEFAULT-VALUES>                                       07040000
+      *</META>                                                          07050000
+           Continue                                                     07060000
+           .                                                            07070000
+      *                                                                 07080000
+      *<META C400-DEFAULT-VALUES-EX>                                    07090000
+       C400-Default-Values-Ex.                                          07100000
+           Exit.                                                        07110000
+      *</META>                                                          07120000
+                                                                        07130000
+      *################################################################*07140000
+      * We make sure that input fields that are not mandatory, gets    *07150000
+      * valid default values if not received.                          *07160000
+      * (User Code to execute before generated code)                   *07170000
+      *----------------------------------------------------------------*07180000
+      *<META C410-DEFAULT-VALUES-UB>                                    07190000
+       C410-Default-Values-UB            Section.                       07200000
+      *                                                                 07210000
+      *</META>                                                          07220000
+      *                                                                 07230000
+           Continue                                                     07240000
+      *                                                                 07250000
+           .                                                            07260000
+      *                                                                 07270000
+      *<META C410-DEFAULT-VALUES-UB-EX>                                 07280000
+       C410-Default-Values-UB-Ex.                                       07290000
+           Exit.                                                        07300000
+      *</META>                                                          07310000
+                                                                        07320000
+      *################################################################*07330000
+      * We make sure that input fields that are not mandatory, gets    *07340000
+      * valid default values if not received.                          *07350000
+      * (User Code to execute after  generated code)                   *07360000
+      *----------------------------------------------------------------*07370000
+      *<META C420-DEFAULT-VALUES-UA>                                    07380000
+       C420-Default-Values-UA            Section.                       07390000
+      *                                                                 07400000
+      *</META>                                                          07410000
+      *                                                                 07420000
+           Continue                                                     07430000
+      *                                                                 07440000
+      *                                                                 07450000
+           .                                                            07460000
+      *                                                                 07470000
+      *<META C420-DEFAULT-VALUES-UA-EX>                                 07480000
+       C420-Default-Values-UA-Ex.                                       07490000
+           Exit.                                                        07500000
+      *</META>                                                          07510000
+                                                                        07520000
+      *################################################################*07530000
+      * Check dependencies between input fields                        *07540000
+      *                                                                *07550000
+      *----------------------------------------------------------------*07560000
+       C500-Dependencies                 Section.                       07570000
+      *                                                                 07580000
+      *  This code is maintained by the codegenerator. Any user changes 07590000
+      *  between the META tags will be lost. Any user code should be    07600000
+      *  placed in the C510... or C520.. sections.                      07610000
+      *                                                                 07620000
+      *<META C500-DEPENDENCIES>                                         07630000
+           If  RTFCE100-I-Orig-Amount-I  =     'U'                              
+           And RTFCE100-I-CC-Amount-I    Not = 'U'                              
+               Move  'F'                 To    RTFCE100-I-CC-Amount-O           
+               Move  'FELT1'             To    R400CH01-Message-Key(1)          
+               Move  'Valutasort-Kontraktsbeløp'                                
+                                         To    R400CH01-Message-Data(1)         
+               Move  'FELT2'             To    R400CH01-Message-Key(2)          
+               Move  'Kontraktsbeløp'    To    R400CH01-Message-Data(2)         
+               Move  'TF-SY-FIELD2-AND-FIELD1'                                  
+                                         To    R400CH01-Message-Code            
+               Perform  Z700-Error-AE                                           
+           End-If                                                               
+      *                                                                         
+      *</META>                                                          07890000
+           Continue                                                     07900000
+           .                                                            07910000
+      *                                                                 07920000
+      *<META C500-DEPENDENCIES-EX>                                      07930000
+       C500-Dependencies-Ex.                                            07940000
+           Exit.                                                        07950000
+      *</META>                                                          07960000
+                                                                        07970000
+      *################################################################*07980000
+      * Check dependencies between input fields                        *07990000
+      * (User Code to execute before generated code)                   *08000000
+      *----------------------------------------------------------------*08010000
+      *<META C510-DEPENDENCIES-UB>                                      08020000
+       C510-Dependencies-UB              Section.                       08030000
+      *                                                                 08040000
+      *</META>                                                          08050000
+      *                                                                 08060000
+           Continue                                                     08070000
+      *                                                                 08080000
+           .                                                            08090000
+      *                                                                 08100000
+      *<META C510-DEPENDENCIES-UB-EX>                                   08110000
+       C510-Dependencies-UB-Ex.                                         08120000
+           Exit.                                                        08130000
+      *</META>                                                          08140000
+                                                                        08150000
+      *################################################################*08160000
+      * Check dependencies between input fields                        *08170000
+      * (User Code to execute after  generated code)                   *08180000
+      *----------------------------------------------------------------*08190000
+      *<META C520-DEPENDENCIES-UA>                                      08200000
+       C520-Dependencies-UA              Section.                       08210000
+      *                                                                 08220000
+      *</META>                                                          08230000
+      *                                                                 08240000
+      * Availability and dates....                                      08250000
+      *                                                                 08260000
+      *                                                                 08270000
+      *    If  RTFCE100-I-Availability-I =     'U'                      08280000
+      *        Evaluate  True                                           08290000
+      *          When    RTFCE100-I-Availability-D  = 'S'               08300000
+      *            If  RTFCE100-I-Due-Date-I = 'U'                      08310000
+      *            Or  RTFCE100-I-Tenor-I    = 'U'                      08320000
+      *                Move  'F'         To    RTFCE100-I-Due-Date-O    08330000
+      *                Move  'VAR1'      To    R400CH01-Message-Key(1)  08340000
+      *                Move  'Forfallsdato eller forfallstid'           08350000
+      *                                  To    R400CH01-Message-Data(1) 08360000
+      *                Move  'VAR2'      To    R400CH01-Message-Key(2)  08370000
+      *                Move  'Avista'    To    R400CH01-Message-Data(2) 08380000
+      *                Move  'TF-SY-FIELD-DEP-FELT1-FELT2'              08390000
+      *                                  To    R400CH01-Message-Code    08400000
+      *                Perform  Z700-Error-AE                           08410000
+      *            End-If                                               08420000
+      *                                                                 08430000
+      *          When     RTFCE100-I-Availability-D  = 'D'              08440000
+      *            Or     RTFCE100-I-Availability-D  = 'A'              08450000
+      *            Or     RTFCE100-I-Availability-D  = 'M'              08460000
+      *                                                                 08470000
+      *            If  RTFCE100-I-Due-Date-I Not = 'U'                  08480000
+      *            And RTFCE100-I-Tenor-I    Not = 'U'                  08490000
+      *                Move  'F'         To    RTFCE100-I-Due-Date-O    08500000
+      *                Move  'FELT1'     To    R400CH01-Message-Key(1)  08510000
+      *                Move  'Forfallsdato'                             08520000
+      *                                  To    R400CH01-Message-Data(1) 08530000
+      *                Move  'FELT2'     To    R400CH01-Message-Key(2)  08540000
+      *                Move  'Forfallstid'                              08550000
+      *                                  To    R400CH01-Message-Data(2) 08560000
+      *                Move  'GL-FELT1-ELLER-FELT2&'                    08570000
+      *                                  To    R400CH01-Message-Code    08580000
+      *               Perform  Z700-Error-AE                            08590000
+      *          End-If                                                 08600000
+      *        End-Evaluate                                             08610000
+      *    End-If                                                       08620000
+      *                                                                 08630000
+      *  Last_Saved_Date must be filled out if contract exists          08640000
+      *                                                                 08650000
+           If  RTFCE100-B-Last-Saved-Date-I Not = 'U'                   08660000
+           And RTFCE100-B-Contract-No-I         = 'U'                   08670000
+               Move  'F'                 To RTFCE100-B-Last-Saved-Date-O08680000
+               Move  'FELT1'             To  R400CH01-Message-Key(1)    08690000
+               Move  'Kontrakt-Nr'       To  R400CH01-Message-Data(1)   08700000
+               Move  'FELT2'             To  R400CH01-Message-Key(2)    08710000
+               Move  'Sist-Lagret-Dato'  To  R400CH01-Message-Data(2)   08720000
+               Move  'TF-SY-FIELD1-AND-FIELD2'                          08730000
+                                         To  R400CH01-Message-Code      08740000
+               Perform  Z700-Error-AE                                   08750000
+           End-If                                                       08760000
+      *                                                                 08770000
+      * REGISTER:                                                       08780000
+      * Mandatory items when contract is registered for the first time. 08790000
+      *                                                                 08800000
+           If  RTFCE100-B-Contract-No-I Not =  'U'                      08810000
+           And RTFCE100-I-Operation-Type-D = 'REGISTER'                 08820000
+               Evaluate True                                            08830000
+                 When  (    RTFCE100-I-Due-Date-I    Not = 'U'          08840000
+                        And RTFCE100-I-Tenor-I       Not = 'U' )        08850000
+                                                                        08860000
+                  And  (    RTFCE100-I-Contract-Type-D   = 'IDA '       08870000
+                         Or RTFCE100-I-Contract-Type-D   = 'EDA '       08880000
+                         Or RTFCE100-I-Contract-Type-D   = 'ICA '       08890000
+                         Or RTFCE100-I-Contract-Type-D   = 'ECA ' )     08900000
+                                                                        08910000
+                   Move 'Forfallstid eller forfallsdato'                08920000
+                                         To    R400CH01-Message-Data(1) 08930000
+                   Move 'FELT1'          To    R400CH01-Message-Key(1)  08940000
+                   Move 'GL-ANGI-FELT&'  To    R400CH01-Message-Code    08950000
+                   Perform Z700-Error-AE                                08960000
+                                                                        08970000
+                 When  RTFCE100-I-Orig-Amount-I Not = 'U'               08980000
+                   Move 'F'              To    RTFCE100-I-Orig-Amount-O 08990000
+                   Move 'Kontraktbeløp'  To    R400CH01-Message-Data(1) 09000000
+                   Move 'FELT1'          To    R400CH01-Message-Key(1)  09010000
+                   Move 'GL-ANGI-FELT&'  To    R400CH01-Message-Code    09020000
+                   Perform Z700-Error-AE                                09030000
+                                                                        09040000
+                 When  RTFCE100-I-CC-Amount-I   Not = 'U'               09050000
+                   Move 'F'              To    RTFCE100-I-Orig-Amount-O 09060000
+                   Move 'Valutasort kontraktbeløp'                      09070000
+                                         To    R400CH01-Message-Data(1) 09080000
+                   Move 'FELT1'          To    R400CH01-Message-Key(1)  09090000
+                   Move 'GL-ANGI-FELT&'  To    R400CH01-Message-Code    09100000
+                   Perform Z700-Error-AE                                09110000
+                End-Evaluate                                            09120000
+      *                                                                 09130000
+           End-If                                                       09140000
+      *                                                                 09150000
+      * ADVICE and ISSUE:                                               09160000
+      * Mandatory items when contract is registered for the first time. 09170000
+      *                                                                 09180000
+           If  RTFCE100-B-Contract-No-I Not =  'U'                      09190000
+           And (   RTFCE100-I-Operation-Type-D = 'ADVICE'               09200000
+                Or RTFCE100-I-Operation-Type-D = 'ISSUE' )              09210000
+                Evaluate True                                           09220000
+                 When  RTFCE100-I-Expiry-Date-I Not = 'U'               09230000
+                   Move 'Utløpsdato'     To    R400CH01-Message-Data(1) 09240000
+                   Move 'FELT1'          To    R400CH01-Message-Key(1)  09250000
+                   Move 'GL-ANGI-FELT&'  To    R400CH01-Message-Code    09260000
+                   Perform Z700-Error-AE                                09270000
+                                                                        09280000
+                 When  RTFCE100-I-Orig-Amount-I Not = 'U'               09290000
+                   Move 'F'              To    RTFCE100-I-Orig-Amount-O 09300000
+                   Move 'Kontraktbeløp'  To    R400CH01-Message-Data(1) 09310000
+                   Move 'FELT1'          To    R400CH01-Message-Key(1)  09320000
+                   Move 'GL-ANGI-FELT&'  To    R400CH01-Message-Code    09330000
+                   Perform Z700-Error-AE                                09340000
+                                                                        09350000
+                 When  RTFCE100-I-CC-Amount-I   Not = 'U'               09360000
+                   Move 'F'              To    RTFCE100-I-Orig-Amount-O 09370000
+                   Move 'Valutasort kontraktbeløp'                      09380000
+                                         To    R400CH01-Message-Data(1) 09390000
+                   Move 'FELT1'          To    R400CH01-Message-Key(1)  09400000
+                   Move 'GL-ANGI-FELT&'  To    R400CH01-Message-Code    09410000
+                   Perform Z700-Error-AE                                09420000
+                End-Evaluate                                            09430000
+           End-If                                                       09440000
+      *                                                                 09450000
+      * REGISTER. Items that are not valid....                          09460000
+      *                                                                 09470000
+           If     RTFCE100-I-Operation-Type-D = 'REGISTER            '  09480000
+            And ( RTFCE100-I-Availability-I          =  'U'             09490000
+              Or  RTFCE100-I-Incoming-Swift-I        =  'U'             09500000
+              Or  RTFCE100-I-Silent-Confr-I          =  'U'             09510000
+              Or  RTFCE100-I-Expiry-Date-I           =  'U'             09520000
+              Or  RTFCE100-I-Place-Of-Expiry-I       =  'U'             09530000
+              Or  RTFCE100-I-Confirmed-I             =  'U'             09540000
+              Or  RTFCE100-I-Max-Pst-Tolerance-I     =  'U'             09550000
+              Or  RTFCE100-I-Min-Pst-Tolerance-I     =  'U' )           09560000
+                Evaluate True                                           09570000
+                 When RTFCE100-I-Incoming-Swift-I    =  'U'             09580000
+                    Move 'F'         To  RTFCE100-I-Incoming-Swift-O    09590000
+                    Move 'Innkommende Swift'                            09600000
+                                     To  R400CH01-Message-Data(1)       09610000
+      *                                                                 09620000
+                 When RTFCE100-I-Silent-Confr-I    =  'U'               09630000
+                    Move 'F'         To  RTFCE100-I-Silent-Confr-O      09640000
+                    Move 'Silent Confirmation'                          09650000
+                                     To  R400CH01-Message-Data(1)       09660000
+      *                                                                 09670000
+                 When RTFCE100-I-Availability-I      =  'U'             09680000
+                    Move 'F'         To  RTFCE100-I-Availability-O      09690000
+                    Move 'Betalbar egenskap'                            09700000
+                                     To  R400CH01-Message-Data(1)       09710000
+      *                                                                 09720000
+                 When RTFCE100-I-Expiry-Date-I       =  'U'             09730000
+                    Move 'F'         To  RTFCE100-I-Expiry-Date-O       09740000
+                    Move 'Utløpsdato'                                   09750000
+                                     To  R400CH01-Message-Data(1)       09760000
+      *                                                                 09770000
+                 When RTFCE100-I-Place-Of-Expiry-I   =  'U'             09780000
+                    Move 'F'         To  RTFCE100-I-Place-Of-Expiry-O   09790000
+                    Move 'Utløpssted'                                   09800000
+                                     To  R400CH01-Message-Data(1)       09810000
+      *                                                                 09820000
+                 When RTFCE100-I-Confirmed-I         =  'U'             09830000
+                    Move 'F'         To  RTFCE100-I-Confirmed-O         09840000
+                    Move 'Bekreftet/ubekreftet'                         09850000
+                                     To  R400CH01-Message-Data(1)       09860000
+      *                                                                 09870000
+                 When RTFCE100-I-Max-Pst-Tolerance-I =  'U'             09880000
+                    Move 'F'         To  RTFCE100-I-Max-Pst-Tolerance-O 09890000
+                    Move 'Max. toleranse'                               09900000
+                                     To  R400CH01-Message-Data(1)       09910000
+      *                                                                 09920000
+                 When RTFCE100-I-Min-Pst-Tolerance-I =  'U'             09930000
+                    Move 'F'         To  RTFCE100-I-Min-Pst-Tolerance-O 09940000
+                    Move 'Min. toleranse'                               09950000
+                                     To  R400CH01-Message-Data(1)       09960000
+      *                                                                 09970000
+                End-Evaluate                                            09980000
+      *                                                                 09990000
+                Move  'TF-SY-FIELD-DEP-FELT1-FELT2'                     10000000
+                                         To    R400CH01-Message-Code    10010000
+                Move  'VAR1'             To    R400CH01-Message-Key(1)  10020000
+                Move  'VAR2'             To    R400CH01-Message-Key(2)  10030000
+                Move  'Inkasso'          To    R400CH01-Message-Data(2) 10040000
+                Perform Z700-Error-AE                                   10050000
+           End-If                                                       10060000
+      *                                                                 10070000
+      * ADVICE and ISSUE. Fields that are not valid.                    10080000
+      *                                                                 10090000
+           If (   RTFCE100-I-Operation-Type-D = 'ADVICE              '  10100000
+               Or RTFCE100-I-Operation-Type-D = 'ISSUE               ') 10110000
+           And RTFCE100-I-Follow-Up-Date-I  = 'U'                       10120000
+               Move  'F'                 To  RTFCE100-I-Follow-Up-Date-O10130000
+               Move  'TF-SY-FIELD-DEP-FELT1-FELT2'                      10140000
+                                         To    R400CH01-Message-Code    10150000
+               Move  'VAR1'              To    R400CH01-Message-Key(1)  10160000
+               Move  'Oppfølgningsdato'  To    R400CH01-Message-Data(1) 10170000
+               Move  'VAR2'              To    R400CH01-Message-Key(2)  10180000
+               Move  'Remburs'           To    R400CH01-Message-Data(2) 10190000
+               Perform Z700-Error-AE                                    10200000
+           End-If                                                       10210000
+      *                                                                 10220000
+           If  RTFCE100-I-Operation-Type-D = 'ISSUE'                    10230000
+           And RTFCE100-I-Silent-Confr-I  = 'U'                         10240000
+               Move  'F'                 To  RTFCE100-I-Silent-Confr-O  10250000
+               Move  'TF-SY-FIELD-DEP-FELT1-FELT2'                      10260000
+                                         To    R400CH01-Message-Code    10270000
+               Move  'VAR1'              To    R400CH01-Message-Key(1)  10280000
+               Move  'Silent Confirmation'                              10290000
+                                         To    R400CH01-Message-Data(1) 10300000
+               Move  'VAR2'              To    R400CH01-Message-Key(2)  10310000
+               Move  'Import remburs'    To    R400CH01-Message-Data(2) 10320000
+               Perform Z700-Error-AE                                    10330000
+           End-If                                                       10340000
+      *                                                                 10350000
+           If  RTFCE100-I-Operation-Type-D = 'ADVICE'                   10360000
+           And RTFCE100-I-Contract-Type-D  = 'ECC'                      10370000
+           And RTFCE100-I-Silent-Confr-I   = 'U'                        10380000
+           And RTFCE100-I-Silent-Confr-D   = 'Y'                        10390000
+               Move  'F'                 To  RTFCE100-I-Silent-Confr-O  10400000
+               Move  'GL-FELT2-IKKE-UTF-FELT1='                         10410000
+                                         To    R400CH01-Message-Code    10420000
+               Move  'FELT1'             To    R400CH01-Message-Key(1)  10430000
+               Move  'Kontraktstype'     To    R400CH01-Message-Data(1) 10440000
+               Move  'FELT2'             To    R400CH01-Message-Key(2)  10450000
+               Move  'Silent Confirmation'                              10460000
+                                         TO    R400CH01-Message-Data(2) 10470000
+               Move  'FELT3'             To    R400CH01-Message-Key(3)  10480000
+               Move  'ECC'               TO    R400CH01-Message-Data(3) 10490000
+               Perform Z700-Error-AE                                    10500000
+           End-If                                                       10510000
+      *                                                                 10520000
+      *  Is Contract-Type valid at given Operation-Type.                10530000
+      *                                                                 10540000
+           Initialize                          R115ISR0-Sys-Code-Rel    10550000
+           Set   R115ISR0-Version        To    True                     10560000
+           Set   R115ISR0-In-Select      To    True                     10570000
+           Set   R115ISR0-In-CC-Count    To    True                     10580000
+      *                                                                 10590000
+           Move  RTFCE100-I-Fin-Inst-No-D                               10600000
+                                         To    R115ISR0-In-F-I-No       10610000
+           Move  'CONTRACT-TYPE'         To    R115ISR0-In-From-ST-Type 10620000
+           Move  RTFCE100-I-Contract-Type-D                             10630000
+                                         To    R115ISR0-In-From-SC-Code 10640000
+           Move  Spaces                  To  R115ISR0-In-From-Contr-Type10650000
+      *                                                                 10660000
+           Move  'OPERATION-TYPE'        To    R115ISR0-In-To-ST-Type   10670000
+           Move  RTFCE100-I-Operation-Type-D                            10680000
+                                         To    R115ISR0-In-To-SC-Code   10690000
+           Move  Spaces                  To    R115ISR0-In-To-Contr-Type10700000
+      *                                                                 10710000
+           Move  'VALID-CT-OP'           To    R115ISR0-In-Relation-Type10720000
+                                                                        10730000
+           Call  'F115ISR0'              Using R115ISR0-Sys-Code-Rel    10740000
+                                               R7919999-Error-Area      10750000
+           End-Call                                                     10760000
+      *                                                                 10770000
+           Evaluate True                                                10780000
+             When R7919999-Return-Abend                                 10790000
+               Move  'C521'              To    R7919999-Paragraph       10800000
+               Move  'FM'                To    R400CH01-Message-Code    10810000
+               Perform Z900-Abend                                       10820000
+                                                                        10830000
+             When R7919999-Return-Error                                 10840000
+               Move 'F'                  To   RTFCE100-I-Contract-Type-O10850000
+               Move  RTFCE100-I-Contract-Type-D                         10860000
+                                         To    R400CH01-Message-Data(1) 10870000
+               Move 'VAR1'               To    R400CH01-Message-Key(1)  10880000
+               Move  RTFCE100-I-Operation-Type-D                        10890000
+                                         To    R400CH01-Message-Data(2) 10900000
+               Move 'VAR2'               To    R400CH01-Message-Key(2)  10910000
+               Move 'TF-SY-INVALID-CONTR-OPERTYP'                       10920000
+                                         To    R400CH01-Message-Code    10930000
+               Perform Z700-Error-AE                                    10940000
+           End-Evaluate                                                 10950000
+      *                                                                 10960000
+      * Check the format of TENOR                                       10970000
+      *                                                                 10980000
+           If   RTFCE100-I-Tenor-I       = 'U'                          10990000
+            and RTFCE100-I-Tenor-D  Not  =  Spaces                      11000000
+      *                                                                 11010000
+              If   RTFCE100-I-Contract-Type-D  = 'ILG '                 11011013
+                If RTFCE100-I-Tenor-D  =                                11011110
+                   ('  ' or 'KVT' or 'MND' or 'HLV' or 'AAR')           11011210
+                   Continue                                             11011310
+                Else                                                    11011410
+                   Initialize                  R7918030-ErrorMessage    11011510
+                   Move  'TF-SY-EI-TENOR-ERR'                           11011610
+                                         To    R7918030-In-MessageCode  11011710
+      *                                                                 11011810
+                   Perform Z000-Error-Message                           11011910
+      *                                                                 11012010
+                   Move  'E523'          To    R7919999-Paragraph       11012110
+                   Move  'FM'            To    R400CH01-Message-Code    11012210
+                   Perform Z700-Error-AE                                11012310
+                End-If                                                  11012410
+              Else                                                      11013010
+                Move RTFCE100-I-Tenor-D  To    Ws-Tenor                 11020000
+      *                                                                 11030000
+      *   1 pos has to be D or M                                        11040000
+      *                                                                 11050000
+                If   Ws-Tenor-DM     Not =    'D' And 'd'               11060000
+                 and Ws-Tenor-DM     Not =    'M' And 'm'               11070000
+      *                                                                 11080000
+                   Initialize                  R7918030-ErrorMessage    11090000
+                   Move  'TF-SY-EI-TENOR-ERR'                           11100000
+                                         To    R7918030-In-MessageCode  11110000
+      *                                                                 11120000
+                   Perform Z000-Error-Message                           11130000
+      *                                                                 11140000
+                   Move  'E524'          To    R7919999-Paragraph       11150010
+                   Move  'FM'            To    R400CH01-Message-Code    11160000
+                   Perform Z700-Error-AE                                11170000
+                End-If                                                  11180000
+      *                                                                 11190000
+      *   2,3 and 4 pos have to be a numeric value                      11200000
+      *                                                                 11210000
+                If  Ws-Tenor-No-Of-DM    Not   Numeric                  11220000
+                   Initialize                  R7918030-ErrorMessage    11230000
+                   Move  'TF-SY-EI-TENOR-ERR'                           11240000
+                                         To    R7918030-In-MessageCode  11250000
+      *                                                                 11260000
+                   Perform Z000-Error-Message                           11270000
+      *                                                                 11280000
+                   Move  'E525'          To    R7919999-Paragraph       11290010
+                   Move  'FM'            To    R400CH01-Message-Code    11300000
+                   Perform Z700-Error-AE                                11310000
+                End-If                                                  11320000
+      *                                                                 11330000
+      *   5 and 6 pos have to be a specific code                        11340000
+      *                                                                 11350000
+                If  Ws-Tenor-Code      Not = 'BE' And 'CC' And 'FD' And 11360000
+                                             'FP' And 'GA' And 'ID' And 11370000
+                                             'ST' And 'TD' And 'XX' And 11380000
+                                             'be' And 'cc' And 'fd' And 11390000
+                                             'fp' And 'ga' And 'id' And 11400000
+                                             'st' And 'td' And 'xx'     11410000
+                  Initialize                  R7918030-ErrorMessage     11420000
+                  Move  'TF-SY-EI-TENOR-ERR'                            11430000
+                                        To    R7918030-In-MessageCode   11440000
+      *                                                                 11450000
+                  Perform Z000-Error-Message                            11460000
+      *                                                                 11470000
+                  Move  'E526'          To    R7919999-Paragraph        11480010
+                  Move  'FM'            To    R400CH01-Message-Code     11490000
+                  Perform Z700-Error-AE                                 11500000
+                End-If                                                  11510000
+      *                                                                 11520000
+              End-If                                                    11530010
+           End-If                                                       11531010
+      *                                                                 11540000
+           If  RTFCE100-I-Due-Date-I     =     'U'                      11541009
+           And RTFCE100-I-Tenor-I        =     'U'                      11542009
+           And RTFCE100-I-Contract-Type-D  Not = 'ILG '                 11542114
+               Move  'F'                 To    RTFCE100-I-Due-Date-O    11543009
+               Move  'FELT1'             To    R400CH01-Message-Key(1)  11544009
+               Move  'Forfallsdato'      To    R400CH01-Message-Data(1) 11545009
+               Move  'FELT2'             To    R400CH01-Message-Key(2)  11546009
+               Move  'Forfallstid'       To    R400CH01-Message-Data(2) 11547009
+               Move  'TF-SY-FIELD1-NOT-FIELD2'                          11548009
+                                         To    R400CH01-Message-Code    11549009
+               Perform  Z700-Error-AE                                   11549109
+           End-If                                                       11549209
+      *                                                                 11540000
+           If  (RTFCE100-I-Due-Date-I     =     'U')       And          11541009
+             (  RTFCE100-I-Due-Date-D     Not = 99991231 ) And          11541009
+             (  RTFCE100-I-Expiry-Date-I  =     'U' )      And                  
+             (  RTFCE100-I-Due-Date-D     Not <                                 
+               RTFCE100-I-Expiry-Date-D )                                       
+               Move  'GL-UGYLDIG-DATO'                                  11548009
+                                         To    R400CH01-Message-Code    11549009
+               Perform  Z700-Error-AE                                   11549109
+           End-If                                                       11549209
+      *                                                                 11549309
+           .                                                            11551000
+      *<META C520-DEPENDENCIES-UA-EX>                                   11560000
+       C520-Dependencies-UA-Ex.                                         11570000
+           Exit.                                                        11580000
+      *</META>                                                          11590000
+                                                                        11600000
+      *################################################################*11610000
+      * Place code necessary to prepare control of input data against  *11620000
+      * database fields later here. add Perform statements of other    *11630000
+      * sections for your own logic here. Preferably seperate sections *11640000
+      * for each database element to be read.                          *11650000
+      *                                                                *11660000
+      * REMEMBER !!! Use database interfaces. No direct read from this *11670000
+      * module.                                                        *11680000
+      *                                                                *11690000
+      *----------------------------------------------------------------*11700000
+      *<META D000-PREPARE-DB-READ>                                      11710000
+       D000-Prepare-DB-Read              Section.                       11720000
+      *                                                                 11730000
+      *</META>                                                          11740000
+      *                                                                 11750000
+           Continue                                                     11762000
+      *                                                                 11770000
+           .                                                            11780000
+      *                                                                 11790000
+      *<META D000-PREPARE-DB-READ-EX>                                   11800000
+       D000-Prepare-DB-Read-Ex.                                         11810000
+           Exit.                                                        11820000
+      *</META>                                                          11830000
+                                                                        11840000
+      *################################################################*11852000
+      * Check dependencies against databas fields.                     *11860000
+      *                                                                *11870000
+      * Here we perform all nesecarry control , before return to the   *11880000
+      * H-module.                                                      *11890000
+      *                                                                *11900000
+      * Add Perform statements to other sections that contain the      *11910000
+      * actual controls.                                               *11920000
+      *----------------------------------------------------------------*11930000
+      *<META E000-CONTROL-BASE>                                         11940000
+       E000-Control-Base                 Section.                       11950000
+      *                                                                 11960000
+      *</META>                                                          11970000
+      *                                                                 11980000
+           If  RTFCE100-B-Contract-No-I = 'U'                           11990000
+               Perform E100-Check-Status                                12000000
+           End-If                                                       12010000
+      *                                                                 12020000
+           If   RTFCE100-I-Contract-Type-D  = 'ILG '     And            12021011
+                RTFCE100-I-Due-Date-I = 'U'              And            12022011
+                RTFCE100-I-Tenor-I    = 'U'                             12023011
+                Perform E200-product-Check                              12024011
+           End-if                                                       12025011
+           .                                                            12030000
+      *                                                                 12040000
+      *<META E000-CONTROL-BASE-EX>                                      12050000
+       E000-Control-Base-Ex.                                            12060000
+           Exit.                                                        12070000
+      *</META>                                                          12080000
+                                                                        12090000
+      *################################################################*12100000
+       E100-Check-Status                 Section.                       12110000
+      *                                                                 12120000
+           Initialize                          R115L050-Initial-Check   12130000
+           Set   R115L050-Version        To    True                     12140000
+      *                                                                 12150000
+           Move  R400CH01-Function       To    R115L050-Function        12160000
+           Move  R400CH01-Medium         To    R115L050-Medium          12170000
+           Move  RTFCE100-I-Fin-Inst-No-D                               12180000
+                                         To    R115L050-Fin-Inst-No     12190000
+           Move  RTFCE100-I-Contract-Type-D                             12200000
+                                         To    R115L050-Contr-Type      12210000
+           Move  RTFCE100-B-Contract-No-D                               12220000
+                                         To    R115L050-Contr-No        12230000
+           Move  RTFCE100-I-Operation-Type-D                            12240000
+                                         To    R115L050-Operation-Type  12250000
+           Move  RTFCE100-B-Last-Saved-Date-D                           12260000
+                                         To    R115L050-Last-Update-TX  12270000
+           Set   R115L050-Check-For-Upd-Yes                             12280000
+                                         To    True                     12290000
+      *                                                                 12300000
+           Call  'F115L050'              Using R115L050-Initial-Check   12310000
+                                               R7919999-Error           12320000
+           End-Call                                                     12330000
+      *                                                                 12340000
+           Evaluate True                                                12350000
+             When R7919999-Return-Abend                                 12360000
+                                                                        12370000
+               Move  'E101'              To    R7919999-Paragraph       12380000
+               Move  'FM'                To    R400CH01-Message-Code    12390000
+               Perform Z900-Abend                                       12400000
+                                                                        12410000
+             When R7919999-Return-Error                                 12420000
+               Move  'E102'              To    R7919999-Paragraph       12430000
+               Move  'FM'                To    R400CH01-Message-Code    12440000
+               Perform Z700-Error-AE                                    12450000
+                                                                        12460000
+             When R7919999-Return-OK                                    12470000
+               Continue                                                 12480000
+           End-Evaluate                                                 12490000
+      *                                                                 12500000
+           .                                                            12510000
+      *                                                                 12520000
+       E100-Check-Status-Ex.                                            12530000
+           Exit.                                                        12540000
+      *                                                                 12540111
+       E200-product-Check                Section.                       12541011
+           Initialize                    R115ISC0-Sys-Code              12542011
+                                                                        12543011
+           Set   R115ISC0-Version        To    True                     12544011
+           Set   R115ISC0-In-Select      To    True                     12545011
+      *                                                                 12546011
+           Move  RTFCE100-I-Fin-Inst-No-D                               12547013
+                                         To    R115ISC0-In-Fin-Inst-No  12548011
+           Move  'PRODUCT-AVAIL '        To    R115ISC0-In-ST-Type      12549011
+           Move  'PROV-DT-TF'            To    R115ISC0-In-SC-Code      12549115
+      *                                                                 12549211
+           Call  'F115ISC0'              Using R115ISC0-Sys-Code        12549311
+                                               R7919999-Error-Area      12549411
+           End-Call                                                     12549511
+      *                                                                 12549611
+           Evaluate True                                                12549711
+             When R7919999-Return-Abend                                 12549811
+               Move  'E201'              To    R7919999-Paragraph       12549911
+               Move  'FM'                To    R400CH01-Message-Code    12550011
+               Perform Z900-Abend                                       12550111
+                                                                        12550211
+             When R7919999-Return-Error                                 12550311
+               Move  'F'                 To   RTFCE100-I-Due-Date-O     12550512
+               Move  'SY-IKKE-TILG-FUNK' To R400CH01-Message-Code       12551112
+               Perform  Z700-Error-AE                                   12551212
+                                                                        12551312
+             When R7919999-Return-OK                                    12551412
+               If  RTFCE100-I-Due-Date-I     =     'U'                  11541009
+               And RTFCE100-I-Tenor-I        =     'U'                  11542009
+                 Continue                                               12551512
+               Else                                                             
+                 Move  'F'               To    RTFCE100-I-Due-Date-O    11543009
+                 Move  'FELT1'           To    R400CH01-Message-Key(1)  11544009
+                 Move  'Forfallsdato'    To    R400CH01-Message-Data(1) 11545009
+                 Move  'FELT2'           To    R400CH01-Message-Key(2)  11546009
+                 Move  'Forfallstid'     To    R400CH01-Message-Data(2) 11547009
+                 Move  'TF-SY-FIELD1-AND-FIELD2'                        11548009
+                                         To    R400CH01-Message-Code    11549009
+                 Perform  Z700-Error-AE                                 11549109
+               End-If                                                           
+                                                                        12551612
+           End-Evaluate                                                 12551712
+           .                                                            12551812
+      *################################################################*12552000
+       Z000-Error-Message                Section.                       12560000
+      *                                                                 12570000
+           Set   R7918030-Version        To    True                     12580000
+      *                                                                 12590000
+           Move  'TF'                    To    R7918030-In-System-ID    12600000
+           Move  R115X000-Fin-Inst-No    To    R7918030-In-Fin-Inst-No  12610000
+           Move  R115X000-FI-Language-639-1                             12620000
+                                         To    R7918030-In-Language     12630000
+      *                                                                 12640000
+           If  R115X000-Trace-On                                        12650000
+               Set  R7918030-In-Log-Yes  To    True                     12660000
+           End-If                                                       12670000
+      *                                                                 12680000
+           Call  'F7918030'              Using R7918030-ErrorMessage    12690000
+           End-Call                                                     12700000
+      *                                                                 12710000
+           Move  R7918030-Out-MessageText                               12720000
+                                         To    R7919999-Message         12730000
+      *                                                                 12740000
+           .                                                            12750000
+      *################################################################*12760000
+       Z600-Error-AW                     Section.                       12770000
+      *                                                                 12780000
+           Set   R7919999-Return-Warning To    True                     12790000
+           Move  'FTFCK100'              To    R400CH01-Message-Text    12800000
+           .                                                            12810000
+      *                                                                 12820000
+       Z600-Error-AW-Ex.                                                12830000
+           Exit.                                                        12840000
+      *</META>                                                          12850000
+                                                                        12860000
+      *################################################################*12870000
+      * Syntax Error status                                            *12880000
+      *                                                                *12890000
+      *----------------------------------------------------------------*12900000
+      *<META Z700-ERROR-AE>                                             12910000
+       Z700-Error-AE                     Section.                       12920000
+      *                                                                 12930000
+           Set   R7919999-Return-Error   To    True                     12940000
+           If    R400CH01-Message-Code   =     'FM'                     12950000
+                 String   'FTFCK100'           Delimited By Size        12960000
+                          ': '                 Delimited By Size        12970000
+                       R7919999-Message        Delimited By Size        12980000
+                                         Into  R400CH01-Message-Text    12990000
+                 End-String                                             13000000
+           Else                                                         13010000
+                 Move  'FTFCK100'        To    R400CH01-Message-Text    13020000
+           End-If                                                       13030000
+           .                                                            13040000
+      *                                                                 13050000
+       Z700-Error-AE-Ex.                                                13060000
+           Goback.                                                      13070000
+      *</META>                                                          13080000
+                                                                        13090000
+      *################################################################*13100000
+      * Severe error. Will genereate USER-ABEND in STG when the        *13110000
+      * function is executed in batch.                                 *13120000
+      *----------------------------------------------------------------*13130000
+      *<META Z800-ERROR-AS>                                             13140000
+       Z800-Error-AS                     Section.                       13150000
+      *                                                                 13160000
+           Set   R7919999-Return-Abend   To    True                     13170000
+           If    R400CH01-Message-Code   =     'FM'                     13180000
+                 String   'FTFCK100'           Delimited By Size        13190000
+                          ': '                 Delimited By Size        13200000
+                       R7919999-Message        Delimited By Size        13210000
+                                         Into  R400CH01-Message-Text    13220000
+                 End-String                                             13230000
+           Else                                                         13240000
+                 Move  'FTFCK100'        To    R400CH01-Message-Text    13250000
+           End-If                                                       13260000
+           .                                                            13270000
+      *                                                                 13280000
+       Z800-Error-AS-Ex.                                                13290000
+           Goback.                                                      13300000
+      *</META>                                                          13310000
+                                                                        13320000
+      *################################################################*13330000
+      * Severe error. Will genereate USER-ABEND in STG when the        *13340000
+      * function is executed in batch.                                 *13350000
+      *----------------------------------------------------------------*13360000
+      *<META Z900-ABEND>                                                13370000
+       Z900-Abend                        Section.                       13380000
+      *                                                                 13390000
+           Set   R7919999-Return-Abend   To    True                     13400000
+           If    R400CH01-Message-Code   =     'FM'                     13410000
+                 String   'FTFCK100'           Delimited By Size        13420000
+                          ': '                 Delimited By Size        13430000
+                       R7919999-Message        Delimited By Size        13440000
+                                         Into  R400CH01-Message-Text    13450000
+                 End-String                                             13460000
+           Else                                                         13470000
+                 Move  'FTFCK100'        To    R400CH01-Message-Text    13480000
+           End-If                                                       13490000
+      *                                                                 13500000
+      *----------------------------------------------------------------*13510000
+      *                                                                 13520000
+           If  R7919999-Return-Code      Not   Numeric                  13530000
+           or  Not R7919999-Return-Abend                                13540000
+               Move  +0                  To    R7919999-Module-Ind      13550000
+           End-If                                                       13560000
+           Add   +1                      To    R7919999-Module-Ind      13570000
+           If  R7919999-Module-Ind       Not >                          13580000
+                             ( Length    Of    R7919999-Module-Tab      13590000
+                             / Length    Of    R7919999-Module-Element )13600000
+               Move  'FTFCK100'          To    R7919999-Module-Name     13610000
+                                               (R7919999-Module-Ind)    13620000
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     13630000
+                                               (R7919999-Module-Ind)    13640000
+           End-If                                                       13650000
+           Set   R7919999-Return-Abend   To    True                     13660000
+           .                                                            13670000
+      *                                                                 13680000
+       Z900-Abend-Ex.                                                   13690000
+           Goback.                                                      13700000
+      *</META>                                                          13710000
+      *                                                                 13720000
+       End Program FTFCK100.                                            13730000

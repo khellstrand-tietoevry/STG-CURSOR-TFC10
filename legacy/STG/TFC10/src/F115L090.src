@@ -1,0 +1,379 @@
+       Identification Division.                                         00010000
+       Program-ID. F115L090.                                            00020000
+       Author.  Hallvard Barman.                                        00030000
+      *################################################################*00040000
+      *                                                                 00050000
+      * FD Trade Finance                                                00060000
+      *                                                                 00070000
+      *    This module will generate a shadow for all tables            00080000
+      *    or accept a shadow                                           00090000
+      *                                                                 00100000
+      *################################################################*00110000
+      * Date ! Si! Change description                            ! 3A ! 00120000
+      *------+---+-----------------------------------------------+----+ 00130000
+      *010399!RM ! New module                                    !LG10! 00140000
+      *################################################################*00150000
+       Environment Division.                                            00160000
+       Configuration Section.                                           00170000
+       Special-Names.                                                   00180000
+           Decimal-Point Is Comma.                                      00190000
+      *                                                                 00200000
+      *################################################################*00210000
+       Data Division.                                                   00220000
+       Working-Storage Section.                                         00230000
+      *                                                                 00240000
+       01  Filler.                                                      00250000
+      *                                                                 00260000
+           05  W-IO-Length               Pic S9(04)              Comp.  00270000
+      *                                                                 00280000
+      *----------------------------------------------------------------*00290000
+      * Internal area:                                                  00300000
+      *                                                                 00310000
+       01  W-Int-IO-Area.                                               00320000
+           Copy R115L090.                                               00330000
+      *                                                                 00340000
+      *----------------------------------------------------------------*00350000
+      * Assorted copy-areas:                                            00360000
+      *                                                                 00370000
+       01  Filler.                                                      00380000
+           Copy R115IPC0.                                               00390003
+       01  Filler.                                                      00400000
+           Copy R115ICH0.                                               00410003
+      *                                                                 00420000
+           Copy R7918030.                                               00430000
+           COPY R115X000.                                               00440000
+      *################################################################.00450000
+       Linkage Section.                                                 00460000
+      *                                                                 00470000
+       01  L-Ext-IO-Area                 Pic  X(560).                   00480000
+       Copy R7919999.                                                   00490000
+      *                                                                 00500000
+      *################################################################.00510000
+       Procedure Division                Using L-Ext-IO-Area            00520000
+                                               R7919999-Error-Area.     00530000
+      *                                                                 00540000
+       A000-Main                         Section.                       00550000
+      *                                                                 00560000
+           Perform B000-Initialize                                      00570000
+      *                                                                 00580000
+           Perform ZI00-Konv-Input-Version                              00590000
+           Perform C000-Interface                                       00600000
+           Perform ZO00-Konv-Output-Version                             00610000
+      *                                                                 00620000
+           Goback.                                                      00630000
+      *################################################################*00640000
+       B000-Initialize                   Section.                       00650000
+      *                                                                 00660000
+           Set   R7919999-Return-OK      To    True                     00670000
+           .                                                            00680000
+      *################################################################.00690000
+       C000-Interface                    Section.                       00700000
+      *                                                                 00710000
+      * Delete Shadow Part-Charge.                                      00720003
+      *                                                                 00730003
+           Perform E810-Find-First-PC-Source                            00740002
+           Perform Until R7919999-Return-Error                          00750002
+      *                                                                 00760002
+              Perform E850-Delete-PC-Source                             00770002
+      *                                                                 00780002
+              Perform E820-Find-Next-PC-Source                          00790002
+           End-Perform                                                  00800002
+           Set  R7919999-Return-OK       To    True                     00810004
+      *                                                                 00820002
+      * Delete Shadow Main-Charge.                                      00830003
+      *                                                                 00840003
+           Perform E910-Find-First-CH-Source                            00850003
+           Perform Until R7919999-Return-Error                          00860003
+      *                                                                 00870003
+              Perform E950-Delete-CH-Source                             00880003
+      *                                                                 00890003
+              Perform E920-Find-Next-CH-Source                          00900003
+           End-Perform                                                  00910003
+           Set  R7919999-Return-OK       To    True                     00920004
+           .                                                            00930003
+      *################################################################*00940000
+       E810-Find-First-PC-Source         Section.                       00950000
+      *                                                                 00960000
+           Initialize                          R115IPC0-Part-Charge     00970000
+           Set   R115IPC0-In-Work        To    True                     00980003
+           Set   R115IPC0-In-Get-1st     To    True                     00990000
+           Perform E830-Find-PC                                         01000000
+           .                                                            01010000
+      *################################################################*01020000
+       E820-Find-Next-PC-Source          Section.                       01030000
+      *                                                                 01040000
+           Initialize                          R115IPC0-Part-Charge     01050000
+           Set   R115IPC0-In-Work        To    True                     01060003
+           Set   R115IPC0-In-Get-Next    To    True                     01070000
+           Perform E830-Find-PC                                         01080000
+           .                                                            01090000
+      *################################################################*01100000
+       E830-Find-PC                      Section.                       01110000
+      *                                                                 01120000
+      *                                                                 01130000
+           Set   R115IPC0-Version        To    True                     01140000
+           Move  R115L090-Fin-Inst-No    To    R115IPC0-In-Fin-Inst-No  01150000
+           Move  R115L090-Contract-Type  To    R115IPC0-In-Contract-Type01160000
+           Move  R115L090-Contract-No    To    R115IPC0-In-Contract-No  01170000
+      *                                                                 01180000
+           Call  'F115IPC0'              Using R115IPC0-Part-Charge     01190000
+                                               R7919999-Error-Area      01200000
+           End-Call                                                     01210000
+      *                                                                 01220000
+           Evaluate True                                                01230000
+             When R7919999-Return-Abend                                 01240000
+               Move  'E831'              To    R7919999-Paragraph       01250000
+               Perform Z900-Abend                                       01260000
+      *                                                                 01270000
+           End-Evaluate                                                 01280000
+      *                                                                 01290000
+           .                                                            01300000
+      *################################################################*01310000
+       E850-Delete-PC-Source             Section.                       01320000
+      *                                                                 01330000
+           Set   R115IPC0-In-Delete      To    True                     01340000
+      *                                                                 01350000
+           Move  R115IPC0-CA-Currency    To    R115IPC0-In-CA-Currency  01360000
+           Move  R115IPC0-PA-Seq-No      To    R115IPC0-In-PA-Seq-No    01370000
+           Move  R115IPC0-Role-Type      To    R115IPC0-In-Role-Type    01380000
+           Move  R115IPC0-CT-Type        To    R115IPC0-In-CT-Type      01390000
+      *    Move  R115IPC0-CH-Seq-No      To    R115IPC0-In-CH-Seq-No    01400005
+      *                                                                 01410000
+           Call  'F115IPC0'              Using R115IPC0-Part-Charge     01420000
+                                               R7919999-Error-Area      01430000
+           End-Call                                                     01440000
+      *                                                                 01450000
+           Evaluate True                                                01460000
+             When R7919999-Return-Abend                                 01470000
+               Move  'E841'              To    R7919999-Paragraph       01480000
+               Perform Z900-Abend                                       01490000
+      *                                                                 01500000
+             When R7919999-Return-Error                                 01510000
+               Move  'E842'              To    R7919999-Paragraph       01520000
+               Perform Z700-Error-AE                                    01530000
+      *                                                                 01540003
+             When R7919999-Return-OK                                    01550003
+               Continue                                                 01560003
+      *                                                                 01570000
+           End-Evaluate                                                 01580000
+           .                                                            01590000
+      *################################################################*01600000
+       E910-Find-First-CH-Source         Section.                       01610000
+      *                                                                 01620000
+           Initialize                          R115ICH0-Main-Charge     01630000
+           Set   R115ICH0-In-Work        To    True                     01640003
+           Set   R115ICH0-In-Get-1st     To    True                     01650000
+           Perform E930-Find-CH                                         01660000
+           .                                                            01670000
+      *################################################################*01680000
+       E920-Find-Next-CH-Source          Section.                       01690000
+      *                                                                 01700000
+           Initialize                          R115ICH0-Main-Charge     01710000
+           Set   R115ICH0-In-Work        To    True                     01720003
+           Set   R115ICH0-In-Get-Next    To    True                     01730000
+           Perform E930-Find-CH                                         01740000
+           .                                                            01750000
+      *################################################################*01760000
+       E930-Find-CH                      Section.                       01770000
+      *                                                                 01780000
+           Set   R115ICH0-Version        To    True                     01790000
+           Move  R115L090-Fin-Inst-No    To    R115ICH0-In-Fin-Inst-No  01800000
+           Move  R115L090-Contract-Type  To    R115ICH0-In-Contract-Type01810000
+           Move  R115L090-Contract-No    To    R115ICH0-In-Contract-No  01820000
+      *                                                                 01830000
+           Call  'F115ICH0'              Using R115ICH0-Main-Charge     01840000
+                                               R7919999-Error-Area      01850000
+           End-Call                                                     01860000
+      *                                                                 01870000
+           Evaluate True                                                01880000
+             When R7919999-Return-Abend                                 01890000
+               Move  'E931'              To    R7919999-Paragraph       01900000
+               Perform Z900-Abend                                       01910000
+      *                                                                 01920000
+           End-Evaluate                                                 01930000
+           .                                                            01940000
+      *################################################################*01950000
+       E950-Delete-CH-Source             Section.                       01960000
+      *                                                                 01970000
+           Set   R115ICH0-In-Work        To    True                     01980003
+           Set   R115ICH0-In-Delete      To    True                     01990000
+      *                                                                 02000000
+           Move  R115ICH0-CA-Currency    To    R115ICH0-In-CA-Currency  02010000
+           Move  R115ICH0-PA-Seq-No      To    R115ICH0-In-PA-Seq-No    02020000
+           Move  R115ICH0-RP-Role-Type   To    R115ICH0-In-RP-Role-Type 02030000
+           Move  R115ICH0-Charge-Type    To    R115ICH0-In-Charge-Type  02040000
+           Move  R115ICH0-CH-Seq-No      To    R115ICH0-In-CH-Seq-No    02050000
+      *                                                                 02060000
+           Call  'F115ICH0'              Using R115ICH0-Main-Charge     02070000
+                                               R7919999-Error-Area      02080000
+           End-Call                                                     02090000
+      *                                                                 02100000
+           Evaluate True                                                02110000
+             When R7919999-Return-Abend                                 02120000
+               Move  'E951'              To    R7919999-Paragraph       02130000
+               Perform Z900-Abend                                       02140000
+      *                                                                 02150000
+             When R7919999-Return-Error                                 02160000
+               Move  'E952'              To    R7919999-Paragraph       02170000
+               Perform Z700-Error-AE                                    02180000
+      *                                                                 02190000
+           End-Evaluate                                                 02200000
+           .                                                            02210000
+      *################################################################*02220000
+       Z000-Error-Message                Section.                       02230000
+      *                                                                 02240000
+           Set   R7918030-Version        To    True                     02250000
+      *                                                                 02260000
+           Move  'TF'                    To    R7918030-In-System-ID    02270000
+           Move  R115X000-Fin-Inst-No    To    R7918030-In-Fin-Inst-No  02280000
+           Move  R115X000-FI-Language-639-1                             02290000
+                                         To    R7918030-In-Language     02300000
+      *                                                                 02310000
+           If  R115X000-Trace-On                                        02320000
+               Set  R7918030-In-Log-Yes  To    True                     02330000
+           End-If                                                       02340000
+      *                                                                 02350000
+           Call  'F7918030'              Using R7918030-ErrorMessage    02360000
+           End-Call                                                     02370000
+      *                                                                 02380000
+           Move  R7918030-Out-MessageText                               02390000
+                                         To    R7919999-Message         02400000
+      *                                                                 02410000
+           .                                                            02420000
+      *################################################################*02430000
+       ZI00-Konv-Input-Version           Section.                       02440000
+      *                                                                 02450000
+      * Version control.                                                02460000
+      * If conversion is needed, we call the conversion module.         02470000
+      *                                                                 02480000
+           Set   R115L090-Version        To    True                     02490000
+           Move  Length                  Of    R115L090-Del-Charges     02500004
+                                         To    W-IO-Length              02510000
+      *                                                                 02520000
+           Evaluate True                                                02530000
+             When L-Ext-IO-Area (1:8)    =     R115L090-Version-No      02540000
+             and  Length                 Of    L-Ext-IO-Area            02550000
+                                         Not < W-IO-Length              02560000
+               Move  L-Ext-IO-Area (1:W-IO-Length)                      02570000
+                                         To    W-Int-IO-Area            02580000
+      *                                                                 02590000
+             When Other                                                 02600000
+               Call  'F115L999'                                         02610000
+                   Using By Content      'F115L090 '                    02620000
+                                         'INPUT '                       02630000
+                         By Reference    L-Ext-IO-Area                  02640000
+                                         W-Int-IO-Area                  02650000
+                                         R7919999-Error-Area            02660000
+               End-Call                                                 02670000
+      *                                                                 02680000
+               If  R7919999-Return-Abend                                02690000
+                   Move  'ZI03'          To    R7919999-Paragraph       02700000
+                   Perform Z900-Abend                                   02710000
+               End-If                                                   02720000
+      *                                                                 02730000
+           End-Evaluate                                                 02740000
+      *                                                                 02750000
+           .                                                            02760000
+      *################################################################*02770000
+       ZO00-Konv-Output-Version          Section.                       02780000
+      *                                                                 02790000
+      * Version control.                                                02800000
+      * If conversion is needed, we call the conversion module.         02810000
+      *                                                                 02820000
+           Evaluate True                                                02830000
+             When L-Ext-IO-Area (1:8)    =     R115L090-Version-No      02840000
+             and  Length                 Of    L-Ext-IO-Area            02850000
+                                         Not < W-IO-Length              02860000
+               Move  W-Int-IO-Area       To    L-Ext-IO-Area            02870000
+                                                         (1:W-IO-Length)02880000
+      *                                                                 02890000
+             When Other                                                 02900000
+               Call  'F115L999'                                         02910000
+                   Using By Content      'F115L090 '                    02920000
+                                         'OUTPUT '                      02930000
+                         By Reference    L-Ext-IO-Area                  02940000
+                                         W-Int-IO-Area                  02950000
+                                         R7919999-Error-Area            02960000
+               End-Call                                                 02970000
+      *                                                                 02980000
+               If  R7919999-Return-Abend                                02990000
+                   Move  'ZO01'          To    R7919999-Paragraph       03000000
+                   Perform Z900-Abend                                   03010000
+               End-If                                                   03020000
+      *                                                                 03030000
+           End-Evaluate                                                 03040000
+      *                                                                 03050000
+           .                                                            03060000
+      *################################################################*03070000
+       Z500-OK-Return                    Section.                       03080000
+      *                                                                 03090000
+           Move  Spaces                  To    R7919999-Message         03100000
+           Initialize                          R7919999-Error           03110000
+      *                                                                 03120000
+           Goback.                                                      03130000
+      *################################################################*03140000
+       Z600-Warning-AW                   Section.                       03150000
+      *                                                                 03160000
+           If  R7919999-Return-Code      Not   Numeric                  03170000
+           or  Not R7919999-Return-Abend                                03180000
+               Move  +0                  To    R7919999-Module-Ind      03190000
+           End-If                                                       03200000
+      *                                                                 03210000
+           Add   +1                      To    R7919999-Module-Ind      03220000
+      *                                                                 03230000
+           If  R7919999-Module-Ind       Not >                          03240000
+                             ( Length    Of    R7919999-Module-Tab      03250000
+                             / Length    Of    R7919999-Module-Element )03260000
+               Move  'F115L090'          To    R7919999-Module-Name     03270000
+                                                   (R7919999-Module-Ind)03280000
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     03290000
+                                                   (R7919999-Module-Ind)03300000
+           End-If                                                       03310000
+      *                                                                 03320000
+           Set   R7919999-Return-Warning To    TRUE                     03330000
+      *                                                                 03340000
+           Goback.                                                      03350000
+      *################################################################*03360000
+       Z700-Error-AE                     Section.                       03370000
+      *                                                                 03380000
+           If  R7919999-Return-Code      Not   Numeric                  03390000
+           or  Not R7919999-Return-Abend                                03400000
+               Move  +0                  To    R7919999-Module-Ind      03410000
+           End-If                                                       03420000
+      *                                                                 03430000
+           Add   +1                      To    R7919999-Module-Ind      03440000
+      *                                                                 03450000
+           If  R7919999-Module-Ind       Not >                          03460000
+                             ( Length    Of    R7919999-Module-Tab      03470000
+                             / Length    Of    R7919999-Module-Element )03480000
+               Move  'F115L090'          To    R7919999-Module-Name     03490000
+                                                   (R7919999-Module-Ind)03500000
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     03510000
+                                                   (R7919999-Module-Ind)03520000
+           End-If                                                       03530000
+      *                                                                 03540000
+           Set   R7919999-Return-Error   To    TRUE                     03550000
+      *                                                                 03560000
+           Goback.                                                      03570000
+      *################################################################*03580000
+       Z900-Abend                        Section.                       03590000
+      *                                                                 03600000
+           If  R7919999-Return-Code      Not   Numeric                  03610000
+           or  Not R7919999-Return-Abend                                03620000
+               Move  +0                  To    R7919999-Module-Ind      03630000
+           End-If                                                       03640000
+      *                                                                 03650000
+           Add   +1                      To    R7919999-Module-Ind      03660000
+      *                                                                 03670000
+           If  R7919999-Module-Ind       Not >                          03680000
+                             ( Length    Of    R7919999-Module-Tab      03690000
+                             / Length    Of    R7919999-Module-Element )03700000
+               Move  'F115L090'          To    R7919999-Module-Name     03710000
+                                                   (R7919999-Module-Ind)03720000
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     03730000
+                                                   (R7919999-Module-Ind)03740000
+           End-If                                                       03750000
+      *                                                                 03760000
+           Set   R7919999-Return-Abend   To    TRUE                     03770000
+      *                                                                 03780000
+           Goback.                                                      03790000

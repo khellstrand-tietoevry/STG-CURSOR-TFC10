@@ -1,0 +1,89 @@
+      *################################################################*00010000
+      *                                                                 00020000
+      * Copy-område R7919090.                                           00030000
+      * Generell submodul for å beregne virke- og hellig-dager.         00040000
+      *                                                                 00050000
+      * Man leverer dato.                                               00060000
+      * I retur vil man få vite om det er bankdag eller ei,             00070000
+      * hvilken ukedag det er, samt hvor mange dager det er             00080000
+      * til neste bankdag.                                              00090000
+      *                                                                 00100000
+      * Eksempel på anrop:                                              00110000
+      *   Initialize                           R7919090-Helligdager     00120000
+      *   Set   R7919090-Versjon         To    True                     00130000
+      *   Move  ååååmmdd                 To    R7919090-In-Dato         00140000
+      *   Call  'F7919090'               Using R7919090-Helligdager     00150000
+      *                                        R7919999-Error           00160000
+      *   End-Call                                                      00170000
+      *   If  R7919999-Retur-Abend                                      00180000
+      *       abend                                                     00190000
+      *   End-If                                                        00200000
+      *   Move  R7919090-Ut-Dgr-Neste-Bankdag                           00210001
+      *                                  To    ...                      00220001
+      *                                                                 00230000
+      *################################################################*00240000
+      * DATO ! SI! ENDRINGENS ART                                ! 3A ! 00250000
+      *---------------------------------------------------------------- 00260000
+      *220198!HLR! Lagt inn -Ut-Fri-Type                         !    ! 00270005
+      *071096!HLR! Lagt inn -Ut-Dgr-Forr-Bankdag              V97!    ! 00280005
+      *100295!HLR! Nytt copy-område                              !JR68! 00290004
+      *################################################################*00300000
+       01  R7919090-HELLIGDAGER.                                        00310003
+      *                                                                 00320000
+           05  R7919090-VERSJONS-NR      PIC  X(08).                    00330003
+             88  R7919090-VERSJON                   VALUE '19980122'.   00340005
+      *                                                                 00350000
+           05  R7919090-KVALIFISERING.                                  00360003
+               10  R7919090-IN-DATO      PIC S9(09)              COMP-3.00370003
+      *                                                                 00380000
+           05  R7919090-RESULTAT.                                       00390003
+               10  R7919090-UT-DAG-TYPE  PIC  X(01).                    00400003
+                 88  R7919090-UT-BANK-DAG           VALUE 'J'.          00410003
+                 88  R7919090-UT-IKKE-BANK-DAG      VALUE 'N'.          00420003
+      *                                                                 00430000
+               10  R7919090-UT-UKEDAG    PIC S9(01)              COMP-3.00440003
+                 88  R7919090-UT-MANDAG             VALUE +1.           00450003
+                 88  R7919090-UT-TIRSDAG            VALUE +2.           00460003
+                 88  R7919090-UT-ONSDAG             VALUE +3.           00470003
+                 88  R7919090-UT-TORSDAG            VALUE +4.           00480003
+                 88  R7919090-UT-FREDAG             VALUE +5.           00490003
+                 88  R7919090-UT-LORDAG             VALUE +6.           00500003
+                 88  R7919090-UT-SONDAG             VALUE +7.           00510003
+      *                                                                 00520000
+               10  R7919090-UT-DGR-NESTE-BANKDAG                        00530003
+                                         PIC S9(03)              COMP-3.00540003
+               10  R7919090-UT-DGR-FORR-BANKDAG                         00550004
+                                         PIC S9(03)              COMP-3.00560004
+      *                                                                 00570000
+      * Følgende kode viser hva slags helligdag det evt. er,            00580006
+      * og også om det er julaften, påskeaften etc.                     00590006
+      *                                                                 00600006
+               10  R7919090-UT-FRI-TYPE  PIC  X(04).                    00610006
+                 88  R7919090-UT-IKKE-HELLIGDAG     VALUE '  ',         00620005
+                                                        '3112', 'PÅLØ', 00630006
+                                                        'PILØ', '2412'. 00640006
+                 88  R7919090-UT-HELLIGDAG          VALUE               00650006
+                                                        '0101', 'PÅTO', 00660006
+                                                        'PÅFR', 'PÅSØ', 00670006
+                                                        'PÅMA', '0105', 00680006
+                                                        '1705', 'KRHI', 00690006
+                                                        'PISØ', 'PIMA', 00700006
+                                                        '2512', '2612'. 00710006
+      *                                                                 00720005
+                 88  R7919090-UT-NYTTAARSAFTEN      VALUE '3112'.       00730006
+                 88  R7919090-UT-1-NYTTAARSDAG      VALUE '0101'.       00740006
+                 88  R7919090-UT-SKJAERTORSDAG      VALUE 'PÅTO'.       00750006
+                 88  R7919090-UT-LANGFREDAG         VALUE 'PÅFR'.       00760006
+                 88  R7919090-UT-PAASKEAFTEN        VALUE 'PÅLØ'.       00770006
+                 88  R7919090-UT-1-PAASKEDAG        VALUE 'PÅSØ'.       00780006
+                 88  R7919090-UT-2-PAASKEDAG        VALUE 'PÅMA'.       00790006
+                 88  R7919090-UT-1-MAI              VALUE '0105'.       00800006
+                 88  R7919090-UT-17-MAI             VALUE '1705'.       00810006
+                 88  R7919090-UT-HIMMELSPRETTEN     VALUE 'KRHI'.       00820006
+                 88  R7919090-UT-PINSEAFTEN         VALUE 'PILØ'.       00830006
+                 88  R7919090-UT-1-PINSEDAG         VALUE 'PISØ'.       00840006
+                 88  R7919090-UT-2-PINSEDAG         VALUE 'PIMA'.       00850006
+                 88  R7919090-UT-JULAFTEN           VALUE '2412'.       00860006
+                 88  R7919090-UT-1-JULEDAG          VALUE '2512'.       00870006
+                 88  R7919090-UT-2-JULEDAG          VALUE '2612'.       00880006
+      *                                                                 00890005

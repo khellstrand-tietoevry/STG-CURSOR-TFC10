@@ -1,0 +1,1483 @@
+       Identification Division.                                         00010099
+       Program-Id. FTFCL100.                                            00020099
+       Author. Z3216TW                                                  00030099
+      *################################################################*00040099
+      *                                                                *00050099
+      * Servo - logilevel   / L-module - Logic module                  *00060099
+      * Uses STG, in accordance with new Servo Standards.              *00070099
+      *                                                                *00080099
+      * TFU10/01 - Endre hovedkontrakt                                 *00090099
+      *                                                                *00100099
+      * Code between <META> and </META> tags must not be modified. Do  *00110099
+      * your modifications in the specified user sections !            *00120099
+      *                                                                *00130099
+      *################################################################*00140099
+      * Date ! Si! Type of change                                ! 3A !*00150099
+      *------+---+-----------------------------------------------+----+*00160099
+      *990318!&&&! New module                                    !&&&&!*00170099
+      *------+---+-----------------------------------------------+----+*00180099
+      *140317!KR ! New event-type TF-PROV-DT                     !    !*00190099
+      *      !   !                                               !    !*00200099
+      *------+---+-----------------------------------------------+----+*00201099
+      *000112!NL ! If Due-Date exists, Follow-Up date er set to  !LO18!*00202099
+      *      !   ! 2 days before due-date.                       !    !*00203099
+      *------+---+-----------------------------------------------+----+*00210099
+      *000512!NL ! If Due-Date exists, Follow-Up date er set Due !LM04!*00220099
+      *------+---+-----------------------------------------------+----+*00230099
+      *260900!NL ! Update statuslist                             !LR02!*00240099
+      *------+---+-----------------------------------------------+----+*00250099
+      *231100!NL ! Follow-Up date is set when due-date is changed!LO18!*00260099
+      *------+---+-----------------------------------------------+----+*00270099
+      *150101!NL ! Follow-Up date is changed again               !LT12!*00280099
+      *------+---+-----------------------------------------------+----+*00290099
+      *110701!NL ! New item, incoming Swift                      !LQ93!*00300099
+      *------+---+-----------------------------------------------+----+*00310099
+      *030703!NL ! New item, Silent Confirmation                 !LY15!*00320099
+      *################################################################*00330099
+       Environment Division.                                            00340099
+       Configuration Section.                                           00350099
+       Special-Names.                                                   00360099
+           Decimal-Point Is Comma.                                      00370099
+      *################################################################*00380099
+       Data Division.                                                   00390099
+       Working-Storage Section.                                         00400099
+      *                                                                 00410099
+       01  W-Work-Fields.                                               00420099
+      *                                                                 00430099
+      *<META WA-START>                                                  00440099
+           05  Filler                     Pic   X(08) Value 'WA-START'. 00450099
+      *</META>                                                          00460099
+      *                                                                 00470099
+      *    User work variables can be placed here                       00480099
+           05  Ws-Contract-No             Pic   9(07).                  00490099
+      *                                                                 00500099
+           05  Ws-Max-Amount              Pic  S9(14)V9(03).            00510099
+           05  Ws-Orig-Amount             Pic  S9(14)V9(03).            00520099
+           05  Ws-Max-Tolerance           Pic  S9(03)V9(02).            00530099
+      *                                                                 00540099
+           05  Ws-Event-Date              Pic  S9(08)       Comp-3.     00550099
+           05  Ws-Add-Days                Pic  S9(02)       Comp-3.     00560099
+      *                                                                 00570099
+           05  Wb-EI-Type                 Pic   X(10).                  00580099
+               88  Wb-EI-Type-Due                    Value 'TF-DUE    '.00590099
+               88  Wb-EI-Type-Follow                 Value 'TF-FOLLOW '.00600099
+               88  Wb-EI-Type-Expiry                 Value 'TF-EXPIRY '.00610099
+               88  Wb-EI-Type-Prov-DT                Value 'TF-PROV-DT'.00611099
+      *                                                                 00620099
+           05  Wb-Table-Version           Pic   X(01).                  00630099
+               88  Wb-In-Work                          Value 'W'.       00640099
+               88  Wb-In-Actual                        Value 'A'.       00650099
+      *                                                                 00651099
+           05  Wb-aut-prov                Pic   X(01).                  00652099
+               88  TF-Aut-Prov                         Value 'Y'.       00653099
+               88  TF-Aut-Prov-Not                     Value 'N'.       00654099
+      *                                                                 00655099
+      *                                                                 00660099
+      *                                                                 00670099
+      *                                                                 00680099
+      *<META WA-STOP>                                                   00690099
+           05  Filler                     Pic   X(08) Value 'WA-STOP '. 00700099
+      *</META>                                                          00710099
+      *                                                                 00720099
+      *----------------------------------------------------------------*00730099
+      *                                                                 00740099
+      * Misc. copy books:                                               00750099
+      *                                                                 00760099
+       01  Filler.                                                      00770099
+      *                                                                 00780099
+      *<META MISC-COPY1>                                                00790099
+      *</META>                                                          00800099
+      *<META MISC-COPY2>                                                00810099
+      *</META>                                                          00820099
+      *                                                                 00830099
+      *    Place your copybooks below here                              00840099
+           Copy R115IMC0.                                               00850099
+           Copy R115ICA0.                                               00860099
+           Copy R115IEI0.                                               00870099
+           Copy R115ISR0.                                               00880099
+           Copy R115L020.                                               00890099
+           Copy R115L030.                                               00900099
+           Copy R115L040.                                               00910099
+           Copy R115L090.                                               00920099
+      *                                                                 00930099
+       Copy R7919010.                                                   00940099
+       Copy R7919070.                                                   00950099
+       Copy R7919090.                                                   00960099
+       Copy R7919270.                                                   00970099
+      *                                                                 00980099
+      *                                                                 00990099
+      *################################################################.01000099
+       Linkage Section.                                                 01010099
+      *                                                                 01020099
+      * Fixed header from STG                                           01030099
+      *                                                                 01040099
+       01  L-STG-Header.                                                01050099
+           Copy R400CH02.                                               01060099
+      *                                                                 01070099
+      * Function data                                                   01080099
+      *                                                                 01090099
+       01  L-Data.                                                      01100099
+           Copy RTFCE100.                                               01110099
+      *                                                                 01120099
+      * Standard error area                                             01130099
+      *                                                                 01140099
+       Copy  R7919999.                                                  01150099
+      *                                                                 01160099
+      *################################################################.01170099
+       Procedure Division                Using L-Stg-Header             01180099
+                                               L-Data                   01190099
+                                               R7919999-Error.          01200099
+      *                                                                 01210099
+       A000-Main                         Section.                       01220099
+      *                                                                 01230099
+           Perform B000-Initialize                                      01240099
+      *                                                                 01250099
+           Perform D000-Preparations                                    01260099
+           Perform E000-Processing                                      01270099
+           .                                                            01280099
+      *                                                                 01290099
+       A000-Main-Ex.                                                    01300099
+           Goback.                                                      01310099
+                                                                        01320099
+      *################################################################*01330099
+      * Initialization of necessary work fields                        *01340099
+      *                                                                *01350099
+      *----------------------------------------------------------------*01360099
+       B000-Initialize                   Section.                       01370099
+      *                                                                 01380099
+           Initialize                          R7919999-Error           01390099
+           Initialize                          W-Work-Fields            01400099
+           .                                                            01410099
+      *                                                                 01420099
+       B000-Initialize-Ex.                                              01430099
+           Exit.                                                        01440099
+                                                                        01450099
+      *################################################################*01460099
+       D000-Preparations                 Section.                       01470099
+      *                                                                 01480099
+           Perform D100-Read-Sys-Code-Rel                               01490099
+           Perform D200-Read-Timestamp                                  01500099
+           Perform D300-Set-Indicators                                  01501099
+      *                                                                 01510099
+           .                                                            01520099
+      *                                                                 01530099
+       D000-Preparations-Ex.                                            01540099
+           Exit.                                                        01550099
+                                                                        01560099
+      *################################################################*01570099
+       D100-Read-Sys-Code-Rel            Section.                       01580099
+      *                                                                 01590099
+           Initialize                          R115ISR0-Sys-Code-Rel    01600099
+           Set   R115ISR0-Version        To    True                     01610099
+           Set   R115ISR0-In-Get-1st     To    True                     01620099
+           Set   R115ISR0-In-CC-Count    To    True                     01630099
+      *                                                                 01640099
+           Move  RTFCE100-I-Fin-Inst-No-D                               01650099
+                                         To    R115ISR0-In-F-I-No       01660099
+           Move  'OPERATION-TYPE'        To    R115ISR0-In-From-ST-Type 01670099
+           Move  RTFCE100-I-Operation-Type-D                            01680099
+                                         To    R115ISR0-In-From-SC-Code 01690099
+           Move  Spaces                  To  R115ISR0-In-From-Contr-Type01700099
+      *                                                                 01710099
+           Move  'STATUS'                To    R115ISR0-In-To-ST-Type   01720099
+           Move  '*'                     To    R115ISR0-In-To-SC-Code   01730099
+           Move  Spaces                  To    R115ISR0-In-To-Contr-Type01740099
+      *                                                                 01750099
+           Move  'VALID-OP-ST'           To    R115ISR0-In-Relation-Type01760099
+                                                                        01770099
+           Call  'F115ISR0'              Using R115ISR0-Sys-Code-Rel    01780099
+                                               R7919999-Error-Area      01790099
+           End-Call                                                     01800099
+      *                                                                 01810099
+           Evaluate True                                                01820099
+             When R7919999-Return-Abend                                 01830099
+               Move  'D101'              To    R7919999-Paragraph       01840099
+               Move  'FM'                To    R400CH01-Message-Code    01850099
+               Perform Z900-Abend                                       01860099
+      *                                                                 01870099
+             When R7919999-Return-Error                                 01880099
+               Move  'D102'              To    R7919999-Paragraph       01890099
+               Move  'FM'                To    R400CH01-Message-Code    01900099
+               Perform Z700-Error-AE                                    01910099
+      *                                                                 01920099
+             When R115ISR0-Out-Total-Rows > 1                           01930099
+               Move  'VAR1'              To    R400CH01-Message-Key(1)  01940099
+               Move  RTFCE100-I-Operation-Type-D                        01950099
+                                         To    R400CH01-Message-Data(1) 01960099
+               Move  'TF-SY-STATUS-NOT-UNIQUE'                          01970099
+                                         To    R400CH01-Message-Code    01980099
+               Perform Z700-Error-AE                                    01990099
+           End-Evaluate                                                 02000099
+      *                                                                 02010099
+           .                                                            02020099
+      *                                                                 02030099
+       D100-Read-Sys-Code-Rel-Ex.                                       02040099
+           Exit.                                                        02050099
+      *################################################################*02060099
+       D200-Read-Timestamp               Section.                       02070099
+      *                                                                 02080099
+           Initialize                          R7919070-Timestamp       02090099
+           Set   R7919070-Versjon        To    True                     02100099
+      *                                                                 02110099
+           Call  'F7919070'              Using R7919070-Timestamp       02120099
+                                               R7919999-Error           02130099
+           End-Call                                                     02140099
+      *                                                                 02150099
+           If  Not R7919999-Retur-OK                                    02160099
+               Move  'D201'              To    R7919999-Paragraf        02170099
+               Perform Z900-Abend                                       02180099
+           End-If                                                       02190099
+      *                                                                 02200099
+      *    Move  R7919070-Ut-Timestamp   To    &ååååmmddttmmsshh        02210099
+      *                                                                 02220099
+      *    Convert R7919070-Ut-Timestamp to DB2-Timestamp format.       02230099
+      *                                                                 02240099
+           Initialize                          R7919270-Konv-Timestamp  02250099
+           Set   R7919270-Versjon        To    True                     02260099
+      *                                                                 02270099
+           Move  R7919070-Ut-Timestamp   To    R7919270-In-Timestamp    02280099
+      *                                                                 02290099
+           Call  'F7919270'              Using R7919270-Konv-Timestamp  02300099
+                                               R7919999-Error           02310099
+           End-Call                                                     02320099
+      *                                                                 02330099
+           If  Not R7919999-Retur-OK                                    02340099
+               Move  'D202'              To    R7919999-Paragraf        02350099
+               Perform Z900-Abend                                       02360099
+           End-If                                                       02370099
+      *                                                                 02380099
+      *    Move  R7919270-Ut-Timestamp-DB2                              02390099
+      *                                                                 02400099
+           .                                                            02410099
+      *                                                                 02420099
+       D200-Read-Timestamp-Ex.                                          02430099
+           Exit.                                                        02440099
+      *                                                                 02442099
+           .                                                            02443099
+      *----------------------------------------------------------------*02443199
+       D300-Set-Indicators               Section.                       02443299
+      *                                                                 02444099
+      *                                                                 02444299
+           If  RTFCE100-I-Due-Date-I     = 'U'           And            02444399
+               RTFCE100-I-Tenor-I        = 'U'           And            02444499
+      *        RTFCE100-I-Operation-Type-D = 'ISSUE-GAR' And            02444599
+               RTFCE100-I-Contract-Type-D  = 'ILG'                      02444699
+               Set TF-Aut-Prov           To True                        02444799
+           Else                                                         02445299
+               Set TF-Aut-Prov-Not       To True                        02445399
+           End-if                                                       02445499
+           .                                                            02445599
+       D300-Set-Indicators-Ex.                                          02445699
+           Exit.                                                        02446099
+      *################################################################*02450099
+      * Place the processing control logic here. Use perform statements*02460099
+      * to other sections.                                             *02470099
+      *----------------------------------------------------------------*02480099
+       E000-Processing                   Section.                       02490099
+      *                                                                 02500099
+           Perform F000-Modification                                    02510099
+           Perform G000-Update                                          02520099
+           .                                                            02530099
+      *                                                                 02540099
+       E000-Processing-Ex.                                              02550099
+           Exit.                                                        02560099
+                                                                        02570099
+      *################################################################*02580099
+      * You can put code to perform necessary modification of data     *02590099
+      * fields etc. here                                               *02600099
+      *----------------------------------------------------------------*02610099
+       F000-Modification                 Section.                       02620099
+      *                                                                 02630099
+           Continue                                                     02640099
+           .                                                            02650099
+      *                                                                 02660099
+       F000-Modification-Ex.                                            02670099
+           Exit.                                                        02680099
+                                                                        02690099
+      *################################################################*02700099
+      * Control your database updates/queries from here. Use Perform   *02710099
+      * statements to the different database parts that will be        *02720099
+      * accessed in such a way that one section only controls update of*02730099
+      * one database element.                                          *02740099
+      *----------------------------------------------------------------*02750099
+       G000-Update                       Section.                       02760099
+           Evaluate True                                                02770099
+                                                                        02780099
+             When RTFCE100-B-Contract-No-I     = 'U'                    02790099
+      *        .......CHANGE EXISTING CONTRACT.......                   02800099
+                                                                        02810099
+               Move  RTFCE100-B-Contract-No-D                           02820099
+                                         To    Ws-Contract-No           02830099
+      *        Change availability                                      02840099
+               If  RTFCE100-I-Availability-I      = 'U'                 02850099
+               Or  RTFCE100-I-Issued-Date-I       = 'U'                 02860099
+               Or  RTFCE100-I-Confirmed-I         = 'U'                 02870099
+               Or  RTFCE100-I-Silent-Confr-I      = 'U'                 02880099
+      *            Update Main_Contract                                 02890099
+                   Set  Wb-In-Work       To    True                     02900099
+                   Perform H200-Read-Main-Contract                      02910099
+                   Perform G100-Update-Main-Contract                    02920099
+               End-If                                                   02930099
+      *                                                                 02940099
+      *        If  RTFCE100-I-Availability-I      = 'U'                 02950099
+      *            Availability also affects Event_Info                 02960099
+      *            Set Wb-EI-Type-Due    To    True                     02970099
+      *            Perform H400-Read-Event-Info                         02980099
+      *            Evaluate True                                        02990099
+      *              When RTFCE100-I-Availability-D      = 'S'          03000099
+      *               And R7919999-Return-OK                            03010099
+      *                Perform G600-Delete-Event-Info                   03020099
+      *                                                                 03030099
+      *              When (    RTFCE100-I-Availability-D = 'D'          03040099
+      *                    Or  RTFCE100-I-Availability-D = 'A'          03050099
+      *                    Or  RTFCE100-I-Availability-D = 'M')         03060099
+      *               And R7919999-Return-OK                            03070099
+      *                If  RTFCE100-I-Due-Date-I = 'U'                  03080099
+      *                    Move  RTFCE100-I-Due-Date-D                  03090099
+      *                                  To    Ws-Event-Date            03100099
+      *                End-If                                           03110099
+      *                Perform G800-Update-Event-Info                   03120099
+      *                                                                 03130099
+      *              When (    RTFCE100-I-Availability-D = 'D'          03140099
+      *                    Or  RTFCE100-I-Availability-D = 'A'          03150099
+      *                    Or  RTFCE100-I-Availability-D = 'M')         03160099
+      *               And R7919999-Return-Error                         03170099
+      *                If  RTFCE100-I-Due-Date-I = 'U'                  03180099
+      *                    Move  RTFCE100-I-Due-Date-D                  03190099
+      *                                  To    Ws-Event-Date            03200099
+      *                End-If                                           03210099
+      *                Perform G700-Insert-Event-Info                   03220099
+      *            End-Evaluate                                         03230099
+      *        End-If                                                   03240099
+                                                                        03250099
+      *        Update Contract_Amount                                   03260099
+               Perform H300-Read-Contract-Amount                        03270099
+      * If the CA-currency has been changed, any registered charges     03280099
+      * are to be deleted.                                              03290099
+               If  RTFCE100-I-CC-Amount-I =    'U'                      03300099
+                 If  RTFCE100-I-CC-Amount-D                             03310099
+                                         Not = R115ICA0-Currency        03320099
+                   Perform H600-Delete-Shadow-Charges                   03330099
+                 End-If                                                 03340099
+               End-If                                                   03350099
+               Perform G300-Delete-Contract-Amount                      03360099
+               Perform G400-Insert-Contract-Amount1                     03370099
+      *                                                                 03380099
+      *        Update Event_Info                                        03390099
+               If  RTFCE100-I-Follow-Up-Date-I    = 'U'                 03400099
+                   Set Wb-EI-Type-Follow To    True                     03410099
+                   Move RTFCE100-I-Follow-Up-Date-D                     03420099
+                                         To     Ws-Event-Date           03430099
+                   Perform H400-Read-Event-Info                         03440099
+                   If  R7919999-Return-OK                               03450099
+                       Perform G800-Update-Event-Info                   03460099
+                   Else                                                 03470099
+                       Perform G700-Insert-Event-Info                   03480099
+                   End-If                                               03490099
+               End-If                                                   03500099
+                                                                        03510099
+               If  RTFCE100-I-Due-Date-I          = 'U'                 03520099
+                   And Not                                              03520199
+                   RTFCE100-I-Contract-Type-D  = 'ILG'                  03520299
+      *            And Not TF-Aut-Prov                                  03521099
+      *        And RTFCE100-I-Availability-I  Not = 'U'                 03530099
+                   Set Wb-EI-Type-Due    To    True                     03540099
+                   Move RTFCE100-I-Due-Date-D                           03550099
+                                         To    Ws-Event-Date            03560099
+                   Perform H400-Read-Event-Info                         03570099
+                   If  R7919999-Return-OK                               03580099
+                       Perform G800-Update-Event-Info                   03590099
+                   Else                                                 03600099
+                       Perform G700-Insert-Event-Info                   03610099
+                   End-If                                               03620099
+               End-If                                                   03630099
+      *                                                                 03640099
+      *        Feilretting 23.11.00                                     03650099
+               If  RTFCE100-I-Operation-Type-D = 'REGISTER'             03660099
+               And (RTFCE100-I-Due-Date-I          = 'U'                03670099
+               Or   RTFCE100-I-Tenor-I             = 'U')               03680099
+               And RTFCE100-I-Follow-Up-Date-I Not = 'U'                03690099
+                   Set Wb-EI-Type-Follow                                03700099
+                                         To    True                     03710099
+                   Perform H500-Calc-Follow-Up-Date                     03720099
+                   Perform H400-Read-Event-Info                         03730099
+                   If  R7919999-Return-OK                               03740099
+                       Perform G800-Update-Event-Info                   03750099
+                   Else                                                 03760099
+                       Perform G700-Insert-Event-Info                   03770099
+                   End-If                                               03780099
+               End-If                                                   03790099
+      *                                                                 03800099
+               If  RTFCE100-I-Tenor-I             = 'U'                 03810099
+                   And Not                                              03810199
+                   RTFCE100-I-Contract-Type-D  = 'ILG'                  03810299
+      *            And Not TF-Aut-Prov                                  03811099
+      *        And RTFCE100-I-Availability-I  Not = 'U'                 03820099
+                   Set Wb-EI-Type-Due    To    True                     03830099
+                   Move 00010101         To    Ws-Event-Date            03840099
+                   Perform H400-Read-Event-Info                         03850099
+                   If  R7919999-Return-OK                               03860099
+                       Perform G800-Update-Event-Info                   03870099
+                   Else                                                 03880099
+                       Perform G700-Insert-Event-Info                   03890099
+                   End-If                                               03900099
+               End-If                                                   03910099
+                                                                        03920099
+               If  RTFCE100-I-Expiry-Date-I       = 'U'                 03930099
+               Or  RTFCE100-I-Place-Of-Expiry-I   = 'U'                 03940099
+                   Set Wb-EI-Type-Expiry To    True                     03950099
+                   If  RTFCE100-I-Expiry-Date-I = 'U'                   03960099
+                       Move RTFCE100-I-Expiry-Date-D                    03970099
+                                         To    Ws-Event-Date            03980099
+                   Else                                                 03990099
+                       Move  00010101    To    Ws-Event-Date            04000099
+                   End-If                                               04010099
+                                                                        04020099
+                   Perform H400-Read-Event-Info                         04030099
+                   If  R7919999-Return-OK                               04040099
+                       Perform G800-Update-Event-Info                   04050099
+                   Else                                                 04060099
+                       Perform G700-Insert-Event-Info                   04070099
+                   End-If                                               04080099
+               End-If                                                   04090099
+      *                                                                 04091099
+      * New logic 2014.03.19 KR TF-AutProv                              04092099
+      *                                                                 04093099
+      *                                                                 04094099
+      *        If  RTFCE100-I-Contract-Type-D  = 'ILG'                  04094199
+      *        And     RTFCE100-I-Due-Date-I          = 'U'             04094299
+      *        And     RTFCE100-I-Due-Date-D          = 99991231        04094399
+      *            Set Wb-EI-Type-Prov-DT To True                       04094499
+      *            Perform H400-Read-Event-Info                         04094599
+      *            If  R7919999-Return-OK                               04094699
+      *                Perform G600-Delete-Event-Info                   04094799
+      *            End-If                                               04094899
+      *        End-If                                                   04094999
+      *                                                                 04095099
+               If  TF-Aut-Prov                                          04095199
+                   Set Wb-EI-Type-Prov-DT To True                       04096099
+                   If  RTFCE100-I-Due-Date-I = 'U'                      04096199
+                       Move  RTFCE100-I-Due-Date-D                      04096299
+                                         To Ws-Event-Date               04096399
+                   Else                                                 04096499
+                       Move  00010101    To Ws-Event-Date               04096599
+                   End-If                                               04096699
+                   Perform H400-Read-Event-Info                         04099099
+                   If  R7919999-Return-OK                               04099199
+                       Perform G800-Update-Event-Info                   04099299
+                   Else                                                 04099399
+                       Perform G700-Insert-Event-Info                   04099499
+                   End-If                                               04099599
+               End-If                                                   04099699
+                                                                        04100099
+             When RTFCE100-B-Contract-No-I Not = 'U'                    04110099
+      *         .......CREATE NEW CONTRACT.......                       04120099
+                                                                        04130099
+      *        Create Main_Contract                                     04140099
+               Perform H100-Create-Contract-No                          04150099
+      *                                                                 04160099
+               Set  Wb-In-Actual         To    True                     04170099
+               Perform G200-Insert-Main-Contract                        04180099
+               Set  Wb-In-Work           To    True                     04190099
+               Perform G200-Insert-Main-Contract                        04200099
+      *                                                                 04210099
+      *        Create Contract_Amount                                   04220099
+               If  RTFCE100-I-Orig-Amount-I       = 'U'                 04230099
+               Or  RTFCE100-I-CC-Amount-I         = 'U'                 04240099
+               Or  RTFCE100-I-Max-Pst-Tolerance-I = 'U'                 04250099
+               Or  RTFCE100-I-Min-Pst-Tolerance-I = 'U'                 04260099
+                   Perform G500-Insert-Contract-Amount2                 04270099
+               End-If                                                   04280099
+      *                                                                 04290099
+      *        Create Event_Info                                        04300099
+               If  RTFCE100-I-Follow-Up-Date-I    = 'U'                 04310099
+                   Set Wb-EI-Type-Follow To    True                     04320099
+                   Move RTFCE100-I-Follow-Up-Date-D                     04330099
+                                         To    Ws-Event-Date            04340099
+                   Perform G700-Insert-Event-Info                       04350099
+               Else                                                     04360099
+                   If  RTFCE100-I-Operation-Type-D = 'REGISTER'         04370099
+                       Set Wb-EI-Type-Follow                            04380099
+                                         To    True                     04390099
+                       Perform H500-Calc-Follow-Up-Date                 04400099
+                       Perform G700-Insert-Event-Info                   04410099
+                   End-If                                               04420099
+      *                                                                 04420199
+ndl                If  RTFCE100-I-Operation-Type-D = 'ISSUE-GAR'        04421099
+gar                And RTFCE100-I-Contract-Type-D  = 'ILG'              04421199
+                       Set Wb-EI-Type-Follow                            04422099
+                                         To    True                     04423099
+                       Perform H550-Calc-Follow-Up-GAR                  04424099
+                       Perform G700-Insert-Event-Info                   04425099
+                   End-If                                               04426099
+               End-If                                                   04430099
+                                                                        04440099
+               If  RTFCE100-I-Due-Date-I          = 'U'                 04450099
+                   And Not                                              04450199
+                   RTFCE100-I-Contract-Type-D  = 'ILG'                  04450299
+      *            And Not TF-Aut-Prov                                  04451099
+                   Set Wb-EI-Type-Due    To    True                     04460099
+                   Move RTFCE100-I-Due-Date-D                           04470099
+                                         To    Ws-Event-Date            04480099
+                   Perform G700-Insert-Event-Info                       04490099
+               End-If                                                   04500099
+                                                                        04510099
+               If  RTFCE100-I-Tenor-I             = 'U'                 04520099
+                   And Not                                              04520199
+                   RTFCE100-I-Contract-Type-D  = 'ILG'                  04520299
+      *            And Not TF-Aut-Prov                                  04521099
+                   Set Wb-EI-Type-Due    To    True                     04530099
+                   Move 00010101         To    Ws-Event-Date            04540099
+                   Perform G700-Insert-Event-Info                       04550099
+               End-If                                                   04560099
+                                                                        04570099
+               If  RTFCE100-I-Expiry-Date-I       = 'U'                 04580099
+               Or  RTFCE100-I-Place-Of-Expiry-I   = 'U'                 04590099
+                   Set Wb-EI-Type-Expiry To    True                     04600099
+                   If  RTFCE100-I-Expiry-Date-I = 'U'                   04610099
+                       Move RTFCE100-I-Expiry-Date-D                    04620099
+                                         To    Ws-Event-Date            04630099
+                   Else                                                 04640099
+                       Move  00010101    To    Ws-Event-Date            04650099
+                   End-If                                               04660099
+                   Perform G700-Insert-Event-Info                       04670099
+ndlfix* ønsket etter brukerforum mars 2011, gi warning                  04671099
+                   If   RTFCE100-I-Expiry-Date-I = 'U'                  04672099
+                   and  RTFCE100-I-Expiry-Date-D < R400CH01-System-Date 04673099
+                   and  RTFCE100-I-Contract-Type-D   = 'ELC '           04674099
+                     Move  'F'           To RTFCE100-I-Due-Date-O       04675099
+                     Move  'FELT1'       To R400CH01-Message-Key(1)     04676099
+                     Move  'Utløpsdato'  To R400CH01-Message-Data(1)    04677099
+                     Move  'FELT2'       To R400CH01-Message-Key(2)     04678099
+                     Move  'Dagens dato' To R400CH01-Message-Data(2)    04679099
+                     Move  'GL-FELT1<FELT2&'                            04679199
+                                         To R400CH01-Message-Code       04679299
+                     Perform  Z600-Error-AW                             04679399
+                   End-If                                               04679499
+               End-If                                                   04679599
+      *                                                                 04690099
+      * New logic 2014.03.19 KR                                         04690199
+      *                                                                 04690299
+      *                                                                 04690399
+               If  TF-Aut-Prov                                          04691099
+                   Set Wb-EI-Type-Prov-DT To True                       04691199
+                   Move RTFCE100-I-Due-Date-D                           04691299
+                                         To    Ws-Event-Date            04691399
+                   Perform H400-Read-Event-Info                         04691499
+                   If  R7919999-Return-OK                               04691599
+                       Perform G800-Update-Event-Info                   04691699
+                   Else                                                 04691799
+                       Perform G700-Insert-Event-Info                   04691899
+                   End-If                                               04691999
+               End-If                                                   04692099
+      *                                                                 04693099
+               Perform H700-Update-Statuslist                           04700099
+      *                                                                 04710099
+           End-Evaluate                                                 04720099
+      *                                                                 04730099
+           Perform G900-Set-Timestamp                                   04740099
+           Set  Wb-In-Actual             To    True                     04750099
+           Perform H200-Read-Main-Contract                              04760099
+           Perform U000-Out-Fields                                      04770099
+                                                                        04770199
+           .                                                            04780099
+      *                                                                 04790099
+       G000-Update-Ex.                                                  04800099
+           Exit.                                                        04810099
+                                                                        04820099
+      *################################################################*04830099
+       G100-Update-Main-Contract         Section.                       04840099
+      *                                                                 04850099
+           Set   R115IMC0-In-Update      To    True                     04860099
+           Set   R115IMC0-In-Work        To    True                     04870099
+      *                                                                 04880099
+           If  RTFCE100-I-Availability-I = 'U'                          04890099
+               Move RTFCE100-I-Availability-D                           04900099
+                                         To    R115IMC0-Availability    04910099
+           End-If                                                       04920099
+      *                                                                 04930099
+           If  RTFCE100-I-Issued-Date-I = 'U'                           04940099
+               Move  RTFCE100-I-Issued-Date-D                           04950099
+                                         To    R115IMC0-Issued-Date     04960099
+           End-If                                                       04970099
+      *                                                                 04980099
+           If  RTFCE100-I-Confirmed-I = 'U'                             04990099
+               Move  RTFCE100-I-Confirmed-D                             05000099
+                                         To    R115IMC0-Confirmed       05010099
+           End-If                                                       05020099
+      *                                                                 05030099
+           If  RTFCE100-I-Silent-Confr-I = 'U'                          05040099
+               Move RTFCE100-I-Silent-Confr-D                           05050099
+                                         To    R115IMC0-Silent-Confrm   05060099
+           End-If                                                       05070099
+      *                                                                 05080099
+           Move  R115ISR0-To-SC-Code     To    R115IMC0-Status          05090099
+      *                                                                 05100099
+           Call  'F115IMC0'              Using R115IMC0-Main-Contract   05110099
+                                               R7919999-Error           05120099
+           End-Call                                                     05130099
+      *                                                                 05140099
+           Evaluate True                                                05150099
+             When R7919999-Retur-Abend                                  05160099
+               Move  'G101'              To    R7919999-Paragraf        05170099
+               Move  'FM'                To    R400CH01-Message-Code    05180099
+               Perform Z900-Abend                                       05190099
+                                                                        05200099
+             When R7919999-Retur-Feil                                   05210099
+               Move  'G102'              To    R7919999-Paragraf        05220099
+               Move  'FM'                To    R400CH01-Message-Code    05230099
+               Perform Z900-Abend                                       05240099
+           End-Evaluate                                                 05250099
+      *                                                                 05260099
+           .                                                            05270099
+      *                                                                 05280099
+       G100-Update-Main-Contract-Ex.                                    05290099
+           Exit.                                                        05300099
+      *################################################################*05310099
+       G200-Insert-Main-Contract         Section.                       05320099
+      *                                                                 05330099
+           Initialize                          R115IMC0-Main-Contract   05340099
+           Set   R115IMC0-Version        To    True                     05350099
+           Set   R115IMC0-In-Insert      To    True                     05360099
+           If  Wb-In-Actual                                             05370099
+               Set   R115IMC0-In-Actual  To    True                     05380099
+           Else                                                         05390099
+               Set   R115IMC0-In-Work    To    True                     05400099
+           End-If                                                       05410099
+      *                                                                 05420099
+           Move  RTFCE100-I-Fin-Inst-No-D                               05430099
+                                         To    R115IMC0-Fin-Inst-No     05440099
+      *                                                                 05450099
+           Move  RTFCE100-I-Contract-Type-D                             05460099
+                                         To    R115IMC0-Contract-Type   05470099
+           Move  Ws-Contract-No          To    R115IMC0-Contract-No     05480099
+           Move  'Y'                     To    R115IMC0-In-Progress     05490099
+           Move  R400CH01-Exec-Date      To    R115IMC0-Register-Date   05500099
+      *                                                                 05510099
+           If  RTFCE100-I-Incoming-Swift-I = 'U'                        05520099
+               Move RTFCE100-I-Incoming-Swift-D                         05530099
+                                         To    R115IMC0-Incom-Swift     05540099
+           End-If                                                       05550099
+      *                                                                 05560099
+           If  RTFCE100-I-Silent-Confr-I = 'U'                          05570099
+               Move RTFCE100-I-Silent-Confr-D                           05580099
+                                         To    R115IMC0-Silent-Confrm   05590099
+           End-If                                                       05600099
+                                                                        05610099
+      *                                                                 05620099
+           If  RTFCE100-I-Availability-I = 'U'                          05630099
+               Move RTFCE100-I-Availability-D                           05640099
+                                         To    R115IMC0-Availability    05650099
+           End-If                                                       05660099
+      *                                                                 05670099
+           If  RTFCE100-I-Issued-Date-I = 'U'                           05680099
+               Move  RTFCE100-I-Issued-Date-D                           05690099
+                                         To    R115IMC0-Issued-Date     05700099
+           End-If                                                       05710099
+      *                                                                 05720099
+           If  RTFCE100-I-Confirmed-I = 'U'                             05730099
+               Move  RTFCE100-I-Confirmed-D                             05740099
+                                         To    R115IMC0-Confirmed       05750099
+           End-If                                                       05760099
+      *                                                                 05770099
+      *                                                                 05780099
+           Move  R7919270-Ut-Timestamp-DB2                              05790099
+                                         To    R115IMC0-Upd-Timestamp   05800099
+           Move  R115ISR0-To-SC-Code     To    R115IMC0-Status          05810099
+      *                                                                 05820099
+           Call  'F115IMC0'              Using R115IMC0-Main-Contract   05830099
+                                               R7919999-Error           05840099
+           End-Call                                                     05850099
+      *                                                                 05860099
+           Evaluate True                                                05870099
+             When R7919999-Retur-Abend                                  05880099
+               Move  'G201'              To    R7919999-Paragraf        05890099
+               Move  'FM'                To    R400CH01-Message-Code    05900099
+               Perform Z900-Abend                                       05910099
+                                                                        05920099
+             When R7919999-Retur-Feil                                   05930099
+               Move  'G202'              To    R7919999-Paragraf        05940099
+               Move  'FM'                To    R400CH01-Message-Code    05950099
+               Perform Z900-Abend                                       05960099
+           End-Evaluate                                                 05970099
+      *                                                                 05980099
+           .                                                            05990099
+      *                                                                 06000099
+       G200-Insert-Main-Contract-Ex.                                    06010099
+           Exit.                                                        06020099
+      *################################################################*06030099
+       G300-Delete-Contract-Amount       Section.                       06040099
+      *                                                                 06050099
+           Set   R115ICA0-In-Delete      To    True                     06060099
+           Set   R115ICA0-In-Work        To    True                     06070099
+      *                                                                 06080099
+           Move  Ws-Contract-No          To    R115ICA0-In-Contract-No  06090099
+           Move  R115ICA0-Currency       To    R115ICA0-In-Currency     06100099
+      *                                                                 06110099
+           Call  'F115ICA0'              Using R115ICA0-Contract-Amount 06120099
+                                               R7919999-Error-Area      06130099
+           End-Call                                                     06140099
+      *                                                                 06150099
+           Evaluate True                                                06160099
+             When R7919999-Return-Abend                                 06170099
+               Move  'G301'              To    R7919999-Paragraph       06180099
+               Move  'FM'                To    R400CH01-Message-Code    06190099
+               Perform Z900-Abend                                       06200099
+                                                                        06210099
+             When R7919999-Return-Error                                 06220099
+               Move  'G302'              To    R7919999-Paragraph       06230099
+               Move  'FM'                To    R400CH01-Message-Code    06240099
+               Perform Z700-Error-AE                                    06250099
+           End-Evaluate                                                 06260099
+      *                                                                 06270099
+           .                                                            06280099
+      *                                                                 06290099
+       G300-Delete-Contract-Amount-Ex.                                  06300099
+           Exit.                                                        06310099
+      *################################################################*06320099
+       G400-Insert-Contract-Amount1      Section.                       06330099
+      *                                                                 06340099
+           Set   R115ICA0-In-Insert      To    True                     06350099
+           Set   R115ICA0-In-Work        To    True                     06360099
+      *                                                                 06370099
+           If  RTFCE100-I-Orig-Amount-I       = 'U'                     06380099
+               Move RTFCE100-I-Orig-Amount-D                            06390099
+                                         To    R115ICA0-Original-Amount 06400099
+                                               R115ICA0-Remaining-Amount06410099
+                                               R115ICA0-Prev-O-Amount   06420099
+                                               R115ICA0-Curr-O-Amount   06430099
+           End-If                                                       06440099
+      *                                                                 06450099
+           If  RTFCE100-I-Max-Pst-Tolerance-I = 'U'                     06460099
+               Move RTFCE100-I-Max-Pst-Tolerance-D                      06470099
+                                         To   R115ICA0-Max-Pct-Tolerance06480099
+           Else                                                         06490099
+               Move 0                    To   R115ICA0-Max-Pct-Tolerance06500099
+           End-If                                                       06510099
+      *                                                                 06520099
+           If  RTFCE100-I-Min-Pst-Tolerance-I = 'U'                     06530099
+               Move RTFCE100-I-Min-Pst-Tolerance-D                      06540099
+                                         To   R115ICA0-Min-Pct-Tolerance06550099
+           Else                                                         06560099
+               Move 0                    To   R115ICA0-Min-Pct-Tolerance06570099
+           End-If                                                       06580099
+      *                                                                 06590099
+           If  RTFCE100-I-CC-Amount-I         = 'U'                     06600099
+               Move RTFCE100-I-CC-Amount-D                              06610099
+                                         To    R115ICA0-Currency        06620099
+           End-If                                                       06630099
+      *                                                                 06640099
+           Call  'F115ICA0'              Using R115ICA0-Contract-Amount 06650099
+                                               R7919999-Error-Area      06660099
+           End-Call                                                     06670099
+      *                                                                 06680099
+           Evaluate True                                                06690099
+             When R7919999-Return-Abend                                 06700099
+               Move  'G401'              To    R7919999-Paragraph       06710099
+               Move  'FM'                To    R400CH01-Message-Code    06720099
+               Perform Z900-Abend                                       06730099
+                                                                        06740099
+             When R7919999-Return-Error                                 06750099
+               Move  'G402'              To    R7919999-Paragraph       06760099
+               Move  'FM'                To    R400CH01-Message-Code    06770099
+               Perform Z700-Error-AE                                    06780099
+           End-Evaluate                                                 06790099
+      *                                                                 06800099
+           .                                                            06810099
+      *                                                                 06820099
+       G400-Ins-Contract-Amount1-Ex.                                    06830099
+           Exit.                                                        06840099
+      *################################################################*06850099
+       G500-Insert-Contract-Amount2      Section.                       06860099
+      *                                                                 06870099
+           Initialize                          R115ICA0-Contract-Amount 06880099
+           Set   R115ICA0-Version        To    True                     06890099
+           Set   R115ICA0-In-Insert      To    True                     06900099
+           Set   R115ICA0-In-Work        To    True                     06910099
+      *                                                                 06920099
+           Move  RTFCE100-I-Fin-Inst-No-D                               06930099
+                                         To    R115ICA0-Fin-Inst-No     06940099
+           Move  RTFCE100-I-Contract-Type-D                             06950099
+                                         To    R115ICA0-Contract-Type   06960099
+           Move  Ws-Contract-No          To    R115ICA0-Contract-No     06970099
+      *                                                                 06980099
+           If  RTFCE100-I-Orig-Amount-I       = 'U'                     06990099
+               Move RTFCE100-I-Orig-Amount-D                            07000099
+                                         To    R115ICA0-Original-Amount 07010099
+                                               R115ICA0-Remaining-Amount07020099
+                                               R115ICA0-Prev-O-Amount   07030099
+                                               R115ICA0-Curr-O-Amount   07040099
+           End-If                                                       07050099
+      *                                                                 07060099
+           If  RTFCE100-I-Max-Pst-Tolerance-I = 'U'                     07070099
+               Move RTFCE100-I-Max-Pst-Tolerance-D                      07080099
+                                         To   R115ICA0-Max-Pct-Tolerance07090099
+           End-If                                                       07100099
+      *                                                                 07110099
+           If  RTFCE100-I-Min-Pst-Tolerance-I = 'U'                     07120099
+               Move RTFCE100-I-Min-Pst-Tolerance-D                      07130099
+                                         To   R115ICA0-Min-Pct-Tolerance07140099
+           End-If                                                       07150099
+      *                                                                 07160099
+           If  RTFCE100-I-CC-Amount-I         = 'U'                     07170099
+               Move RTFCE100-I-CC-Amount-D                              07180099
+                                         To    R115ICA0-Currency        07190099
+           End-If                                                       07200099
+      *                                                                 07210099
+           Call  'F115ICA0'              Using R115ICA0-Contract-Amount 07220099
+                                               R7919999-Error-Area      07230099
+           End-Call                                                     07240099
+      *                                                                 07250099
+           Evaluate True                                                07260099
+             When R7919999-Return-Abend                                 07270099
+               Move  'G501'              To    R7919999-Paragraph       07280099
+               Move  'FM'                To    R400CH01-Message-Code    07290099
+               Perform Z900-Abend                                       07300099
+                                                                        07310099
+             When R7919999-Return-Error                                 07320099
+               Move  'G502'              To    R7919999-Paragraph       07330099
+               Move  'FM'                To    R400CH01-Message-Code    07340099
+               Perform Z700-Error-AE                                    07350099
+           End-Evaluate                                                 07360099
+      *                                                                 07370099
+           .                                                            07380099
+      *                                                                 07390099
+       G500-Ins-Contract-Amount2-Ex.                                    07400099
+           Exit.                                                        07410099
+      *################################################################*07420099
+       G600-Delete-Event-Info            Section.                       07430099
+      *                                                                 07440099
+           Set   R115IEI0-In-Delete      To    True                     07450099
+           Set   R115IEI0-In-Work        To    True                     07460099
+      *                                                                 07470099
+           Call  'F115IEI0'              Using R115IEI0-Event-Info      07480099
+                                               R7919999-Error-Area      07490099
+           End-Call                                                     07500099
+      *                                                                 07510099
+           Evaluate True                                                07520099
+             When R7919999-Return-Abend                                 07530099
+               Move  'G601'              To    R7919999-Paragraph       07540099
+               Move  'FM'                To    R400CH01-Message-Code    07550099
+               Perform Z900-Abend                                       07560099
+                                                                        07570099
+             When R7919999-Return-Error                                 07580099
+               Move  'G602'              To    R7919999-Paragraph       07590099
+               Move  'FM'                To    R400CH01-Message-Code    07600099
+               Perform Z700-Error-AE                                    07610099
+           End-Evaluate                                                 07620099
+      *                                                                 07630099
+           .                                                            07640099
+      *                                                                 07650099
+       G600-Delete-Event-Info-Ex.                                       07660099
+           Exit.                                                        07670099
+      *################################################################*07680099
+       G700-Insert-Event-Info            Section.                       07690099
+      *                                                                 07700099
+           Initialize                          R115IEI0-Event-Info      07710099
+           Set   R115IEI0-Version        To    True                     07720099
+           Set   R115IEI0-In-Insert      To    True                     07730099
+           Set   R115IEI0-In-Work        To    True                     07740099
+      *                                                                 07750099
+           Move  RTFCE100-I-Fin-Inst-No-D                               07760099
+                                         To    R115IEI0-Fin-Inst-No     07770099
+           Move  RTFCE100-I-Contract-Type-D                             07780099
+                                         To    R115IEI0-Contract-Type   07790099
+           Move  Ws-Contract-No          To    R115IEI0-Contract-No     07800099
+           Set   R115IEI0-In-Rel-MC      To    True                     07810099
+      *RM  Move  RTFCE100-I-CC-Amount-D  To    R115IEI0-CA-Currency     07820099
+           Move  Wb-EI-Type              To    R115IEI0-Event-Type      07830099
+      *                                                                 07840099
+           If  Ws-Event-Date > 00010101                                 07850099
+               Move  Ws-Event-Date       To    R115IEI0-Event-Date      07860099
+           End-If                                                       07870099
+      *                                                                 07880099
+           If   RTFCE100-I-Tenor-I = 'U'                                07890099
+           And (Wb-EI-Type-Due or Wb-EI-Type-Prov-DT)                   07900099
+               Move RTFCE100-I-Tenor-D   To    R115IEI0-Tenor           07910099
+           End-If                                                       07920099
+      *                                                                 07930099
+           If  RTFCE100-I-Place-Of-Expiry-I = 'U'                       07940099
+           And Wb-EI-Type-Expiry                                        07950099
+               Move  RTFCE100-I-Place-Of-Expiry-D                       07960099
+                                         To    R115IEI0-Place-Expiry    07970099
+           End-If                                                       07980099
+      *                                                                 07990099
+           Call  'F115IEI0'              Using R115IEI0-Event-Info      08000099
+                                               R7919999-Error-Area      08010099
+           End-Call                                                     08020099
+      *                                                                 08030099
+           Evaluate True                                                08040099
+             When R7919999-Return-Abend                                 08050099
+               Move  'G701'              To    R7919999-Paragraph       08060099
+               Move  'FM'                To    R400CH01-Message-Code    08070099
+               Perform Z900-Abend                                       08080099
+                                                                        08090099
+             When R7919999-Return-Error                                 08100099
+               Move  'G702'              To    R7919999-Paragraph       08110099
+               Move  'FM'                To    R400CH01-Message-Code    08120099
+               Perform Z700-Error-AE                                    08130099
+           End-Evaluate                                                 08140099
+      *                                                                 08150099
+           .                                                            08160099
+      *                                                                 08170099
+       G700-Insert-Event-Info-Ex.                                       08180099
+           Exit.                                                        08190099
+      *################################################################*08200099
+       G800-Update-Event-Info            Section.                       08210099
+      *                                                                 08220099
+           Set   R115IEI0-In-Update      To    True                     08230099
+           Set   R115IEI0-In-Work        To    True                     08240099
+      *                                                                 08250099
+      *RM  Move  RTFCE100-I-CC-Amount-D  To    R115IEI0-CA-Currency     08260099
+      *                                                                 08270099
+           If  Ws-Event-Date > 00010101                                 08280099
+               Move  Ws-Event-Date       To    R115IEI0-Event-Date      08290099
+               If  Wb-EI-Type-Due                                       08300099
+                   Move Spaces           To    R115IEI0-Tenor           08310099
+               End-If                                                   08320099
+           End-If                                                       08330099
+      *                                                                 08340099
+           If  RTFCE100-I-Tenor-I = 'U'                                 08350099
+           And Wb-EI-Type-Due                                           08360099
+               Move RTFCE100-I-Tenor-D   To    R115IEI0-Tenor           08370099
+               Move 00010101             To    R115IEI0-Event-Date      08380099
+           End-If                                                       08390099
+      *                                                                 08391099
+           If  RTFCE100-I-Tenor-I = 'U'                                 08392099
+           And Wb-EI-Type-Prov-DT                                       08393099
+               Move RTFCE100-I-Tenor-D   To    R115IEI0-Tenor           08394099
+      *        Move 00010101             To    R115IEI0-Event-Date      08395099
+           End-If                                                       08396099
+      *                                                                 08400099
+           If  RTFCE100-I-Place-Of-Expiry-I = 'U'                       08410099
+           And Wb-EI-Type-Expiry                                        08420099
+               Move  RTFCE100-I-Place-Of-Expiry-D                       08430099
+                                         To    R115IEI0-Place-Expiry    08440099
+           End-If                                                       08450099
+      *                                                                 08460099
+           Call  'F115IEI0'              Using R115IEI0-Event-Info      08470099
+                                               R7919999-Error-Area      08480099
+           End-Call                                                     08490099
+      *                                                                 08500099
+           Evaluate True                                                08510099
+             When R7919999-Return-Abend                                 08520099
+               Move  'G801'              To    R7919999-Paragraph       08530099
+               Move  'FM'                To    R400CH01-Message-Code    08540099
+               Perform Z900-Abend                                       08550099
+                                                                        08560099
+             When R7919999-Return-Error                                 08570099
+               Move  'G802'              To    R7919999-Paragraph       08580099
+               Move  'FM'                To    R400CH01-Message-Code    08590099
+               Perform Z700-Error-AE                                    08600099
+           End-Evaluate                                                 08610099
+      *                                                                 08620099
+           .                                                            08630099
+      *                                                                 08640099
+       G800-Update-Event-Info-Ex.                                       08650099
+           Exit.                                                        08660099
+      *################################################################*08670099
+       G900-Set-Timestamp                Section.                       08680099
+      *                                                                 08690099
+           Initialize                          R115L030-Set-Timestamp   08700099
+           Set   R115L030-Version        To    True                     08710099
+      *                                                                 08720099
+           Move  RTFCE100-I-Fin-Inst-No-D                               08730099
+                                         To    R115L030-Fin-Inst-No     08740099
+           Move  RTFCE100-I-Contract-Type-D                             08750099
+                                         To    R115L030-Contract-Type   08760099
+           Move  Ws-Contract-No          To    R115L030-Contract-No     08770099
+           Move  R400CH01-Function       To    R115L030-Function        08780099
+           Move  R400CH01-Medium         To    R115L030-Medium          08790099
+           Move  R400CH01-Exec-Date      To    R115L030-Exec-Date       08800099
+           Move  R400CH01-System-Date    To    R115L030-System-Date     08810099
+           Move  R400CH01-System-Time    To    R115L030-System-Time     08820099
+           Move  R400CH01-Userid         To    R115L030-Userid          08830099
+      *                                                                 08840099
+           Set   R115L030-Set-Status     To    True                     08850099
+           Move  R115ISR0-To-SC-Code     To    R115L030-Status          08860099
+      *                                                                 08870099
+           Call  'F115L030'              Using R115L030-Set-Timestamp   08880099
+                                               R7919999-Error-Area      08890099
+           End-Call                                                     08900099
+      *                                                                 08910099
+           Evaluate True                                                08920099
+             When R7919999-Return-Abend                                 08930099
+               Move  'G901'              To    R7919999-Paragraph       08940099
+               Move  'FM'                To    R400CH01-Message-Code    08950099
+               Perform Z900-Abend                                       08960099
+                                                                        08970099
+             When R7919999-Return-Error                                 08980099
+               Move  'G902'              To    R7919999-Paragraph       08990099
+               Move  'FM'                To    R400CH01-Message-Code    09000099
+               Perform Z700-Error-AE                                    09010099
+           End-Evaluate                                                 09020099
+      *                                                                 09030099
+           .                                                            09040099
+      *                                                                 09050099
+       G900-Set-Timestamp-Ex.                                           09060099
+           Exit.                                                        09070099
+      *################################################################*09080099
+       H100-Create-Contract-No           Section.                       09090099
+      *                                                                 09100099
+           Initialize                          R115L020-Gen-Contract-No 09110099
+           Set   R115L020-Version        To    True                     09120099
+           Move  RTFCE100-I-Contract-Type-D                             09130099
+                                         To    R115L020-In-Contract-Type09140099
+           Move  RTFCE100-I-Fin-Inst-No-D                               09150099
+                                         To    R115L020-In-Fin-Inst-No  09160099
+           Move  R400CH01-Bank           To    R115L020-In-Reg-No       09170099
+      *                                                                 09180099
+           Call  'F115L020'              Using R115L020-Gen-Contract-No 09190099
+                                               R7919999-Error-Area      09200099
+           End-Call                                                     09210099
+      *                                                                 09220099
+           Evaluate True                                                09230099
+             When R7919999-Return-Abend                                 09240099
+               Move  'H101'              To    R7919999-Paragraph       09250099
+               Move  'FM'                To    R400CH01-Message-Code    09260099
+               Perform Z900-Abend                                       09270099
+      *                                                                 09280099
+             When R7919999-Return-Error                                 09290099
+               Move  'H102'              To    R7919999-Paragraph       09300099
+               Move  'FM'                To    R400CH01-Message-Code    09310099
+               Perform Z900-Abend                                       09320099
+                                                                        09330099
+           End-Evaluate                                                 09340099
+      *                                                                 09350099
+           Move  R115L020-Contract-No    To    Ws-Contract-No           09360099
+      *                                                                 09370099
+           .                                                            09380099
+      *                                                                 09390099
+       H100-Create-Contract-No-Ex.                                      09400099
+           Exit.                                                        09410099
+      *################################################################*09420099
+       H200-Read-Main-Contract           Section.                       09430099
+      *                                                                 09440099
+           Initialize                          R115IMC0-Main-Contract   09450099
+           Set   R115IMC0-Version        To    True                     09460099
+           Set   R115IMC0-In-Select      To    True                     09470099
+           If  Wb-In-Work                                               09480099
+               Set   R115IMC0-In-Work    To    True                     09490099
+           Else                                                         09500099
+               Set   R115IMC0-In-Actual  To    True                     09510099
+           End-If                                                       09520099
+      *                                                                 09530099
+           Move  RTFCE100-I-Fin-Inst-No-D                               09540099
+                                         To    R115IMC0-In-Fin-Inst-No  09550099
+           Move  RTFCE100-I-Contract-Type-D                             09560099
+                                         To    R115IMC0-In-Contract-Type09570099
+           Move  Ws-Contract-No          To    R115IMC0-In-Contract-No  09580099
+      *                                                                 09590099
+           Call  'F115IMC0'              Using R115IMC0-Main-Contract   09600099
+                                               R7919999-Error-Area      09610099
+           End-Call                                                     09620099
+      *                                                                 09630099
+           Evaluate True                                                09640099
+             When R7919999-Return-Abend                                 09650099
+               Move  'H201'              To    R7919999-Paragraph       09660099
+               Move  'FM'                To    R400CH01-Message-Code    09670099
+               Perform Z900-Abend                                       09680099
+                                                                        09690099
+             When R7919999-Return-Error                                 09700099
+               Move  'H202'              To    R7919999-Paragraph       09710099
+               Move  'FM'                To    R400CH01-Message-Code    09720099
+               Perform Z700-Error-AE                                    09730099
+           End-Evaluate                                                 09740099
+      *                                                                 09750099
+           .                                                            09760099
+      *                                                                 09770099
+       H200-Read-Main-Contract-Ex.                                      09780099
+           Exit.                                                        09790099
+      *################################################################*09800099
+       H300-Read-Contract-Amount         Section.                       09810099
+      *                                                                 09820099
+           Initialize                          R115ICA0-Contract-Amount 09830099
+           Set   R115ICA0-Version        To    True                     09840099
+           Set   R115ICA0-In-Get-1st     To    True                     09850099
+           Set   R115ICA0-In-Work        To    True                     09860099
+      *                                                                 09870099
+           Move  RTFCE100-I-Fin-Inst-No-D                               09880099
+                                         To    R115ICA0-In-Fin-Inst-No  09890099
+           Move  RTFCE100-I-Contract-Type-D                             09900099
+                                         To    R115ICA0-In-Contract-Type09910099
+           Move  Ws-Contract-No          To    R115ICA0-In-Contract-No  09920099
+      *                                                                 09930099
+           Call  'F115ICA0'              Using R115ICA0-Contract-Amount 09940099
+                                               R7919999-Error-Area      09950099
+           End-Call                                                     09960099
+      *                                                                 09970099
+           Evaluate True                                                09980099
+             When R7919999-Return-Abend                                 09990099
+               Move  'H301'              To    R7919999-Paragraph       10000099
+               Move  'FM'                To    R400CH01-Message-Code    10010099
+               Perform Z900-Abend                                       10020099
+                                                                        10030099
+             When R7919999-Return-Error                                 10040099
+               Move  'H302'              To    R7919999-Paragraph       10050099
+               Move  'FM'                To    R400CH01-Message-Code    10060099
+               Perform Z700-Error-AE                                    10070099
+           End-Evaluate                                                 10080099
+      *                                                                 10090099
+           .                                                            10100099
+      *                                                                 10110099
+       H300-Read-Contract-Amount-Ex.                                    10120099
+           Exit.                                                        10130099
+      *################################################################*10140099
+       H400-Read-Event-Info              Section.                       10150099
+      *                                                                 10160099
+           Initialize                          R115IEI0-Event-Info      10170099
+           Set   R115IEI0-Version        To    True                     10180099
+           Set   R115IEI0-In-Select      To    True                     10190099
+           Set   R115IEI0-In-Work        To    True                     10200099
+      *                                                                 10210099
+           Move  RTFCE100-I-Fin-Inst-No-D                               10220099
+                                         To    R115IEI0-In-Fin-Inst-No  10230099
+           Move  RTFCE100-I-Contract-Type-D                             10240099
+                                         To    R115IEI0-In-Contract-Type10250099
+           Move  Ws-Contract-No          To    R115IEI0-In-Contract-No  10260099
+           Set   R115IEI0-In-Rel-MC      To    True                     10270099
+           Move  Wb-EI-Type              To    R115IEI0-In-Event-Type   10280099
+      *                                                                 10290099
+           Call  'F115IEI0'              Using R115IEI0-Event-Info      10300099
+                                               R7919999-Error-Area      10310099
+           End-Call                                                     10320099
+      *                                                                 10330099
+           If  R7919999-Return-Abend                                    10340099
+               Move  'H401'              To    R7919999-Paragraph       10350099
+               Move  'FM'                To    R400CH01-Message-Code    10360099
+               Perform Z900-Abend                                       10370099
+           End-If                                                       10380099
+      *                                                                 10390099
+           .                                                            10400099
+      *                                                                 10410099
+       H400-Read-Event-Info-Ex.                                         10420099
+           Exit.                                                        10430099
+      *################################################################*10440099
+       H500-Calc-Follow-Up-Date          Section.                       10450099
+      *                                                                 10460099
+           Initialize                          R7919010-Dato-Pluss-Dager10470099
+           Set   R7919010-Versjon        To    True                     10480099
+      *                                                                 10490099
+      *    New rules for setting follow-up date is made in desember 200010500099
+      *                                                                 10510099
+           If  RTFCE100-I-Due-Date-I     = 'U'                          10520099
+           And (RTFCE100-I-Contract-Type-D  = 'ICP'                     10530099
+           Or   RTFCE100-I-Contract-Type-D  = 'ECP')                    10540099
+               Move  RTFCE100-I-Due-Date-D                              10550099
+                                         To    Ws-Event-Date            10560099
+      *                                                                 10570099
+           Else                                                         10580099
+               Move  R400CH01-Exec-Date  To    R7919010-In-Dato         10590099
+               Move  +10                 To    R7919010-In-Adder-Dag    10600099
+               Call  'F7919010'          Using R7919010-Dato-Pluss-Dager10610099
+                                               R7919999-Error           10620099
+               End-Call                                                 10630099
+      *                                                                 10640099
+               If  Not R7919999-Retur-OK                                10650099
+                   Move  'H502'          To    R7919999-Paragraph       10660099
+                   Move  'FM'            To    R400CH01-Message-Code    10670099
+                   Perform Z900-Abend                                   10680099
+               End-If                                                   10690099
+      *                                                                 10700099
+               Move  R7919010-Ut-Dato    To    Ws-Event-Date            10710099
+               Perform                         H570-Check-If-Bank-Day   10720099
+           End-If                                                       10730099
+      *                                                                 10740099
+      *    Move  R7919010-Ut-Dato        To    Ws-Event-Date            10750099
+      *                                                                 10760099
+      *    If  RTFCE100-I-Due-Date-I      = 'U'                         10770099
+      *    And R7919010-Ut-Dato > RTFCE100-I-Due-Date-D                 10780099
+      *        Move RTFCE100-I-Due-Date-D                               10790099
+      *                                  To    Ws-Event-Date            10800099
+      *    Else                                                         10810099
+      *        Move  R7919010-Ut-Dato    To    Ws-Event-Date            10820099
+      *    End-If                                                       10830099
+      *                                                                 10840099
+           .                                                            10850099
+      *                                                                 10860099
+       H500-Calc-Follow-Up-Date-Ex.                                     10870099
+           Exit.                                                        10880099
+      *################################################################*10881099
+       H550-Calc-Follow-Up-GAR           Section.                       10882099
+      *                                                                 10883099
+           Initialize                          R7919010-Dato-Pluss-Dager10884099
+           Set   R7919010-Versjon        To    True                     10885099
+      *                                                                 10886099
+           Move  R400CH01-Exec-Date      To    R7919010-In-Dato         10889799
+           Move  +3                      To    R7919010-In-Adder-MND    10889899
+           Call 'F7919010'               Using R7919010-Dato-Pluss-Dager10889999
+                                               R7919999-Error           10890099
+           End-Call                                                     10890199
+      *                                                                 10890599
+           If  Not R7919999-Retur-OK                                    10890699
+               Move  'H502'          To    R7919999-Paragraph           10890799
+               Move  'FM'            To    R400CH01-Message-Code        10890899
+               Perform Z900-Abend                                       10890999
+           End-If                                                       10891099
+      *                                                                 10891199
+           Move  R7919010-Ut-Dato    To    Ws-Event-Date                10891299
+           Perform                         H570-Check-If-Bank-Day       10892099
+      *                                                                 10892299
+           .                                                            10892399
+      *                                                                 10892499
+       H550-Calc-Follow-Up-GAR-Ex.                                      10892599
+           Exit.                                                        10892699
+      *################################################################*10893099
+       H570-Check-If-Bank-Day            Section.                       10900099
+      *                                                                 10910099
+           Initialize                          R7919090-Helligdager     10920099
+           Set   R7919090-Versjon        To    True                     10930099
+           Move  Ws-Event-Date           To    R7919090-In-Dato         10940099
+           Call  'F7919090'              Using R7919090-Helligdager     10950099
+                                               R7919999-Error           10960099
+           End-Call                                                     10970099
+           If  Not R7919999-Retur-OK                                    10980099
+               Move  'H511'              To    R7919999-Paragraf        10990099
+               Perform Z900-Abend                                       11000099
+           End-If                                                       11010099
+      *                                                                 11020099
+           Evaluate True                                                11030099
+             When R7919090-Ut-Bank-Dag                                  11040099
+               If  R7919090-Ut-Dgr-Neste-Bankdag > 1                    11050099
+               and RTFCE100-I-Due-Date-I        = 'U'                   11060099
+                 Initialize                    R7919010-Dato-Pluss-Dager11070099
+                 Set   R7919010-Versjon  To    True                     11080099
+                 Move  Ws-Event-Date     To    R7919010-In-Dato         11090099
+                 Compute  Ws-Add-Days   =                               11100099
+                 ( R7919090-Ut-Dgr-Neste-Bankdag +                      11110099
+                   R7919090-Ut-Dgr-Forr-Bankdag - 2)  * -1              11120099
+                 If Ws-Add-Days < 0                                     11130099
+                    Move  Ws-Add-Days    To    R7919010-In-Adder-Dag    11140099
+                    Call  'F7919010'     Using R7919010-Dato-Pluss-Dager11150099
+                                               R7919999-Error           11160099
+                    End-Call                                            11170099
+                    If  Not R7919999-Retur-OK                           11180099
+                        Move  'X570'       To    R7919999-Paragraf      11190099
+                        Perform Z900-Abend                              11200099
+                    End-If                                              11210099
+                    Move  R7919010-Ut-Dato To    Ws-Event-Date          11220099
+                 End-If                                                 11230099
+               End-If                                                   11240099
+             When R7919090-Ut-Ikke-Bank-Dag                             11250099
+               Initialize                      R7919010-Dato-Pluss-Dager11260099
+               Set   R7919010-Versjon    To    True                     11270099
+               Move  Ws-Event-Date       To    R7919010-In-Dato         11280099
+               Compute  Ws-Add-Days   =                                 11290099
+               ( R7919090-Ut-Dgr-Neste-Bankdag +                        11300099
+                 R7919090-Ut-Dgr-Forr-Bankdag - 1)  * -1                11310099
+               Move  Ws-Add-Days         To    R7919010-In-Adder-Dag    11320099
+               Call  'F7919010'          Using R7919010-Dato-Pluss-Dager11330099
+                                           R7919999-Error               11340099
+               End-Call                                                 11350099
+               If  Not R7919999-Retur-OK                                11360099
+                   Move  'X573'          To    R7919999-Paragraf        11370099
+                   Perform Z900-Abend                                   11380099
+               End-If                                                   11390099
+               Move  R7919010-Ut-Dato    To    Ws-Event-Date            11400099
+           End-Evaluate                                                 11410099
+           .                                                            11420099
+      *                                                                 11430099
+       H570-Check-If-Bank-Day-Ex.                                       11440099
+           Exit.                                                        11450099
+      *################################################################*11460099
+       H600-Delete-Shadow-Charges        Section.                       11470099
+      *                                                                 11480099
+           Initialize                          R115L090-Del-Charges     11490099
+           Set   R115L090-Version        To    True                     11500099
+      *                                                                 11510099
+           Move  RTFCE100-I-Fin-Inst-No-D                               11520099
+                                         To    R115L090-Fin-Inst-No     11530099
+           Move  RTFCE100-I-Contract-Type-D                             11540099
+                                         To    R115L090-Contract-Type   11550099
+           Move  RTFCE100-B-Contract-No-D                               11560099
+                                         To    R115L090-Contract-No     11570099
+      *                                                                 11580099
+           Call  'F115L090'              Using R115L090-Del-Charges     11590099
+                                               R7919999-Error-Area      11600099
+           End-Call                                                     11610099
+      *                                                                 11620099
+           Evaluate True                                                11630099
+             When R7919999-Return-Abend                                 11640099
+               Move  'H601'              To    R7919999-Paragraph       11650099
+               Move  'FM'                To    R400CH01-Message-Code    11660099
+               Perform Z900-Abend                                       11670099
+      *                                                                 11680099
+             When R7919999-Return-Error                                 11690099
+               Move  'H602'              To    R7919999-Paragraph       11700099
+               Move  'FM'                To    R400CH01-Message-Code    11710099
+               Perform Z900-Abend                                       11720099
+      *                                                                 11730099
+             When R7919999-Return-OK                                    11740099
+               Continue                                                 11750099
+      *                                                                 11760099
+           End-Evaluate                                                 11770099
+           .                                                            11780099
+      *                                                                 11790099
+       H600-Delete-Shadow-Charges-Ex.                                   11800099
+           Exit.                                                        11810099
+                                                                        11820099
+      *################################################################*11830099
+       H700-Update-Statuslist            Section.                       11840099
+      *                                                                 11850099
+           Initialize                          R115L040-Count-Statuslist11860099
+           Set   R115L040-Version        To    True                     11870099
+      *                                                                 11880099
+           Move  RTFCE100-I-Fin-Inst-No-D                               11890099
+                                         To    R115L040-In-Fin-Inst-No  11900099
+           Move  RTFCE100-I-Contract-Type-D                             11910099
+                                         To    R115L040-In-Contract-Type11920099
+           Move  'CREATE '               To    R115L040-In-Operationtype11930099
+      *                                                                 11940099
+           Call  'F115L040'              Using R115L040-Count-Statuslist11950099
+                                               R7919999-Error-Area      11960099
+           End-Call                                                     11970099
+      *                                                                 11980099
+           Evaluate True                                                11990099
+             When R7919999-Return-Abend                                 12000099
+               Move  'H701'              To    R7919999-Paragraph       12010099
+               Perform Z900-Abend                                       12020099
+      *                                                                 12030099
+             When R7919999-Return-Error                                 12040099
+               Move  'H702'              To R7919999-Paragraph          12050099
+               Perform Z700-Error-AE                                    12060099
+      *                                                                 12070099
+           End-Evaluate                                                 12080099
+      *                                                                 12090099
+           .                                                            12100099
+      *                                                                 12110099
+       H700-Update-Statuslist-Ex.                                       12120099
+           Exit.                                                        12130099
+                                                                        12140099
+      *################################################################*12150099
+      * Perform your move of data fields that must be delivered back   *12160099
+      * from this module here.                                         *12170099
+      *----------------------------------------------------------------*12180099
+       U000-Out-Fields                   Section.                       12190099
+      *                                                                 12200099
+           If  RTFCE100-I-Operation-Type-D = 'ADVICE              '     12210099
+           Or  RTFCE100-I-Operation-Type-D = 'PRE-ADVICE          '     12220099
+           Or  RTFCE100-I-Operation-Type-D = 'ISSUE               '     12230099
+               Perform H300-Read-Contract-Amount                        12240099
+               Compute Ws-Max-Amount                                    12250099
+                   =   ( R115ICA0-Original-Amount                       12260099
+                         * R115ICA0-Max-Pct-Tolerance ) / 100           12270099
+                   +     R115ICA0-Original-Amount                       12280099
+               End-Compute                                              12290099
+                                                                        12300099
+               Move 'U'                  To RTFCE100-O-Calc-Max-Amount-O12310099
+               Move Ws-Max-Amount        To RTFCE100-O-Calc-Max-Amount-D12320099
+           End-If                                                       12330099
+      *                                                                 12340099
+           Move  'U'                     To     RTFCE100-B-Contract-No-O12350099
+           Move  Ws-Contract-No          To     RTFCE100-B-Contract-No-D12360099
+      *                                                                 12370099
+           Move  'U'                     To RTFCE100-B-Last-Saved-Date-O12380099
+           Move  R115IMC0-Upd-Timestamp  To RTFCE100-B-Last-Saved-Date-D12390099
+      *                                                                 12400099
+           .                                                            12410099
+      *                                                                 12420099
+       U000-Out-Fields-Ex.                                              12430099
+           Exit.                                                        12440099
+                                                                        12450099
+      *################################################################*12460099
+      * Set Warning status                                             *12470099
+      *                                                                *12480099
+      *----------------------------------------------------------------*12490099
+      *<META Z600-ERROR-AW>                                             12500099
+       Z600-Error-AW                     Section.                       12510099
+      *                                                                 12520099
+           Set   R7919999-Return-Warning To    True                     12530099
+           Move  'FTFCL100'              To    R400CH01-Message-Text    12540099
+           .                                                            12550099
+      *                                                                 12560099
+       Z600-Error-AW-Ex.                                                12570099
+           Exit.                                                        12580099
+      *</META>                                                          12590099
+                                                                        12600099
+      *################################################################*12610099
+      * Syntax Error status                                            *12620099
+      *                                                                *12630099
+      *----------------------------------------------------------------*12640099
+      *<META Z700-ERROR-AE>                                             12650099
+       Z700-Error-AE                     Section.                       12660099
+      *                                                                 12670099
+           Set   R7919999-Return-Error   To    True                     12680099
+           If    R400CH01-Message-Code   =     'FM'                     12690099
+                 String   'FTFCL100'           Delimited By Size        12700099
+                          ': '                 Delimited By Size        12710099
+                       R7919999-Message        Delimited By Size        12720099
+                                         Into  R400CH01-Message-Text    12730099
+                 End-String                                             12740099
+           Else                                                         12750099
+                 Move  'FTFCL100'        To    R400CH01-Message-Text    12760099
+           End-If                                                       12770099
+           .                                                            12780099
+      *                                                                 12790099
+       Z700-Error-AE-Ex.                                                12800099
+           Goback.                                                      12810099
+      *</META>                                                          12820099
+                                                                        12830099
+      *################################################################*12840099
+      * Severe error. Will genereate USER-ABEND in STG when the        *12850099
+      * function is executed in batch.                                 *12860099
+      *----------------------------------------------------------------*12870099
+      *<META Z800-ERROR-AS>                                             12880099
+       Z800-Error-AS                     Section.                       12890099
+      *                                                                 12900099
+           Set   R7919999-Return-Abend   To    True                     12910099
+           If    R400CH01-Message-Code   =     'FM'                     12920099
+                 String   'FTFCL100'           Delimited By Size        12930099
+                          ': '                 Delimited By Size        12940099
+                       R7919999-Message        Delimited By Size        12950099
+                                         Into  R400CH01-Message-Text    12960099
+                 End-String                                             12970099
+           Else                                                         12980099
+                 Move  'FTFCL100'        To    R400CH01-Message-Text    12990099
+           End-If                                                       13000099
+           .                                                            13010099
+      *                                                                 13020099
+       Z800-Error-AS-Ex.                                                13030099
+           Goback.                                                      13040099
+      *</META>                                                          13050099
+                                                                        13060099
+      *################################################################*13070099
+      * Severe error. Will genereate USER-ABEND in STG when the        *13080099
+      * function is executed in batch.                                 *13090099
+      *----------------------------------------------------------------*13100099
+      *<META Z900-ABEND>                                                13110099
+       Z900-Abend                        Section.                       13120099
+      *                                                                 13130099
+           Set   R7919999-Return-Abend   To    True                     13140099
+           If    R400CH01-Message-Code   =     'FM'                     13150099
+                 String   'FTFCL100'           Delimited By Size        13160099
+                          ': '                 Delimited By Size        13170099
+                       R7919999-Message        Delimited By Size        13180099
+                                         Into  R400CH01-Message-Text    13190099
+                 End-String                                             13200099
+           Else                                                         13210099
+                 Move  'FTFCL100'        To    R400CH01-Message-Text    13220099
+           End-If                                                       13230099
+      *                                                                 13240099
+      *----------------------------------------------------------------*13250099
+      *                                                                 13260099
+           If  R7919999-Return-Code      Not   Numeric                  13270099
+           or  Not R7919999-Return-Abend                                13280099
+               Move  +0                  To    R7919999-Module-Ind      13290099
+           End-If                                                       13300099
+           Add   +1                      To    R7919999-Module-Ind      13310099
+           If  R7919999-Module-Ind       Not >                          13320099
+                             ( Length    Of    R7919999-Module-Tab      13330099
+                             / Length    Of    R7919999-Module-Element )13340099
+               Move  'FTFCL100'          To    R7919999-Module-Name     13350099
+                                               (R7919999-Module-Ind)    13360099
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     13370099
+                                               (R7919999-Module-Ind)    13380099
+           End-If                                                       13390099
+           Set   R7919999-Return-Abend   To    True                     13400099
+           .                                                            13410099
+      *                                                                 13420099
+       Z900-Abend-Ex.                                                   13430099
+           Goback.                                                      13440099
+      *</META>                                                          13450099
+      *                                                                 13460099
+       End Program FTFCL100.                                            13470099

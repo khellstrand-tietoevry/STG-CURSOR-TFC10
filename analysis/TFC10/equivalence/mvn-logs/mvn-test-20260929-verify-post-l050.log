@@ -1,0 +1,296 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/usr/local/Cellar/maven/3.9.11/libexec/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] TFC10 modernization reactor                                        [pom]
+[INFO] ftfc-l050                                                          [jar]
+[INFO] ftfc-k100                                                          [jar]
+[INFO] ftfc-l100                                                          [jar]
+[INFO] ftfc-l020                                                          [jar]
+[INFO] ftfc-l090                                                          [jar]
+[INFO] ftfc-f7919                                                         [jar]
+[INFO] ftfc-h100                                                          [jar]
+[INFO] 
+[INFO] --------------------< no.tieto.tfc10:tfc10-phase1 >---------------------
+[INFO] Building TFC10 modernization reactor 0.1.0-SNAPSHOT                [1/8]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ tfc10-phase1 ---
+[INFO] 
+[INFO] ----------------------< no.tieto.tfc10:ftfc-l050 >----------------------
+[INFO] Building ftfc-l050 0.1.0-SNAPSHOT                                  [2/8]
+[INFO]   from ftfc-l050/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ ftfc-l050 ---
+[INFO] Deleting /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l050/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ftfc-l050 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l050/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ftfc-l050 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 5 source files with javac [debug release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ftfc-l050 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l050/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ftfc-l050 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ ftfc-l050 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running no.tieto.tfc10.l050.TracedInitialCheckBackendTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.142 s -- in no.tieto.tfc10.l050.TracedInitialCheckBackendTest
+[INFO] Running no.tieto.tfc10.l050.InitialCheckServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in no.tieto.tfc10.l050.InitialCheckServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] ----------------------< no.tieto.tfc10:ftfc-k100 >----------------------
+[INFO] Building ftfc-k100 0.1.0-SNAPSHOT                                  [3/8]
+[INFO]   from ftfc-k100/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ ftfc-k100 ---
+[INFO] Deleting /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-k100/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ftfc-k100 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-k100/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ftfc-k100 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ftfc-k100 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-k100/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ftfc-k100 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ ftfc-k100 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running no.tieto.tfc10.k.KModuleValidatorTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.148 s -- in no.tieto.tfc10.k.KModuleValidatorTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] ----------------------< no.tieto.tfc10:ftfc-l100 >----------------------
+[INFO] Building ftfc-l100 0.1.0-SNAPSHOT                                  [4/8]
+[INFO]   from ftfc-l100/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ ftfc-l100 ---
+[INFO] Deleting /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l100/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ftfc-l100 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l100/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ftfc-l100 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ftfc-l100 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l100/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ftfc-l100 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ ftfc-l100 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running no.tieto.tfc10.l.LModuleLoaderTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.140 s -- in no.tieto.tfc10.l.LModuleLoaderTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] ----------------------< no.tieto.tfc10:ftfc-l020 >----------------------
+[INFO] Building ftfc-l020 0.1.0-SNAPSHOT                                  [5/8]
+[INFO]   from ftfc-l020/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ ftfc-l020 ---
+[INFO] Deleting /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l020/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ftfc-l020 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l020/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ftfc-l020 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 3 source files with javac [debug release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ftfc-l020 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l020/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ftfc-l020 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ ftfc-l020 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running no.tieto.tfc10.l020.ContractNumberGeneratorTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.135 s -- in no.tieto.tfc10.l020.ContractNumberGeneratorTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] ----------------------< no.tieto.tfc10:ftfc-l090 >----------------------
+[INFO] Building ftfc-l090 0.1.0-SNAPSHOT                                  [6/8]
+[INFO]   from ftfc-l090/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ ftfc-l090 ---
+[INFO] Deleting /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l090/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ftfc-l090 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l090/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ftfc-l090 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ftfc-l090 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-l090/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ftfc-l090 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ ftfc-l090 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running no.tieto.tfc10.l090.ShadowChargeCleanupTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.148 s -- in no.tieto.tfc10.l090.ShadowChargeCleanupTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] ---------------------< no.tieto.tfc10:ftfc-f7919 >----------------------
+[INFO] Building ftfc-f7919 0.1.0-SNAPSHOT                                 [7/8]
+[INFO]   from ftfc-f7919/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ ftfc-f7919 ---
+[INFO] Deleting /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-f7919/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ftfc-f7919 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-f7919/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ftfc-f7919 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 5 source files with javac [debug release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ftfc-f7919 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-f7919/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ftfc-f7919 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ ftfc-f7919 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running no.tieto.tfc10.f7919.F7919HelpersTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.214 s -- in no.tieto.tfc10.f7919.F7919HelpersTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] ----------------------< no.tieto.tfc10:ftfc-h100 >----------------------
+[INFO] Building ftfc-h100 0.1.0-SNAPSHOT                                  [8/8]
+[INFO]   from ftfc-h100/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ ftfc-h100 ---
+[INFO] Deleting /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-h100/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ ftfc-h100 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-h100/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ ftfc-h100 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug release 21] to target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ ftfc-h100 ---
+[INFO] skip non existing resourceDirectory /Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/modernized/TFC10/ftfc-h100/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ ftfc-h100 ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug release 21] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ ftfc-h100 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running no.tieto.tfc10.h.HModuleOrchestratorTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.125 s -- in no.tieto.tfc10.h.HModuleOrchestratorTest
+[INFO] Running no.tieto.tfc10.h.HModuleOrchestratorIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in no.tieto.tfc10.h.HModuleOrchestratorIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for TFC10 modernization reactor 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] TFC10 modernization reactor ........................ SUCCESS [  0.377 s]
+[INFO] ftfc-l050 .......................................... SUCCESS [  5.342 s]
+[INFO] ftfc-k100 .......................................... SUCCESS [  1.827 s]
+[INFO] ftfc-l100 .......................................... SUCCESS [  1.780 s]
+[INFO] ftfc-l020 .......................................... SUCCESS [  1.551 s]
+[INFO] ftfc-l090 .......................................... SUCCESS [  1.725 s]
+[INFO] ftfc-f7919 ......................................... SUCCESS [  1.893 s]
+[INFO] ftfc-h100 .......................................... SUCCESS [  1.599 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  17.241 s
+[INFO] Finished at: 2026-09-29T22:33:06+02:00
+[INFO] ------------------------------------------------------------------------

@@ -1,0 +1,200 @@
+      ******************************************************************        
+      *  Program XCTGTG00 executed                                     *        
+      *     Date      : 7 Jul 2003                                     *        
+      *     Time      : 10:41:38                                       *        
+      *     User      : Z2106NL                                        *        
+      *     Copy      : RTFCE100                                       *        
+      *                                                                *        
+      ******************************************************************        
+      *                                                                *        
+      *     Function  : TFC10                                          *        
+      *     Version   : 01                                             *        
+      *     Calls     : FTFCH100                                       *        
+      *     Base      : DLI                                            *        
+      *     Name      : CreateMainContract                             *        
+      *     Num. Item : 20                                             *        
+      *     Num Rep   : 0                                              *        
+      *                                                                         
+           02  TFC10-V01.                                                       
+      *****************************************************************         
+      *     Item   : 005                                                        
+      *     Descr  : Fin-Inst-No                                                
+      *                                                                         
+           05  RTFCE100-I-Fin-Inst-No-G.                                        
+                 15  RTFCE100-I-Fin-Inst-No-I        Pic  x(01).                
+                 15  RTFCE100-I-Fin-Inst-No-O        Pic  x(01).                
+                 15  RTFCE100-I-Fin-Inst-No-X.                                  
+                   20  RTFCE100-I-Fin-Inst-No-D      Pic  x(18).                
+      *****************************************************************         
+      *     Item   : 010                                                        
+      *     Descr  : Kontrakt-Type                                              
+      *                                                                         
+           05  RTFCE100-I-Contract-Type-G.                                      
+                 15  RTFCE100-I-Contract-Type-I      Pic  x(01).                
+                 15  RTFCE100-I-Contract-Type-O      Pic  x(01).                
+                 15  RTFCE100-I-Contract-Type-X.                                
+                   20  RTFCE100-I-Contract-Type-D    Pic  x(3).                 
+      *****************************************************************         
+      *     Item   : 011                                                        
+      *     Descr  : Kontrakt-Nr                                                
+      *                                                                         
+           05  RTFCE100-B-Contract-No-G.                                        
+                 15  RTFCE100-B-Contract-No-I        Pic  x(01).                
+                 15  RTFCE100-B-Contract-No-O        Pic  x(01).                
+                 15  RTFCE100-B-Contract-No-X.                                  
+                   20  RTFCE100-B-Contract-No-D      Pic  9(7).                 
+      *****************************************************************         
+      *     Item   : 030                                                        
+      *     Descr  : Sist-Lagret-Dato                                           
+      *                                                                         
+           05  RTFCE100-B-Last-Saved-Date-G.                                    
+                 15  RTFCE100-B-Last-Saved-Date-I    Pic  x(01).                
+                 15  RTFCE100-B-Last-Saved-Date-O    Pic  x(01).                
+                 15  RTFCE100-B-Last-Saved-Date-X.                              
+                   20  RTFCE100-B-Last-Saved-Date-D  Pic  x(26).                
+      *****************************************************************         
+      *     Item   : 035                                                        
+      *     Descr  : Operasjons-Art                                             
+      *                                                                         
+           05  RTFCE100-I-Operation-Type-G.                                     
+                 15  RTFCE100-I-Operation-Type-I     Pic  x(01).                
+                 15  RTFCE100-I-Operation-Type-O     Pic  x(01).                
+                 15  RTFCE100-I-Operation-Type-X.                               
+                   20  RTFCE100-I-Operation-Type-D   Pic  x(20).                
+      *****************************************************************         
+      *     Item   : 040                                                        
+      *     Descr  : Betalbar-Egenskap                                          
+      *                                                                         
+           05  RTFCE100-I-Availability-G.                                       
+                 15  RTFCE100-I-Availability-I       Pic  x(01).                
+                 15  RTFCE100-I-Availability-O       Pic  x(01).                
+                 15  RTFCE100-I-Availability-X.                                 
+                   20  RTFCE100-I-Availability-D     Pic  x(1).                 
+      *****************************************************************         
+      *     Item   : 041                                                        
+      *     Descr  : Inkommende-Swift                                           
+      *                                                                         
+           05  RTFCE100-I-incoming-Swift-G.                                     
+                 15  RTFCE100-I-incoming-Swift-I     Pic  x(01).                
+                 15  RTFCE100-I-incoming-Swift-O     Pic  x(01).                
+                 15  RTFCE100-I-incoming-Swift-X.                               
+                   20  RTFCE100-I-incoming-Swift-D   Pic  x(1).                 
+      *****************************************************************         
+      *     Item   : 043                                                        
+      *     Descr  : Silent-Confirmation                                        
+      *                                                                         
+           05  RTFCE100-I-Silent-Confr-G.                                       
+                 15  RTFCE100-I-Silent-Confr-I       Pic  x(01).                
+                 15  RTFCE100-I-Silent-Confr-O       Pic  x(01).                
+                 15  RTFCE100-I-Silent-Confr-X.                                 
+                   20  RTFCE100-I-Silent-Confr-D     Pic  x(1).                 
+      *****************************************************************         
+      *     Item   : 045                                                        
+      *     Descr  : Bekreftet/Ubekreftet                                       
+      *                                                                         
+           05  RTFCE100-I-Confirmed-G.                                          
+                 15  RTFCE100-I-Confirmed-I          Pic  x(01).                
+                 15  RTFCE100-I-Confirmed-O          Pic  x(01).                
+                 15  RTFCE100-I-Confirmed-X.                                    
+                   20  RTFCE100-I-Confirmed-D        Pic  x(1).                 
+      *****************************************************************         
+      *     Item   : 101                                                        
+      *     Descr  : Oppfølgningsdato                                           
+      *                                                                         
+           05  RTFCE100-I-Follow-Up-Date-G.                                     
+                 15  RTFCE100-I-Follow-Up-Date-I     Pic  x(01).                
+                 15  RTFCE100-I-Follow-Up-Date-O     Pic  x(01).                
+                 15  RTFCE100-I-Follow-Up-Date-X.                               
+                   20  RTFCE100-I-Follow-Up-Date-D   Pic  9(8).                 
+      *****************************************************************         
+      *     Item   : 104                                                        
+      *     Descr  : Forfallsdato                                               
+      *                                                                         
+           05  RTFCE100-I-Due-Date-G.                                           
+                 15  RTFCE100-I-Due-Date-I           Pic  x(01).                
+                 15  RTFCE100-I-Due-Date-O           Pic  x(01).                
+                 15  RTFCE100-I-Due-Date-X.                                     
+                   20  RTFCE100-I-Due-Date-D         Pic  9(8).                 
+      *****************************************************************         
+      *     Item   : 105                                                        
+      *     Descr  : Utløpsdato                                                 
+      *                                                                         
+           05  RTFCE100-I-Expiry-Date-G.                                        
+                 15  RTFCE100-I-Expiry-Date-I        Pic  x(01).                
+                 15  RTFCE100-I-Expiry-Date-O        Pic  x(01).                
+                 15  RTFCE100-I-Expiry-Date-X.                                  
+                   20  RTFCE100-I-Expiry-Date-D      Pic  9(8).                 
+      *****************************************************************         
+      *     Item   : 106                                                        
+      *     Descr  : Utstedt-Dato                                               
+      *                                                                         
+           05  RTFCE100-I-Issued-Date-G.                                        
+                 15  RTFCE100-I-Issued-Date-I        Pic  x(01).                
+                 15  RTFCE100-I-Issued-Date-O        Pic  x(01).                
+                 15  RTFCE100-I-Issued-Date-X.                                  
+                   20  RTFCE100-I-Issued-Date-D      Pic  9(8).                 
+      *****************************************************************         
+      *     Item   : 110                                                        
+      *     Descr  : Forfallstid                                                
+      *                                                                         
+           05  RTFCE100-I-Tenor-G.                                              
+                 15  RTFCE100-I-Tenor-I              Pic  x(01).                
+                 15  RTFCE100-I-Tenor-O              Pic  x(01).                
+                 15  RTFCE100-I-Tenor-X.                                        
+                   20  RTFCE100-I-Tenor-D            Pic  x(6).                 
+      *****************************************************************         
+      *     Item   : 115                                                        
+      *     Descr  : Utløpssted                                                 
+      *                                                                         
+           05  RTFCE100-I-Place-Of-Expiry-G.                                    
+                 15  RTFCE100-I-Place-Of-Expiry-I    Pic  x(01).                
+                 15  RTFCE100-I-Place-Of-Expiry-O    Pic  x(01).                
+                 15  RTFCE100-I-Place-Of-Expiry-X.                              
+                   20  RTFCE100-I-Place-Of-Expiry-D  Pic  x(29).                
+      *****************************************************************         
+      *     Item   : 300                                                        
+      *     Descr  : Kontraktsbeløp                                             
+      *                                                                         
+           05  RTFCE100-I-Orig-Amount-G.                                        
+                 15  RTFCE100-I-Orig-Amount-I        Pic  x(01).                
+                 15  RTFCE100-I-Orig-Amount-O        Pic  x(01).                
+                 15  RTFCE100-I-Orig-Amount-X.                                  
+                   20  RTFCE100-I-Orig-Amount-D      Pic  9(14)V9(3).           
+      *****************************************************************         
+      *     Item   : 301                                                        
+      *     Descr  : Valutasort-Kontraktsbeløp                                  
+      *                                                                         
+           05  RTFCE100-I-CC-Amount-G.                                          
+                 15  RTFCE100-I-CC-Amount-I          Pic  x(01).                
+                 15  RTFCE100-I-CC-Amount-O          Pic  x(01).                
+                 15  RTFCE100-I-CC-Amount-X.                                    
+                   20  RTFCE100-I-CC-Amount-D        Pic  x(3).                 
+      *****************************************************************         
+      *     Item   : 302                                                        
+      *     Descr  : Max-Prosent-Toleranse                                      
+      *                                                                         
+           05  RTFCE100-I-Max-Pst-Tolerance-G.                                  
+                 15  RTFCE100-I-Max-Pst-Tolerance-I  Pic  x(01).                
+                 15  RTFCE100-I-Max-Pst-Tolerance-O  Pic  x(01).                
+                 15  RTFCE100-I-Max-Pst-Tolerance-X.                            
+                   20  RTFCE100-I-Max-Pst-Tolerance-D                           
+                                                     Pic  9(3).                 
+      *****************************************************************         
+      *     Item   : 303                                                        
+      *     Descr  : Min-Prosent-Tolerance                                      
+      *                                                                         
+           05  RTFCE100-I-Min-Pst-Tolerance-G.                                  
+                 15  RTFCE100-I-Min-Pst-Tolerance-I  Pic  x(01).                
+                 15  RTFCE100-I-Min-Pst-Tolerance-O  Pic  x(01).                
+                 15  RTFCE100-I-Min-Pst-Tolerance-X.                            
+                   20  RTFCE100-I-Min-Pst-Tolerance-D                           
+                                                     Pic  9(3).                 
+      *****************************************************************         
+      *     Item   : 304                                                        
+      *     Descr  : Utregnet-Max-Beløp                                         
+      *                                                                         
+           05  RTFCE100-O-Calc-Max-Amount-G.                                    
+                 15  RTFCE100-O-Calc-Max-Amount-I    Pic  x(01).                
+                 15  RTFCE100-O-Calc-Max-Amount-O    Pic  x(01).                
+                 15  RTFCE100-O-Calc-Max-Amount-X.                              
+                   20  RTFCE100-O-Calc-Max-Amount-D  Pic  9(14)V9(3).           

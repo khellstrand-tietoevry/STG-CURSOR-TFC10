@@ -1,0 +1,181 @@
+000100 Identification Division.                                         00010015
+000200 Program-ID. F7919010.                                            00020015
+000300 Author.  Henning Langfeldt Rødland.                              00030015
+000400*################################################################*00040015
+000500*                                                                 00050015
+000600* Generell submodul.                                              00060015
+000700* Benyttes for å addere eller subtrahere                          00070015
+000800* dager, måneder og/eller år.                                     00080015
+000900*                                                                 00090015
+001000* Inn: Gregoriansk dato - ÅÅÅÅMMDD                                00100015
+001100*      +/- antall år                                              00110015
+001200*      +/- antall måneder                                         00120015
+001300*      +/- antall dager                                           00130015
+001400*      Antall dager per år (360, 365 eller 366 for kalender)      00140015
+001500*                                                                 00150015
+001600* Ut:  Gregoriansk dato - ÅÅÅÅMMDD                                00160015
+001700*                                                                 00170015
+001800* Man kan godt kombinere positive og negative verdier, f.eks.     00180015
+001900* legge til en måned og trekke fra tre dager.                     00190015
+002000*                                                                 00200015
+002100* Når ikke dager pr. år angis, benyttes reell kalender.           00210015
+002200*                                                                 00220015
+002300* Eksempel på anrop:                                              00230015
+002400*   Initialize                           R7919010-Dato-Pluss-Dager00240015
+002500*   Set   R7919010-Versjon         To    True                     00250015
+002600*   Move  ååååmmdd                 To    R7919010-In-Dato         00260015
+002700*   Move  +1                       To    R7919010-In-Adder-Dag    00270015
+002800*   Call  'F7919010'               Using R7919010-Dato-Pluss-Dager00280015
+002900*                                        R7919999-Error           00290015
+003000*   End-Call                                                      00300015
+003100*   If  R7919999-Retur-Abend                                      00310015
+003200*       abend                                                     00320015
+003300*   End-If                                                        00330015
+003400*   Move  R7919010-Ut-Dato         To    ååååmmdd                 00340015
+003500*                                                                 00350015
+003600*################################################################*00360015
+003700* Dato ! Si! Endringens art                                ! 3A ! 00370015
+003800*---------------------------------------------------------------- 00380015
+      *110924!SM ! Recompile to Cobol 6.3                   !CMAS-1883!*00380119
+MIPS  *280521!OBJ! Recompiled to version 6.3 (OptiMIPS)          !    ! 00381018
+003900*220695!HLR! Skrevet om, tuning                            !JR68! 00390015
+004000*030195!HLR! Ny modul                                      !JR68! 00400015
+004100*################################################################*00410015
+004200 Environment Division.                                            00420015
+004300 Configuration Section.                                           00430015
+004400 Special-Names.                                                   00440015
+004500     Decimal-Point is comma.                                      00450015
+004600*################################################################*00460015
+004700 Data Division.                                                   00470015
+004800 Working-Storage Section.                                         00480015
+004900*                                                                 00490015
+005000 Copy R7919010.                                                   00500015
+005100 Copy R791901W.                                                   00510015
+005200*                                                                 00520015
+005300 Copy R7919060.                                                   00530015
+005400 Copy R791906W.                                                   00540015
+005500*                                                                 00550015
+005600*################################################################*00560015
+005700 Linkage Section.                                                 00570015
+005800*                                                                 00580015
+005900 Copy R7919010                     Replacing                      00590015
+006000                                         R7919010-Dato-Pluss-Dager00600015
+006100                                   By    F7919010-Ext-IO-Area.    00610015
+006200 Copy R7919999.                                                   00620015
+006300*                                                                 00630015
+006400*----------------------------------------------------------------*00640015
+006500* Her ligger gamle versjoner av copy-området, på grunn av         00650015
+006600* versjonshåndtering.                                             00660015
+006700* Vi skal konvertere til og fra ny layout.                        00670015
+006800*                                                                 00680015
+006900 Copy R791901G.                                                   00690015
+007000*                                                                 00700015
+007100*################################################################*00710015
+007200 Procedure Division                Using F7919010-Ext-IO-Area     00720015
+007300                                         R7919999-Error.          00730015
+007400                                                                  00740015
+007500 A000-Main                         Section.                       00750015
+007600*                                                                 00760015
+007700     Set   R7919999-Retur-Ok       To    True                     00770015
+007800*                                                                 00780015
+007900     Perform ZI00-Konv-Input-Versjon                              00790015
+008000*                                                                 00800015
+008100     If  R7919999-Retur-Ok                                        00810015
+008200         Perform F7919010-Dato-Pluss-Dager                        00820015
+008300     End-If                                                       00830015
+008400*                                                                 00840015
+008500     If  R7919999-Retur-Ok                                        00850015
+008600         Perform ZO00-Konv-Output-Versjon                         00860015
+008700     End-If                                                       00870015
+008800*                                                                 00880015
+008900     .                                                            00890015
+009000 A099-Goback.                                                     00900015
+009100     Goback.                                                      00910015
+009200*################################################################*00920015
+009300     Copy R791901P.                                               00930015
+009400     Copy R791906P.                                               00940015
+009500*################################################################*00950015
+009600 ZI00-Konv-Input-Versjon           Section.                       00960015
+009700*                                                                 00970015
+009800     Evaluate True                                                00980015
+009900       When R7919010-Versjon       In    F7919010-Ext-IO-Area     00990015
+010000         Move  F7919010-Ext-IO-Area                               01000015
+010100                                   To    R7919010-Dato-Pluss-Dager01010015
+010200*                                                                 01020015
+010300       When R7919010-Versjons-Nr   In    F7919010-Ext-IO-Area     01030015
+010400                                   =     '19941231'               01040015
+010500*                                                                 01050015
+010600         Set   Address             Of    F7919010-Versjon-1994123101060015
+010700           To  Address             Of    F7919010-Ext-IO-Area     01070015
+010800*                                                                 01080015
+010900         Initialize                      R7919010-Dato-Pluss-Dager01090015
+011000         Set   R7919010-Versjon    In    R7919010-Dato-Pluss-Dager01100015
+011100                                   To    True                     01110015
+011200*                                                                 01120015
+011300         Move  R7919010-In-Dato    In    F7919010-Versjon-1994123101130015
+011400           To  R7919010-In-Dato    In    R7919010-Dato-Pluss-Dager01140015
+011500         Move  R7919010-In-Dager   In    F7919010-Versjon-1994123101150015
+011600           To  R7919010-In-Adder-Dag                              01160015
+011700                                   In    R7919010-Dato-Pluss-Dager01170015
+011800         Move  R7919010-In-Dgr-Pr-Aar                             01180015
+011900                                   In    F7919010-Versjon-1994123101190015
+012000           To  R7919010-In-Dgr-Pr-Aar                             01200015
+012100                                   In    R7919010-Dato-Pluss-Dager01210015
+012200*                                                                 01220015
+012300       When Other                                                 01230015
+012400         Move  Space               To    R7919999-Melding         01240015
+012500         String 'Beklager, vi håndterer ikke versjon "'           01250015
+012600                                         Delimited by size        01260015
+012700                R7919010-Versjons-Nr                              01270015
+012800                                   In    F7919010-Ext-IO-Area     01280015
+012900                                         Delimited by size        01290015
+013000                '". Ta i bruk ny versjon.'                        01300015
+013100                                         Delimited by size        01310015
+013200                                   Into  R7919999-Melding         01320015
+013300         End-String                                               01330015
+013400         Move  'ZI01'              To    R7919999-Paragraf        01340015
+013500         Perform F7919010-Z900-Abend                              01350015
+013600*                                                                 01360015
+013700     End-Evaluate                                                 01370015
+013800*                                                                 01380015
+013900     .                                                            01390015
+014000 ZI99-Ex.                                                         01400015
+014100     Exit.                                                        01410015
+014200*################################################################*01420015
+014300 ZO00-Konv-Output-Versjon          Section.                       01430015
+014400*                                                                 01440015
+014500     Evaluate True                                                01450015
+014600       When R7919010-Versjon       In    F7919010-Ext-IO-Area     01460015
+014700         Move  R7919010-Dato-Pluss-Dager                          01470015
+014800                                   To    F7919010-Ext-IO-Area     01480015
+014900*                                                                 01490015
+015000       When R7919010-Versjons-Nr   In    F7919010-Ext-IO-Area     01500015
+015100                                   =     '19941231'               01510015
+015200*                                                                 01520015
+015300         Set   Address             Of    F7919010-Versjon-1994123101530015
+015400           To  Address             Of    F7919010-Ext-IO-Area     01540015
+015500*                                                                 01550015
+015600         Initialize                                               01560015
+015700               R7919010-Resultat   In    F7919010-Versjon-1994123101570015
+015800         Move  R7919010-Ut-Dato    In    R7919010-Dato-Pluss-Dager01580015
+015900           To  R7919010-Ut-Dato    In    F7919010-Versjon-1994123101590015
+016000*                                                                 01600015
+016100       When Other                                                 01610015
+016200         Move  Space               To    R7919999-Melding         01620015
+016300         String 'Systemfeil, vi håndterte versjon "'              01630015
+016400                                         Delimited by size        01640015
+016500                R7919010-Versjons-Nr                              01650015
+016600                                   In    F7919010-Ext-IO-Area     01660015
+016700                                         Delimited by size        01670015
+016800                '" inn, skulle også gjort det ut.'                01680015
+016900                                         Delimited by size        01690015
+017000                                   Into  R7919999-Melding         01700015
+017100         End-String                                               01710015
+017200         Move  'ZO01'              To    R7919999-Paragraf        01720015
+017300         Perform F7919010-Z900-Abend                              01730015
+017400*                                                                 01740015
+017500     End-Evaluate                                                 01750015
+017600*                                                                 01760015
+017700     .                                                            01770015
+017800 ZO99-Ex.                                                         01780015
+017900     Exit.                                                        01790015

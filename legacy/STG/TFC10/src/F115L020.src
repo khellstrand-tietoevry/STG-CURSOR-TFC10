@@ -1,0 +1,390 @@
+       Identification Division.                                         00010002
+       Program-ID. F115L020.                                            00020002
+       Author.  Rune Mesel.                                             00030002
+      *################################################################*00040002
+      *                                                                 00050002
+      * FD Trade Finance                                                00060002
+      *                                                                 00070002
+      * Module to generate a contract no, based upon input contract type00080002
+      *                                                                 00090002
+      *                                                                 00100002
+      * An ordinary Select call may look like this:                     00110002
+      *                                                                 00120002
+      *    Initialize                          R115L020-Gen-Contract-No 00130002
+      *    Set   R115L020-Version        To    True                     00140002
+      *    Set   R115L020-In-Select      To    True                     00150002
+      *    Move  &contract-type          To    R115L020-In-Contract-Type00160002
+      *                                                                 00170002
+      *    Call  'F115L020'              Using R115L020-Gen-Contract-No 00180002
+      *                                        R7919999-Error-Area      00190002
+      *    End-Call                                                     00200002
+      *                                                                 00210002
+      *    Evaluate True                                                00220002
+      *      When R7919999-Return-Abend                                 00230002
+      *        Move  '&&&&'              To    R7919999-Paragraph       00240002
+      *        Perform Z900-Abend                                       00250002
+      *                                                                 00260002
+      *      When R7919999-Return-Error                                 00270002
+      *        ...not found...                                          00280002
+      *                                                                 00290002
+      *      When R7919999-Return-OK                                    00300002
+      *        ...found...                                              00310002
+      *                                                                 00320002
+      *    End-Evaluate                                                 00330002
+      *                                                                 00340002
+      *################################################################*00350002
+      * Date ! Si! Change description                            ! 3A ! 00360002
+      *------+---+-----------------------------------------------+----+ 00370002
+      *240105!CMF! Ny brukere i Sparebank 1 SMN som må legges in !    ! 00370102
+      *            i SMN logik for contract range. Se forklaring !    ! 00370202
+      *            nedan. Ny regnr 4400.                         !    ! 00370302
+      *210422!HF ! Feil ved test på MidtNorge, måtte legge inn   !    ! 00370402
+      *      !   ! paranteser i testen.                          !    ! 00370502
+      *300322!HF ! MidtNorge ikke lenger to serier (contract range).  ! 00370602
+      *      !   ! Banken velger serie nr 2 som default.         !    ! 00370702
+      *210910!NDL! Fjernet logikk rundt 9055, Handelsbanken      !LO18! 00370802
+      *060206!NDL! MidtNorge to regnr.                           !LO18! 00370902
+      *130302!HB ! Handelsbanken to regnr.                       !LO18! 00371002
+      *210900!NDL! Nordlansabanken, to regnr                     !LQ38! 00372002
+      *010399!RM ! New module                                    !LG10! 00373002
+      *################################################################*00374002
+       Environment Division.                                            00375002
+       Configuration Section.                                           00376002
+       Special-Names.                                                   00377002
+           Decimal-Point Is Comma.                                      00378002
+      *                                                                 00379002
+      *################################################################*00380002
+       Data Division.                                                   00390002
+       Working-Storage Section.                                         00400002
+      *                                                                 00410002
+       01  Filler.                                                      00420002
+      *                                                                 00430002
+           05  W-IO-Length               Pic S9(04)              Comp.  00440002
+      *                                                                 00450002
+           05  WD-Length                 Pic  Z.ZZ9.                    00460002
+      *                                                                 00470002
+           05  WS-Range-Type             Pic  X(20).                    00480002
+           05  WS-Reg-No                 Pic  9(08).                    00490002
+      *                                                                 00500002
+      *----------------------------------------------------------------*00510002
+      * Internal area:                                                  00520002
+      *                                                                 00530002
+       01  W-Int-IO-Area.                                               00540002
+           Copy R115L020.                                               00550002
+      *                                                                 00560002
+      *----------------------------------------------------------------*00570002
+      * Assorted copy-areas:                                            00580002
+      *                                                                 00590002
+       01  Filler.                                                      00600002
+           Copy R7918030.                                               00610002
+       01  Filler.                                                      00620002
+           COPY R115ISC0.                                               00630002
+      *                                                                 00640002
+      *################################################################.00650002
+       Linkage Section.                                                 00660002
+      *                                                                 00670002
+       01  L-Ext-IO-Area                 Pic  X(560).                   00680002
+       Copy R7919999.                                                   00690002
+      *                                                                 00700002
+      *################################################################.00710002
+       Procedure Division                Using L-Ext-IO-Area            00720002
+                                               R7919999-Error-Area.     00730002
+      *                                                                 00740002
+       A000-Main                         Section.                       00750002
+      *                                                                 00760002
+           Perform B000-Initialize                                      00770002
+      *                                                                 00780002
+           Perform ZI00-Konv-Input-Version                              00790002
+           Perform C000-Interface                                       00800002
+           Perform ZO00-Konv-Output-Version                             00810002
+      *                                                                 00820002
+           Goback.                                                      00830002
+      *################################################################*00840002
+       B000-Initialize                   Section.                       00850002
+      *                                                                 00860002
+           Set   R7919999-Return-OK      To    True                     00870002
+      *                                                                 00880002
+           .                                                            00890002
+      *################################################################.00900002
+       C000-Interface                    Section.                       00910002
+      *                                                                 00920002
+           Perform C100-Initialize-Output                               00930002
+           Perform C200-Prepare-Input                                   00940002
+           Perform E000-Read-Contr-Def                                  00950002
+           Perform E200-Find-No-Range                                   00960002
+           Perform E300-Replace-No-Range                                00970002
+           Perform E400-Check-Contract-Range                            00980002
+      *                                                                 00990002
+           .                                                            01000002
+      *################################################################.01010002
+       C100-Initialize-Output            Section.                       01020002
+      *                                                                 01030002
+           Initialize                          R115L020-Data            01040002
+      *                                                                 01050002
+           .                                                            01060002
+      *################################################################.01070002
+       C200-Prepare-Input                Section.                       01080002
+      *                                                                 01090002
+           Continue                                                     01100002
+      *                                                                 01110002
+           .                                                            01120002
+      *################################################################.01130002
+       E000-Read-Contr-Def               Section.                       01140002
+      *                                                                 01150002
+           Initialize                          R115ISC0-Sys-Code        01160002
+           Move  'CONTRACT-TYPE'         To    R115ISC0-In-ST-Type      01170002
+           Move  R115L020-In-Contract-Type                              01180002
+                                         To    R115ISC0-In-SC-Code      01190002
+           Perform E100-Read-SYS-Code                                   01200002
+      *                                                                 01210002
+           Move R115ISC0-Range-Type      To    WS-Range-Type            01220002
+      *                                                                 01230002
+           .                                                            01240002
+      *################################################################.01250002
+       E100-Read-SYS-Code                Section.                       01260002
+      *                                                                 01270002
+           Set   R115ISC0-Version        To    True                     01280002
+           Set   R115ISC0-In-Select      To    True                     01290002
+           Move  R115L020-In-Fin-Inst-No To    R115ISC0-In-Fin-Inst-No  01300002
+           Move  Spaces                  To    R115ISC0-In-Contr-type   01310002
+      *                                                                 01320002
+           Call  'F115ISC0'              Using R115ISC0-Sys-Code        01330002
+                                               R7919999-Error-Area      01340002
+           End-Call                                                     01350002
+      *                                                                 01360002
+           Evaluate True                                                01370002
+             When R7919999-Return-Abend                                 01380002
+               Move  'E101'              To    R7919999-Paragraph       01390002
+               Perform Z900-Abend                                       01400002
+      *                                                                 01410002
+             When R7919999-Return-Error                                 01420002
+               Move  'E102'              To    R7919999-Paragraph       01430002
+               Perform Z900-Abend                                       01440002
+      *                                                                 01450002
+           End-Evaluate                                                 01460002
+      *                                                                 01470002
+           .                                                            01480002
+      *################################################################.01490002
+       E200-Find-No-Range                Section.                       01500002
+      *                                                                 01510002
+           Initialize                          R115ISC0-Sys-Code        01520002
+           Move  'CONTRACT-RANGE'        To    R115ISC0-In-ST-Type      01530002
+           Move   Ws-Range-Type          To    R115ISC0-In-SC-Code      01540002
+           Perform E100-Read-SYS-Code                                   01550002
+      *                                                                 01560002
+      *    Add +1                        To    R115ISC0-Range-Current   01570002
+      *                                                                 01580002
+           Evaluate True                                                01590002
+                                                                        01600002
+      * MidtNorge Molde                                                 01610002
+            When R115L020-In-Reg-No = 4202 Or R115L020-In-Reg-No = 4200 01620002
+             Or  R115L020-In-Reg-No = 4210 Or R115L020-In-Reg-No = 4400 01630002
+              Add +1                     To    R115ISC0-Range2-Current  01640002
+                                                                        01650002
+      * Nordlandsbanken Bodø                                            01660002
+            When R115L020-In-Reg-No = 8900 Or R115L020-In-Reg-No = 8902 01670002
+              Add +1                     To    R115ISC0-Range2-Current  01680002
+                                                                        01690002
+      * Handelsbanken Bergen                                            01700002
+      *     When R115L020-In-Reg-No = 9055                              01710002
+      *       Add +1                     To    R115ISC0-Range2-Current  01720002
+      *                                                                 01730002
+            When Other                                                  01740002
+              Add +1                     To    R115ISC0-Range-Current   01750002
+           End-Evaluate                                                 01760002
+      *                                                                 01770002
+           .                                                            01780002
+      *################################################################.01790002
+       E300-Replace-No-Range             Section.                       01800002
+      *                                                                 01810002
+           Set   R115ISC0-In-Update      To    True                     01820002
+      *                                                                 01830002
+           Call  'F115ISC0'              Using R115ISC0-Sys-Code        01840002
+                                               R7919999-Error-Area      01850002
+           End-Call                                                     01860002
+      *                                                                 01870002
+           Evaluate True                                                01880002
+             When Not R7919999-Return-OK                                01890002
+               Move  'E301'              To    R7919999-Paragraph       01900002
+               Perform Z900-Abend                                       01910002
+      *                                                                 01920002
+           End-Evaluate                                                 01930002
+      *                                                                 01940002
+           .                                                            01950002
+      *################################################################.01960002
+       E400-Check-Contract-Range         Section.                       01970002
+      *                                                                 01980002
+           Evaluate True                                                01990002
+             When R115ISC0-Range-Current         >=   R115ISC0-Range-End02000002
+               String 'Contract gen. out of range -'                    02010002
+                                                Delimited By Size       02020002
+                      R115L020-In-Contract-Type Delimited By Size       02030002
+                      '- current value : '      Delimited By Size       02040002
+                      R115ISC0-Range-Current    Delimited By Size       02050002
+                                       Into     R7919999-Message        02060002
+               End-String                                               02070002
+               Move  'E401'              To    R7919999-Paragraph       02080002
+               Perform Z900-Abend                                       02090002
+      *                                                                 02100002
+             When R115L020-In-Reg-No = 8900 Or                          02110002
+                  R115L020-In-Reg-No = 8902 And                         02120002
+                  R115ISC0-Range2-Current >=   R115ISC0-Range2-End      02130002
+               String 'Contract gen. out of range -'                    02140002
+                                                Delimited By Size       02150002
+                      R115L020-In-Contract-Type Delimited By Size       02160002
+                      '- current value : '      Delimited By Size       02170002
+                      R115ISC0-Range2-Current   Delimited By Size       02180002
+                                       Into     R7919999-Message        02190002
+               End-String                                               02200002
+               Move  'E402'              To    R7919999-Paragraph       02210002
+               Perform Z900-Abend                                       02220002
+      *                                                                 02230002
+      *      When R115L020-In-Reg-No = 9055 And                         02240002
+      *           R115ISC0-Range2-Current >=   R115ISC0-Range2-End      02250002
+      *        String 'Contract gen. out of range -'                    02260002
+      *                                         Delimited By Size       02270002
+      *               R115L020-In-Contract-Type Delimited By Size       02280002
+      *               '- current value : '      Delimited By Size       02290002
+      *               R115ISC0-Range2-Current   Delimited By Size       02300002
+      *                                Into     R7919999-Message        02310002
+      *        End-String                                               02320002
+      *        Move  'E403'              To    R7919999-Paragraph       02330002
+      *                                                                 02340002
+             When (R115L020-In-Reg-No = 4202 Or                         02350002
+                   R115L020-In-Reg-No = 4200 Or                         02360002
+                   R115L020-In-Reg-No = 4210 Or                         02361002
+                   R115L020-In-Reg-No = 4400) And                       02362002
+                   R115ISC0-Range2-Current >=   R115ISC0-Range2-End     02363002
+               String 'Contract gen. out of range -'                    02364002
+                                                Delimited By Size       02365002
+                      R115L020-In-Contract-Type Delimited By Size       02366002
+                      '- current value : '      Delimited By Size       02367002
+                      R115ISC0-Range2-Current   Delimited By Size       02368002
+                                       Into     R7919999-Message        02369002
+               End-String                                               02369102
+               Move  'E404'              To    R7919999-Paragraph       02369202
+               Perform Z900-Abend                                       02369302
+      *                                                                 02369402
+             When R115L020-In-Reg-No = 8900 Or                          02369502
+                  R115L020-In-Reg-No = 8902                             02369602
+               Move R115ISC0-Range2-Current                             02369702
+                                         To    R115L020-Contract-No     02369802
+      *      When R115L020-In-Reg-No = 9055                             02369902
+      *        Move R115ISC0-Range2-Current                             02370002
+      *                                  To    R115L020-Contract-No     02380002
+             When R115L020-In-Reg-No = 4202 Or                          02390002
+                  R115L020-In-Reg-No = 4200 Or                          02400002
+                  R115L020-In-Reg-No = 4210 Or                          02410002
+                  R115L020-In-Reg-No = 4400                             02420002
+               Move R115ISC0-Range2-Current                             02430002
+                                         To    R115L020-Contract-No     02440002
+             When Other                                                 02450002
+               Move R115ISC0-Range-Current                              02460002
+                                         To    R115L020-Contract-No     02470002
+           End-Evaluate                                                 02480002
+      *                                                                 02490002
+           .                                                            02500002
+      *################################################################*02510002
+       ZI00-Konv-Input-Version           Section.                       02520002
+      *                                                                 02530002
+      * Version control.                                                02540002
+      * If conversion is needed, we call the conversion module.         02550002
+      *                                                                 02560002
+           Set   R115L020-Version        To    True                     02570002
+           Move  Length                  Of    R115L020-Gen-Contract-No 02580002
+                                         To    W-IO-Length              02590002
+      *                                                                 02600002
+           Evaluate True                                                02610002
+             When L-Ext-IO-Area (1:8)    =     R115L020-Version-No      02620002
+             and  Length                 Of    L-Ext-IO-Area            02630002
+                                         Not < W-IO-Length              02640002
+               Move  L-Ext-IO-Area (1:W-IO-Length)                      02650002
+                                         To    W-Int-IO-Area            02660002
+      *                                                                 02670002
+             When Other                                                 02680002
+               Call  'F115L999'                                         02690002
+                   Using By Content      'F115L020 '                    02700002
+                                         'INPUT '                       02710002
+                         By Reference    L-Ext-IO-Area                  02720002
+                                         W-Int-IO-Area                  02730002
+                                         R7919999-Error-Area            02740002
+               End-Call                                                 02750002
+      *                                                                 02760002
+               If  R7919999-Return-Abend                                02770002
+                   Move  'ZI03'          To    R7919999-Paragraph       02780002
+                   Perform Z900-Abend                                   02790002
+               End-If                                                   02800002
+      *                                                                 02810002
+           End-Evaluate                                                 02820002
+      *                                                                 02830002
+           .                                                            02840002
+      *################################################################*02850002
+       ZO00-Konv-Output-Version          Section.                       02860002
+      *                                                                 02870002
+      * Version control.                                                02880002
+      * If conversion is needed, we call the conversion module.         02890002
+      *                                                                 02900002
+           Evaluate True                                                02910002
+             When L-Ext-IO-Area (1:8)    =     R115L020-Version-No      02920002
+             and  Length                 Of    L-Ext-IO-Area            02930002
+                                         Not < W-IO-Length              02940002
+               Move  W-Int-IO-Area       To    L-Ext-IO-Area            02950002
+                                                         (1:W-IO-Length)02960002
+      *                                                                 02970002
+             When Other                                                 02980002
+               Call  'F115L999'                                         02990002
+                   Using By Content      'F115L020 '                    03000002
+                                         'OUTPUT '                      03010002
+                         By Reference    L-Ext-IO-Area                  03020002
+                                         W-Int-IO-Area                  03030002
+                                         R7919999-Error-Area            03040002
+               End-Call                                                 03050002
+      *                                                                 03060002
+               If  R7919999-Return-Abend                                03070002
+                   Move  'ZO01'          To    R7919999-Paragraph       03080002
+                   Perform Z900-Abend                                   03090002
+               End-If                                                   03100002
+      *                                                                 03110002
+           End-Evaluate                                                 03120002
+      *                                                                 03130002
+           .                                                            03140002
+      *################################################################*03150002
+       Z000-Error-Message                Section.                       03160002
+      *                                                                 03170002
+           Set   R7918030-Version        To    True                     03180002
+      *                                                                 03190002
+           Move  'TF'                    To    R7918030-In-System-ID    03200002
+      *    Move  &fin-inst no#           To    R7918030-In-Fin-Inst-No  03210002
+      *    Move  &language - ISO 639-1#  To    R7918030-In-Language     03220002
+      *                                                                 03230002
+      *    Set   R7918030-In-Log-Yes     To    True                     03240002
+      *                                                                 03250002
+           Call  'F7918030'              Using R7918030-ErrorMessage    03260002
+           End-Call                                                     03270002
+      *                                                                 03280002
+           Move  R7918030-Out-MessageText                               03290002
+                                         To    R7919999-Message         03300002
+      *                                                                 03310002
+           .                                                            03320002
+      *################################################################*03330002
+       Z900-Abend                        Section.                       03340002
+      *                                                                 03350002
+           If  R7919999-Return-Code      Not   Numeric                  03360002
+           or  Not R7919999-Return-Abend                                03370002
+               Move  +0                  To    R7919999-Module-Ind      03380002
+           End-If                                                       03390002
+      *                                                                 03400002
+           Add   +1                      To    R7919999-Module-Ind      03410002
+      *                                                                 03420002
+           If  R7919999-Module-Ind       Not >                          03430002
+                             ( Length    Of    R7919999-Module-Tab      03440002
+                             / Length    Of    R7919999-Module-Element )03450002
+               Move  'F115L020'          To    R7919999-Module-Name     03460002
+                                                   (R7919999-Module-Ind)03470002
+               Move  R7919999-Paragraph  To    R7919999-Module-Para     03480002
+                                                   (R7919999-Module-Ind)03490002
+           End-If                                                       03500002
+      *                                                                 03510002
+           Set   R7919999-Return-Abend   To    TRUE                     03520002
+      *                                                                 03530002
+           Goback.                                                      03540002

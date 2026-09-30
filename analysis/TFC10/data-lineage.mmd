@@ -1,0 +1,9 @@
+graph LR
+  H[FTFCH100] -->|read/write via copybooks| STG[TFCE100 payload]
+  K[FTFCK100] -->|R115L050| IC[F115L050]
+  IC -->|F115IMC0| MC[(Main contract)]
+  IC -->|F115ICA0 F115IPA0| AM[(Amounts)]
+  IC -->|F115ISC0 F115ISR0| SC[(System codes)]
+  L[FTFCL100] -->|F115IMC0 F115ICA0 F115IEI0| MC
+  L --> AM
+  L -->|F115ISC0 via helpers| SC

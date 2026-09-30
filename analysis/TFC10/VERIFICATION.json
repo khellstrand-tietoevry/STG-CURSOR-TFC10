@@ -1,0 +1,1148 @@
+{
+  "v": 1,
+  "system": "TFC10",
+  "generated": "2026-09-29 20:33 UTC",
+  "asked": "",
+  "rules": [
+    "PROVEN needs every check to pass: the six below, and for an uplift three more (7 to 9). NOT PROVEN when any check fails. PARTLY PROVEN when nothing failed but a check could not pass.",
+    "1. Tests ran: at least one test executed in a fresh run, none failed, none was skipped without a reason, and every result file is newer than the code. The counts must be read by this script from result files or a saved raw runner log; counts only typed in cannot reach PROVEN.",
+    "2. Rules traced (rewrite and reimagine): every P0 rule the module answers for is backed by a test that ran and passed: its id is in the test or class name of a result this script parsed, or a test file names it on a line not marked skipped or pending and that file's class ran and passed. A rule named only by skipped, pending or failing tests is named, not run; one only the notes name is claimed. Neither is tested.",
+    "3. Same behavior: the development cases, judged again by compare.py, executed at least one case and none differs or is missing (a difference a person approved is allowed and listed); for an uplift, no regression, no new failure, no missing test and no drop in executed tests against BASELINE.md.",
+    "4. Fresh inputs: at least 10 new inputs, none with the same output as a development case, ran on the legacy and the new code with no difference. Needed whenever the legacy could run here; when it could not, the proof is trace-based and the best verdict is PARTLY PROVEN.",
+    "5. Canary: a deliberate one-line break whose own result file or saved runner log shows failing tests. A line in the notes is a claim.",
+    "6. Source untouched: no file under legacy/<system> is newer than the analysis (PREFLIGHT.md), by a plain file walk; no version-control tool is run.",
+    "7. Baseline measured (uplift): the old version's numbers in BASELINE.md come from per-test result files, a per-test results file or a raw runner log that this script parsed (in analysis/<system>/baseline/, or on a Recorded: or Machine-readable: line of BASELINE.md), and the typed table agrees with them. A table typed by hand, or sources that disagree, cannot reach PROVEN.",
+    "8. Tests kept (uplift): no test file of the untouched legacy tree is missing from the working copy, no more than 25% of them changed, and the legacy tree has test files to compare against (walked by file, no process is run). The list is for a person to review; weakened assertions cannot be detected, only that files changed.",
+    "9. Deltas covered (uplift): every Behavioral-silent delta in DELTA_CATALOG.md has its site's file named, as a whole word, by some test file of the working copy. A name is not proof that the test exercises the change.",
+    "Open questions, unticked criteria and the sign-off are for a person. They never change the verdict.",
+    "A folder that holds only test code and the files that build it is test tooling: it is listed, not judged, and not counted."
+  ],
+  "legacy": {
+    "state": "clean",
+    "method": "by modification time, and no version-control tool was run",
+    "detail": "no file changed after the analysis started (51 files compared)",
+    "files": [],
+    "path": "legacy/TFC10",
+    "target": "/Users/kristofferhellstrand/git/tfi-workspace/STG-cursor-TFC10/legacy/STG/TFC10",
+    "ran": false
+  },
+  "problems": [],
+  "modules": [
+    {
+      "name": "ftfc-f7919",
+      "track": "rewrite",
+      "path": "modernized/TFC10/ftfc-f7919",
+      "verdict": "PARTLY PROVEN",
+      "reasons": [
+        "Same behavior: No equivalence cases were recorded: the new code was never compared with the legacy output.",
+        "Fresh inputs: The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+      ],
+      "passed": [
+        "Tests ran: 6 test(s) executed, 0 failed, 0 skipped.",
+        "Rules traced: All 2 P0 rule(s) this module answers for are backed by a test that ran and passed.",
+        "Canary: 1 canary run(s) shown by a result file or log; the first (BankDayCalculator: always treat weekday as bank day (ignore holidays)) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-f7919/target/surefire-reports/TEST-no.tieto.tfc10.f7919.F7919HelpersTest.xml).",
+        "Source untouched: legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+      ],
+      "checks": [
+        {
+          "id": "tests",
+          "label": "Tests ran",
+          "state": "pass",
+          "detail": "6 test(s) executed, 0 failed, 0 skipped."
+        },
+        {
+          "id": "rules",
+          "label": "Rules traced",
+          "state": "pass",
+          "detail": "All 2 P0 rule(s) this module answers for are backed by a test that ran and passed."
+        },
+        {
+          "id": "same",
+          "label": "Same behavior",
+          "state": "gap",
+          "detail": "No equivalence cases were recorded: the new code was never compared with the legacy output."
+        },
+        {
+          "id": "fresh",
+          "label": "Fresh inputs",
+          "state": "gap",
+          "detail": "The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+        },
+        {
+          "id": "canary",
+          "label": "Canary",
+          "state": "pass",
+          "detail": "1 canary run(s) shown by a result file or log; the first (BankDayCalculator: always treat weekday as bank day (ignore holidays)) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-f7919/target/surefire-reports/TEST-no.tieto.tfc10.f7919.F7919HelpersTest.xml)."
+        },
+        {
+          "id": "source",
+          "label": "Source untouched",
+          "state": "pass",
+          "detail": "legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+        }
+      ],
+      "evidence": {
+        "tests": {
+          "executed": 6,
+          "failed": 0,
+          "skipped": 0,
+          "skippedNoReason": 0,
+          "stale": false,
+          "suites": [
+            {
+              "name": "unit tests",
+              "command": "cd modernized/TFC10 && mvn -q clean test",
+              "date": "",
+              "note": "",
+              "source": "result files",
+              "files": 1,
+              "written": "2026-09-29 20:33 UTC",
+              "executed": 6,
+              "failed": 0,
+              "skipped": 0
+            }
+          ]
+        },
+        "legacy": {
+          "ran": false,
+          "how": "GnuCOBOL partial compile only; no DB2/CICS runtime",
+          "why": "H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here"
+        },
+        "rules": {
+          "tied": true,
+          "counted": 8,
+          "outOfScope": 11,
+          "totals": {
+            "P0": {
+              "rules": 2,
+              "tested": 2,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 0
+            },
+            "P1": {
+              "rules": 6,
+              "tested": 2,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 4
+            }
+          },
+          "p0NoTests": [],
+          "namedNotRun": [],
+          "perTestResults": true,
+          "p0": [
+            {
+              "id": "RULE-008",
+              "name": "K-module initial check calls F115L050",
+              "confidence": "High",
+              "status": "tested",
+              "main": 1,
+              "tests": 2,
+              "claimed": true,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-f7919/src/test/java/no/tieto/tfc10/f7919/F7919HelpersTest.java:15"
+            },
+            {
+              "id": "RULE-009",
+              "name": "Return-Error stops K path",
+              "confidence": "Medium",
+              "status": "tested",
+              "main": 1,
+              "tests": 1,
+              "claimed": true,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-f7919/src/test/java/no/tieto/tfc10/f7919/F7919HelpersTest.java:31"
+            }
+          ]
+        },
+        "leftOut": [
+          "End-to-end COBOL execution for FTFCH100/FTFCK100/FTFCL100/F115L050",
+          "Fresh-input legacy vs Java comparison (legacy.ran false)",
+          "equivalence/cases.json not present",
+          "F115IMC0/F115ICA0/F115IPA0 and other DB boundary CALL targets without .src",
+          "RULE-016 decimal-comma characterization beyond COBOL Special-Names declaration"
+        ],
+        "canary": [
+          {
+            "change": "BankDayCalculator: always treat weekday as bank day (ignore holidays)",
+            "testsFailed": 1,
+            "shown": true,
+            "where": [
+              "analysis/TFC10/equivalence/canary/ftfc-f7919/target/surefire-reports/TEST-no.tieto.tfc10.f7919.F7919HelpersTest.xml"
+            ]
+          }
+        ]
+      },
+      "caveats": [],
+      "needsPerson": [],
+      "brief": {
+        "found": true,
+        "phase": "",
+        "items": [],
+        "count": 0
+      },
+      "notProven": [
+        "It does not prove behavior on inputs nobody tried: the equivalence cases and the fresh inputs are samples, not the whole input space.",
+        "The legacy could not run here, so the comparison rests on recorded outputs and traces. It is only as good as that recording.",
+        "It does not cover speed, capacity, security, concurrency, or anything the tests and cases do not exercise.",
+        "It traces only the rules that were extracted: behavior nobody wrote down as a rule has no rule to trace.",
+        "A test that names a rule shows the rule is mentioned, not that the test is a good one. The canary shows only that some test can fail.",
+        "It does not replace the review and sign-off of the people who own the system."
+      ],
+      "verifiedAt": "2026-09-29 20:33 UTC"
+    },
+    {
+      "name": "ftfc-h100",
+      "track": "rewrite",
+      "path": "modernized/TFC10/ftfc-h100",
+      "verdict": "PARTLY PROVEN",
+      "reasons": [
+        "Same behavior: No equivalence cases were recorded: the new code was never compared with the legacy output.",
+        "Fresh inputs: The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+      ],
+      "passed": [
+        "Tests ran: 4 test(s) executed, 0 failed, 0 skipped. Note: Post-L050 verify; full reactor clean test 2026-09-29.",
+        "Rules traced: No rule this module answers for is rated P0 (1 rule(s) counted).",
+        "Canary: 1 canary run(s) shown by a result file or log; the first (HModuleOrchestrator: skip real L load (always return LResult.ok)) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorIntegrationTest.xml, analysis/TFC10/equivalence/canary/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorTest.xml).",
+        "Source untouched: legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+      ],
+      "checks": [
+        {
+          "id": "tests",
+          "label": "Tests ran",
+          "state": "pass",
+          "detail": "4 test(s) executed, 0 failed, 0 skipped. Note: Post-L050 verify; full reactor clean test 2026-09-29."
+        },
+        {
+          "id": "rules",
+          "label": "Rules traced",
+          "state": "pass",
+          "detail": "No rule this module answers for is rated P0 (1 rule(s) counted)."
+        },
+        {
+          "id": "same",
+          "label": "Same behavior",
+          "state": "gap",
+          "detail": "No equivalence cases were recorded: the new code was never compared with the legacy output."
+        },
+        {
+          "id": "fresh",
+          "label": "Fresh inputs",
+          "state": "gap",
+          "detail": "The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+        },
+        {
+          "id": "canary",
+          "label": "Canary",
+          "state": "pass",
+          "detail": "1 canary run(s) shown by a result file or log; the first (HModuleOrchestrator: skip real L load (always return LResult.ok)) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorIntegrationTest.xml, analysis/TFC10/equivalence/canary/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorTest.xml)."
+        },
+        {
+          "id": "source",
+          "label": "Source untouched",
+          "state": "pass",
+          "detail": "legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+        }
+      ],
+      "evidence": {
+        "tests": {
+          "executed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "skippedNoReason": 0,
+          "stale": false,
+          "suites": [
+            {
+              "name": "unit tests",
+              "command": "cd modernized/TFC10 && mvn -q clean test",
+              "date": "",
+              "note": "Post-L050 verify; full reactor clean test 2026-09-29.",
+              "source": "result files",
+              "files": 2,
+              "written": "2026-09-29 20:33 UTC",
+              "executed": 4,
+              "failed": 0,
+              "skipped": 0
+            }
+          ]
+        },
+        "legacy": {
+          "ran": false,
+          "how": "GnuCOBOL partial compile only; no DB2/CICS runtime",
+          "why": "H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here"
+        },
+        "rules": {
+          "tied": true,
+          "counted": 1,
+          "outOfScope": 18,
+          "totals": {
+            "P1": {
+              "rules": 1,
+              "tested": 1,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 0
+            }
+          },
+          "p0NoTests": [],
+          "namedNotRun": [],
+          "perTestResults": true,
+          "p0": []
+        },
+        "leftOut": [
+          "End-to-end COBOL execution for FTFCH100/FTFCK100/FTFCL100/F115L050",
+          "Fresh-input legacy vs Java comparison (legacy.ran false)",
+          "equivalence/cases.json not present",
+          "F115IMC0/F115ICA0/F115IPA0 and other DB boundary CALL targets without .src",
+          "RULE-016 decimal-comma characterization beyond COBOL Special-Names declaration"
+        ],
+        "canary": [
+          {
+            "change": "HModuleOrchestrator: skip real L load (always return LResult.ok)",
+            "testsFailed": 1,
+            "shown": true,
+            "where": [
+              "analysis/TFC10/equivalence/canary/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorIntegrationTest.xml",
+              "analysis/TFC10/equivalence/canary/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorTest.xml"
+            ]
+          }
+        ]
+      },
+      "caveats": [],
+      "needsPerson": [],
+      "brief": {
+        "found": true,
+        "phase": "",
+        "items": [],
+        "count": 0
+      },
+      "notProven": [
+        "It does not prove behavior on inputs nobody tried: the equivalence cases and the fresh inputs are samples, not the whole input space.",
+        "The legacy could not run here, so the comparison rests on recorded outputs and traces. It is only as good as that recording.",
+        "It does not cover speed, capacity, security, concurrency, or anything the tests and cases do not exercise.",
+        "It traces only the rules that were extracted: behavior nobody wrote down as a rule has no rule to trace.",
+        "A test that names a rule shows the rule is mentioned, not that the test is a good one. The canary shows only that some test can fail.",
+        "It does not replace the review and sign-off of the people who own the system."
+      ],
+      "verifiedAt": "2026-09-29 20:33 UTC"
+    },
+    {
+      "name": "ftfc-k100",
+      "track": "rewrite",
+      "path": "modernized/TFC10/ftfc-k100",
+      "verdict": "PARTLY PROVEN",
+      "reasons": [
+        "Same behavior: No equivalence cases were recorded: the new code was never compared with the legacy output.",
+        "Fresh inputs: The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+      ],
+      "passed": [
+        "Tests ran: 4 test(s) executed, 0 failed, 0 skipped.",
+        "Rules traced: All 2 P0 rule(s) this module answers for are backed by a test that ran and passed.",
+        "Canary: 1 canary run(s) shown by a result file or log; the first (KModuleValidator: ignore initial-check error flag) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-k100/target/surefire-reports/TEST-no.tieto.tfc10.k.KModuleValidatorTest.xml).",
+        "Source untouched: legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+      ],
+      "checks": [
+        {
+          "id": "tests",
+          "label": "Tests ran",
+          "state": "pass",
+          "detail": "4 test(s) executed, 0 failed, 0 skipped."
+        },
+        {
+          "id": "rules",
+          "label": "Rules traced",
+          "state": "pass",
+          "detail": "All 2 P0 rule(s) this module answers for are backed by a test that ran and passed."
+        },
+        {
+          "id": "same",
+          "label": "Same behavior",
+          "state": "gap",
+          "detail": "No equivalence cases were recorded: the new code was never compared with the legacy output."
+        },
+        {
+          "id": "fresh",
+          "label": "Fresh inputs",
+          "state": "gap",
+          "detail": "The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+        },
+        {
+          "id": "canary",
+          "label": "Canary",
+          "state": "pass",
+          "detail": "1 canary run(s) shown by a result file or log; the first (KModuleValidator: ignore initial-check error flag) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-k100/target/surefire-reports/TEST-no.tieto.tfc10.k.KModuleValidatorTest.xml)."
+        },
+        {
+          "id": "source",
+          "label": "Source untouched",
+          "state": "pass",
+          "detail": "legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+        }
+      ],
+      "evidence": {
+        "tests": {
+          "executed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "skippedNoReason": 0,
+          "stale": false,
+          "suites": [
+            {
+              "name": "unit tests",
+              "command": "cd modernized/TFC10 && mvn -q clean test",
+              "date": "",
+              "note": "",
+              "source": "result files",
+              "files": 1,
+              "written": "2026-09-29 20:32 UTC",
+              "executed": 4,
+              "failed": 0,
+              "skipped": 0
+            }
+          ]
+        },
+        "legacy": {
+          "ran": false,
+          "how": "GnuCOBOL partial compile only; no DB2/CICS runtime",
+          "why": "H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here"
+        },
+        "rules": {
+          "tied": true,
+          "counted": 2,
+          "outOfScope": 17,
+          "totals": {
+            "P0": {
+              "rules": 2,
+              "tested": 2,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 0
+            }
+          },
+          "p0NoTests": [],
+          "namedNotRun": [],
+          "perTestResults": true,
+          "p0": [
+            {
+              "id": "RULE-008",
+              "name": "K-module initial check calls F115L050",
+              "confidence": "High",
+              "status": "tested",
+              "main": 0,
+              "tests": 1,
+              "claimed": false,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-k100/src/test/java/no/tieto/tfc10/k/KModuleValidatorTest.java:32"
+            },
+            {
+              "id": "RULE-009",
+              "name": "Return-Error stops K path",
+              "confidence": "Medium",
+              "status": "tested",
+              "main": 0,
+              "tests": 1,
+              "claimed": false,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-k100/src/test/java/no/tieto/tfc10/k/KModuleValidatorTest.java:23"
+            }
+          ]
+        },
+        "leftOut": [
+          "End-to-end COBOL execution for FTFCH100/FTFCK100/FTFCL100/F115L050",
+          "Fresh-input legacy vs Java comparison (legacy.ran false)",
+          "equivalence/cases.json not present",
+          "F115IMC0/F115ICA0/F115IPA0 and other DB boundary CALL targets without .src",
+          "RULE-016 decimal-comma characterization beyond COBOL Special-Names declaration"
+        ],
+        "canary": [
+          {
+            "change": "KModuleValidator: ignore initial-check error flag",
+            "testsFailed": 1,
+            "shown": true,
+            "where": [
+              "analysis/TFC10/equivalence/canary/ftfc-k100/target/surefire-reports/TEST-no.tieto.tfc10.k.KModuleValidatorTest.xml"
+            ]
+          }
+        ]
+      },
+      "caveats": [],
+      "needsPerson": [],
+      "brief": {
+        "found": true,
+        "phase": "",
+        "items": [],
+        "count": 0
+      },
+      "notProven": [
+        "It does not prove behavior on inputs nobody tried: the equivalence cases and the fresh inputs are samples, not the whole input space.",
+        "The legacy could not run here, so the comparison rests on recorded outputs and traces. It is only as good as that recording.",
+        "It does not cover speed, capacity, security, concurrency, or anything the tests and cases do not exercise.",
+        "It traces only the rules that were extracted: behavior nobody wrote down as a rule has no rule to trace.",
+        "A test that names a rule shows the rule is mentioned, not that the test is a good one. The canary shows only that some test can fail.",
+        "It does not replace the review and sign-off of the people who own the system."
+      ],
+      "verifiedAt": "2026-09-29 20:33 UTC"
+    },
+    {
+      "name": "ftfc-l020",
+      "track": "rewrite",
+      "path": "modernized/TFC10/ftfc-l020",
+      "verdict": "PARTLY PROVEN",
+      "reasons": [
+        "Same behavior: No equivalence cases were recorded: the new code was never compared with the legacy output.",
+        "Fresh inputs: The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+      ],
+      "passed": [
+        "Tests ran: 4 test(s) executed, 0 failed, 0 skipped.",
+        "Rules traced: All 1 P0 rule(s) this module answers for are backed by a test that ran and passed.",
+        "Canary: 1 canary run(s) shown by a result file or log; the first (ContractRangeRules: disable primary range exhaustion check) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-l020/target/surefire-reports/TEST-no.tieto.tfc10.l020.ContractNumberGeneratorTest.xml).",
+        "Source untouched: legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+      ],
+      "checks": [
+        {
+          "id": "tests",
+          "label": "Tests ran",
+          "state": "pass",
+          "detail": "4 test(s) executed, 0 failed, 0 skipped."
+        },
+        {
+          "id": "rules",
+          "label": "Rules traced",
+          "state": "pass",
+          "detail": "All 1 P0 rule(s) this module answers for are backed by a test that ran and passed."
+        },
+        {
+          "id": "same",
+          "label": "Same behavior",
+          "state": "gap",
+          "detail": "No equivalence cases were recorded: the new code was never compared with the legacy output."
+        },
+        {
+          "id": "fresh",
+          "label": "Fresh inputs",
+          "state": "gap",
+          "detail": "The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+        },
+        {
+          "id": "canary",
+          "label": "Canary",
+          "state": "pass",
+          "detail": "1 canary run(s) shown by a result file or log; the first (ContractRangeRules: disable primary range exhaustion check) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-l020/target/surefire-reports/TEST-no.tieto.tfc10.l020.ContractNumberGeneratorTest.xml)."
+        },
+        {
+          "id": "source",
+          "label": "Source untouched",
+          "state": "pass",
+          "detail": "legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+        }
+      ],
+      "evidence": {
+        "tests": {
+          "executed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "skippedNoReason": 0,
+          "stale": false,
+          "suites": [
+            {
+              "name": "unit tests",
+              "command": "cd modernized/TFC10 && mvn -q clean test",
+              "date": "",
+              "note": "",
+              "source": "result files",
+              "files": 1,
+              "written": "2026-09-29 20:33 UTC",
+              "executed": 4,
+              "failed": 0,
+              "skipped": 0
+            }
+          ]
+        },
+        "legacy": {
+          "ran": false,
+          "how": "GnuCOBOL partial compile only; no DB2/CICS runtime",
+          "why": "H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here"
+        },
+        "rules": {
+          "tied": true,
+          "counted": 2,
+          "outOfScope": 17,
+          "totals": {
+            "P0": {
+              "rules": 1,
+              "tested": 1,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 0
+            },
+            "P1": {
+              "rules": 1,
+              "tested": 0,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 1
+            }
+          },
+          "p0NoTests": [],
+          "namedNotRun": [],
+          "perTestResults": true,
+          "p0": [
+            {
+              "id": "RULE-006",
+              "name": "Invalid status and operation-type combination",
+              "confidence": "High",
+              "status": "tested",
+              "main": 1,
+              "tests": 2,
+              "claimed": false,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-l020/src/test/java/no/tieto/tfc10/l020/ContractNumberGeneratorTest.java:33"
+            }
+          ]
+        },
+        "leftOut": [
+          "End-to-end COBOL execution for FTFCH100/FTFCK100/FTFCL100/F115L050",
+          "Fresh-input legacy vs Java comparison (legacy.ran false)",
+          "equivalence/cases.json not present",
+          "F115IMC0/F115ICA0/F115IPA0 and other DB boundary CALL targets without .src",
+          "RULE-016 decimal-comma characterization beyond COBOL Special-Names declaration"
+        ],
+        "canary": [
+          {
+            "change": "ContractRangeRules: disable primary range exhaustion check",
+            "testsFailed": 1,
+            "shown": true,
+            "where": [
+              "analysis/TFC10/equivalence/canary/ftfc-l020/target/surefire-reports/TEST-no.tieto.tfc10.l020.ContractNumberGeneratorTest.xml"
+            ]
+          }
+        ]
+      },
+      "caveats": [],
+      "needsPerson": [],
+      "brief": {
+        "found": true,
+        "phase": "",
+        "items": [],
+        "count": 0
+      },
+      "notProven": [
+        "It does not prove behavior on inputs nobody tried: the equivalence cases and the fresh inputs are samples, not the whole input space.",
+        "The legacy could not run here, so the comparison rests on recorded outputs and traces. It is only as good as that recording.",
+        "It does not cover speed, capacity, security, concurrency, or anything the tests and cases do not exercise.",
+        "It traces only the rules that were extracted: behavior nobody wrote down as a rule has no rule to trace.",
+        "A test that names a rule shows the rule is mentioned, not that the test is a good one. The canary shows only that some test can fail.",
+        "It does not replace the review and sign-off of the people who own the system."
+      ],
+      "verifiedAt": "2026-09-29 20:33 UTC"
+    },
+    {
+      "name": "ftfc-l050",
+      "track": "rewrite",
+      "path": "modernized/TFC10/ftfc-l050",
+      "verdict": "PARTLY PROVEN",
+      "reasons": [
+        "Same behavior: No equivalence cases were recorded: the new code was never compared with the legacy output.",
+        "Fresh inputs: The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+      ],
+      "passed": [
+        "Tests ran: 11 test(s) executed, 0 failed, 0 skipped. Note: TracedInitialCheckBackend + RULE-005/006/007 tests",
+        "Rules traced: All 4 P0 rule(s) this module answers for are backed by a test that ran and passed.",
+        "Canary: 1 canary run(s) shown by a result file or log; the first (InitialCheckService: ignore backend.error() return path) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-l050/target/surefire-reports/TEST-no.tieto.tfc10.l050.InitialCheckServiceTest.xml).",
+        "Source untouched: legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+      ],
+      "checks": [
+        {
+          "id": "tests",
+          "label": "Tests ran",
+          "state": "pass",
+          "detail": "11 test(s) executed, 0 failed, 0 skipped. Note: TracedInitialCheckBackend + RULE-005/006/007 tests"
+        },
+        {
+          "id": "rules",
+          "label": "Rules traced",
+          "state": "pass",
+          "detail": "All 4 P0 rule(s) this module answers for are backed by a test that ran and passed."
+        },
+        {
+          "id": "same",
+          "label": "Same behavior",
+          "state": "gap",
+          "detail": "No equivalence cases were recorded: the new code was never compared with the legacy output."
+        },
+        {
+          "id": "fresh",
+          "label": "Fresh inputs",
+          "state": "gap",
+          "detail": "The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+        },
+        {
+          "id": "canary",
+          "label": "Canary",
+          "state": "pass",
+          "detail": "1 canary run(s) shown by a result file or log; the first (InitialCheckService: ignore backend.error() return path) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-l050/target/surefire-reports/TEST-no.tieto.tfc10.l050.InitialCheckServiceTest.xml)."
+        },
+        {
+          "id": "source",
+          "label": "Source untouched",
+          "state": "pass",
+          "detail": "legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+        }
+      ],
+      "evidence": {
+        "tests": {
+          "executed": 11,
+          "failed": 0,
+          "skipped": 0,
+          "skippedNoReason": 0,
+          "stale": false,
+          "suites": [
+            {
+              "name": "unit tests",
+              "command": "cd modernized/TFC10 && mvn -q clean test",
+              "date": "",
+              "note": "TracedInitialCheckBackend + RULE-005/006/007 tests",
+              "source": "result files",
+              "files": 2,
+              "written": "2026-09-29 20:32 UTC",
+              "executed": 11,
+              "failed": 0,
+              "skipped": 0
+            }
+          ]
+        },
+        "legacy": {
+          "ran": false,
+          "how": "GnuCOBOL partial compile only; no DB2/CICS runtime",
+          "why": "H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here"
+        },
+        "rules": {
+          "tied": true,
+          "counted": 9,
+          "outOfScope": 10,
+          "totals": {
+            "P0": {
+              "rules": 4,
+              "tested": 4,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 0
+            },
+            "P1": {
+              "rules": 4,
+              "tested": 2,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 2
+            },
+            "P2": {
+              "rules": 1,
+              "tested": 0,
+              "named, not run": 0,
+              "code only": 1,
+              "claimed only": 0,
+              "none": 0
+            }
+          },
+          "p0NoTests": [],
+          "namedNotRun": [],
+          "perTestResults": true,
+          "p0": [
+            {
+              "id": "RULE-005",
+              "name": "F115L050 requires function and medium",
+              "confidence": "High",
+              "status": "tested",
+              "main": 4,
+              "tests": 2,
+              "claimed": false,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-l050/src/test/java/no/tieto/tfc10/l050/InitialCheckServiceTest.java:40"
+            },
+            {
+              "id": "RULE-006",
+              "name": "Invalid status and operation-type combination",
+              "confidence": "High",
+              "status": "tested",
+              "main": 0,
+              "tests": 1,
+              "claimed": false,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-l050/src/test/java/no/tieto/tfc10/l050/TracedInitialCheckBackendTest.java:15"
+            },
+            {
+              "id": "RULE-007",
+              "name": "Permanent status blocks in-progress main contract",
+              "confidence": "High",
+              "status": "tested",
+              "main": 0,
+              "tests": 2,
+              "claimed": false,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-l050/src/test/java/no/tieto/tfc10/l050/TracedInitialCheckBackendTest.java:24"
+            },
+            {
+              "id": "RULE-008",
+              "name": "K-module initial check calls F115L050",
+              "confidence": "High",
+              "status": "tested",
+              "main": 1,
+              "tests": 2,
+              "claimed": false,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-l050/src/test/java/no/tieto/tfc10/l050/InitialCheckServiceTest.java:17"
+            }
+          ]
+        },
+        "leftOut": [
+          "End-to-end COBOL execution for FTFCH100/FTFCK100/FTFCL100/F115L050",
+          "Fresh-input legacy vs Java comparison (legacy.ran false)",
+          "equivalence/cases.json not present",
+          "F115IMC0/F115ICA0/F115IPA0 and other DB boundary CALL targets without .src",
+          "RULE-016 decimal-comma characterization beyond COBOL Special-Names declaration"
+        ],
+        "canary": [
+          {
+            "change": "InitialCheckService: ignore backend.error() return path",
+            "testsFailed": 1,
+            "shown": true,
+            "where": [
+              "analysis/TFC10/equivalence/canary/ftfc-l050/target/surefire-reports/TEST-no.tieto.tfc10.l050.InitialCheckServiceTest.xml"
+            ]
+          }
+        ]
+      },
+      "caveats": [],
+      "needsPerson": [],
+      "brief": {
+        "found": true,
+        "phase": "",
+        "items": [],
+        "count": 0
+      },
+      "notProven": [
+        "It does not prove behavior on inputs nobody tried: the equivalence cases and the fresh inputs are samples, not the whole input space.",
+        "The legacy could not run here, so the comparison rests on recorded outputs and traces. It is only as good as that recording.",
+        "It does not cover speed, capacity, security, concurrency, or anything the tests and cases do not exercise.",
+        "It traces only the rules that were extracted: behavior nobody wrote down as a rule has no rule to trace.",
+        "A test that names a rule shows the rule is mentioned, not that the test is a good one. The canary shows only that some test can fail.",
+        "It does not replace the review and sign-off of the people who own the system."
+      ],
+      "verifiedAt": "2026-09-29 20:33 UTC"
+    },
+    {
+      "name": "ftfc-l090",
+      "track": "rewrite",
+      "path": "modernized/TFC10/ftfc-l090",
+      "verdict": "PARTLY PROVEN",
+      "reasons": [
+        "Same behavior: No equivalence cases were recorded: the new code was never compared with the legacy output.",
+        "Fresh inputs: The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+      ],
+      "passed": [
+        "Tests ran: 4 test(s) executed, 0 failed, 0 skipped.",
+        "Rules traced: All 1 P0 rule(s) this module answers for are backed by a test that ran and passed.",
+        "Canary: 1 canary run(s) shown by a result file or log; the first (ShadowChargeCleanup: ignore part-charge delete errors) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-l090/target/surefire-reports/TEST-no.tieto.tfc10.l090.ShadowChargeCleanupTest.xml).",
+        "Source untouched: legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+      ],
+      "checks": [
+        {
+          "id": "tests",
+          "label": "Tests ran",
+          "state": "pass",
+          "detail": "4 test(s) executed, 0 failed, 0 skipped."
+        },
+        {
+          "id": "rules",
+          "label": "Rules traced",
+          "state": "pass",
+          "detail": "All 1 P0 rule(s) this module answers for are backed by a test that ran and passed."
+        },
+        {
+          "id": "same",
+          "label": "Same behavior",
+          "state": "gap",
+          "detail": "No equivalence cases were recorded: the new code was never compared with the legacy output."
+        },
+        {
+          "id": "fresh",
+          "label": "Fresh inputs",
+          "state": "gap",
+          "detail": "The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+        },
+        {
+          "id": "canary",
+          "label": "Canary",
+          "state": "pass",
+          "detail": "1 canary run(s) shown by a result file or log; the first (ShadowChargeCleanup: ignore part-charge delete errors) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-l090/target/surefire-reports/TEST-no.tieto.tfc10.l090.ShadowChargeCleanupTest.xml)."
+        },
+        {
+          "id": "source",
+          "label": "Source untouched",
+          "state": "pass",
+          "detail": "legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+        }
+      ],
+      "evidence": {
+        "tests": {
+          "executed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "skippedNoReason": 0,
+          "stale": false,
+          "suites": [
+            {
+              "name": "unit tests",
+              "command": "cd modernized/TFC10 && mvn -q clean test",
+              "date": "",
+              "note": "",
+              "source": "result files",
+              "files": 1,
+              "written": "2026-09-29 20:33 UTC",
+              "executed": 4,
+              "failed": 0,
+              "skipped": 0
+            }
+          ]
+        },
+        "legacy": {
+          "ran": false,
+          "how": "GnuCOBOL partial compile only; no DB2/CICS runtime",
+          "why": "H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here"
+        },
+        "rules": {
+          "tied": true,
+          "counted": 2,
+          "outOfScope": 17,
+          "totals": {
+            "P0": {
+              "rules": 1,
+              "tested": 1,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 0
+            },
+            "P1": {
+              "rules": 1,
+              "tested": 0,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 1
+            }
+          },
+          "p0NoTests": [],
+          "namedNotRun": [],
+          "perTestResults": true,
+          "p0": [
+            {
+              "id": "RULE-007",
+              "name": "Permanent status blocks in-progress main contract",
+              "confidence": "High",
+              "status": "tested",
+              "main": 1,
+              "tests": 1,
+              "claimed": true,
+              "by": "test name",
+              "where": "modernized/TFC10/ftfc-l090/src/test/java/no/tieto/tfc10/l090/ShadowChargeCleanupTest.java:47"
+            }
+          ]
+        },
+        "leftOut": [
+          "End-to-end COBOL execution for FTFCH100/FTFCK100/FTFCL100/F115L050",
+          "Fresh-input legacy vs Java comparison (legacy.ran false)",
+          "equivalence/cases.json not present",
+          "F115IMC0/F115ICA0/F115IPA0 and other DB boundary CALL targets without .src",
+          "RULE-016 decimal-comma characterization beyond COBOL Special-Names declaration"
+        ],
+        "canary": [
+          {
+            "change": "ShadowChargeCleanup: ignore part-charge delete errors",
+            "testsFailed": 1,
+            "shown": true,
+            "where": [
+              "analysis/TFC10/equivalence/canary/ftfc-l090/target/surefire-reports/TEST-no.tieto.tfc10.l090.ShadowChargeCleanupTest.xml"
+            ]
+          }
+        ]
+      },
+      "caveats": [],
+      "needsPerson": [],
+      "brief": {
+        "found": true,
+        "phase": "",
+        "items": [],
+        "count": 0
+      },
+      "notProven": [
+        "It does not prove behavior on inputs nobody tried: the equivalence cases and the fresh inputs are samples, not the whole input space.",
+        "The legacy could not run here, so the comparison rests on recorded outputs and traces. It is only as good as that recording.",
+        "It does not cover speed, capacity, security, concurrency, or anything the tests and cases do not exercise.",
+        "It traces only the rules that were extracted: behavior nobody wrote down as a rule has no rule to trace.",
+        "A test that names a rule shows the rule is mentioned, not that the test is a good one. The canary shows only that some test can fail.",
+        "It does not replace the review and sign-off of the people who own the system."
+      ],
+      "verifiedAt": "2026-09-29 20:33 UTC"
+    },
+    {
+      "name": "ftfc-l100",
+      "track": "rewrite",
+      "path": "modernized/TFC10/ftfc-l100",
+      "verdict": "PARTLY PROVEN",
+      "reasons": [
+        "Same behavior: No equivalence cases were recorded: the new code was never compared with the legacy output.",
+        "Fresh inputs: The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+      ],
+      "passed": [
+        "Tests ran: 5 test(s) executed, 0 failed, 0 skipped.",
+        "Rules traced: No rule this module answers for is rated P0 (1 rule(s) counted).",
+        "Canary: 1 canary run(s) shown by a result file or log; the first (LModuleLoader unique-row check: rel.totalRows() > 1 \u2192 >= 1) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-l100/target/surefire-reports/TEST-no.tieto.tfc10.l.LModuleLoaderTest.xml).",
+        "Source untouched: legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+      ],
+      "checks": [
+        {
+          "id": "tests",
+          "label": "Tests ran",
+          "state": "pass",
+          "detail": "5 test(s) executed, 0 failed, 0 skipped."
+        },
+        {
+          "id": "rules",
+          "label": "Rules traced",
+          "state": "pass",
+          "detail": "No rule this module answers for is rated P0 (1 rule(s) counted)."
+        },
+        {
+          "id": "same",
+          "label": "Same behavior",
+          "state": "gap",
+          "detail": "No equivalence cases were recorded: the new code was never compared with the legacy output."
+        },
+        {
+          "id": "fresh",
+          "label": "Fresh inputs",
+          "state": "gap",
+          "detail": "The legacy could not run here (H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here), so the proof is trace-based: no fresh-input comparison was possible and the verdict cannot be PROVEN."
+        },
+        {
+          "id": "canary",
+          "label": "Canary",
+          "state": "pass",
+          "detail": "1 canary run(s) shown by a result file or log; the first (LModuleLoader unique-row check: rel.totalRows() > 1 \u2192 >= 1) made 1 more test(s) fail than the clean run (analysis/TFC10/equivalence/canary/ftfc-l100/target/surefire-reports/TEST-no.tieto.tfc10.l.LModuleLoaderTest.xml)."
+        },
+        {
+          "id": "source",
+          "label": "Source untouched",
+          "state": "pass",
+          "detail": "legacy/TFC10 is untouched: no file changed after the analysis started (51 files compared). Checked by modification time, and no version-control tool was run."
+        }
+      ],
+      "evidence": {
+        "tests": {
+          "executed": 5,
+          "failed": 0,
+          "skipped": 0,
+          "skippedNoReason": 0,
+          "stale": false,
+          "suites": [
+            {
+              "name": "unit tests",
+              "command": "cd modernized/TFC10 && mvn -q clean test",
+              "date": "",
+              "note": "",
+              "source": "result files",
+              "files": 1,
+              "written": "2026-09-29 20:32 UTC",
+              "executed": 5,
+              "failed": 0,
+              "skipped": 0
+            }
+          ]
+        },
+        "legacy": {
+          "ran": false,
+          "how": "GnuCOBOL partial compile only; no DB2/CICS runtime",
+          "why": "H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here"
+        },
+        "rules": {
+          "tied": true,
+          "counted": 1,
+          "outOfScope": 18,
+          "totals": {
+            "P1": {
+              "rules": 1,
+              "tested": 1,
+              "named, not run": 0,
+              "code only": 0,
+              "claimed only": 0,
+              "none": 0
+            }
+          },
+          "p0NoTests": [],
+          "namedNotRun": [],
+          "perTestResults": true,
+          "p0": []
+        },
+        "leftOut": [
+          "End-to-end COBOL execution for FTFCH100/FTFCK100/FTFCL100/F115L050",
+          "Fresh-input legacy vs Java comparison (legacy.ran false)",
+          "equivalence/cases.json not present",
+          "F115IMC0/F115ICA0/F115IPA0 and other DB boundary CALL targets without .src",
+          "RULE-016 decimal-comma characterization beyond COBOL Special-Names declaration"
+        ],
+        "canary": [
+          {
+            "change": "LModuleLoader unique-row check: rel.totalRows() > 1 \u2192 >= 1",
+            "testsFailed": 1,
+            "shown": true,
+            "where": [
+              "analysis/TFC10/equivalence/canary/ftfc-l100/target/surefire-reports/TEST-no.tieto.tfc10.l.LModuleLoaderTest.xml"
+            ]
+          }
+        ]
+      },
+      "caveats": [],
+      "needsPerson": [],
+      "brief": {
+        "found": true,
+        "phase": "",
+        "items": [],
+        "count": 0
+      },
+      "notProven": [
+        "It does not prove behavior on inputs nobody tried: the equivalence cases and the fresh inputs are samples, not the whole input space.",
+        "The legacy could not run here, so the comparison rests on recorded outputs and traces. It is only as good as that recording.",
+        "It does not cover speed, capacity, security, concurrency, or anything the tests and cases do not exercise.",
+        "It traces only the rules that were extracted: behavior nobody wrote down as a rule has no rule to trace.",
+        "A test that names a rule shows the rule is mentioned, not that the test is a good one. The canary shows only that some test can fail.",
+        "It does not replace the review and sign-off of the people who own the system."
+      ],
+      "verifiedAt": "2026-09-29 20:33 UTC"
+    }
+  ],
+  "toolingOnly": [],
+  "signoff": {
+    "name": "",
+    "role": "",
+    "date": "",
+    "decision": ""
+  },
+  "overall": {
+    "verdict": "PARTLY PROVEN",
+    "counts": {
+      "PROVEN": 0,
+      "PARTLY PROVEN": 7,
+      "NOT PROVEN": 0
+    }
+  }
+}

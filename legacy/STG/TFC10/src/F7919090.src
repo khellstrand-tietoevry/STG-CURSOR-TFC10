@@ -1,0 +1,1065 @@
+       Identification Division.                                         00010038
+       Program-ID. F7919090.                                            00020038
+       Author.  Henning Langfeldt Rødland.                              00030038
+      *################################################################*00040038
+      *                                                                 00050038
+      * Generell submodul.                                              00060038
+      * Benyttes for å beregne virke- og hellig-dager.                  00070038
+      *                                                                 00080038
+      * Man leverer dato.                                               00090038
+      * I retur vil man få vite om det er bankdag eller ei,             00100038
+      * hvilken ukedag det er, samt hvor mange dager det er             00110038
+      * til neste bankdag.                                              00120038
+      *                                                                 00130038
+      * Eksempel på anrop:                                              00140038
+      *   Initialize                           R7919090-Helligdager     00150038
+      *   Set   R7919090-Versjon         To    True                     00160038
+      *   Move  ååååmmdd                 To    R7919090-In-Dato         00170038
+      *   Call  'F7919090'               Using R7919090-Helligdager     00180038
+      *                                        R7919999-Error           00190038
+      *   End-Call                                                      00200038
+      *   If  R7919999-Retur-Abend                                      00210038
+      *       abend                                                     00220038
+      *   End-If                                                        00230038
+      *   Move  R7919090-Ut-Dgr-Neste-Bankdag                           00240038
+      *                                  To    ...                      00250038
+      *                                                                 00260038
+      *################################################################*00270038
+      * Dato ! Si! Endringens art                                ! 3A ! 00280038
+      *---------------------------------------------------------------- 00290038
+      *110924!SM ! Recompile to Cobol 6.3                   !CMAS-1883!*00290139
+MIPS  *310521!OBJ! Recompiled to version 6.3 (OptiMIPS)          !    ! 00291038
+      *101019!MB ! Rekompilert på F m/COBver > 4.2 ifbm Teknisk Gjeld ! 00300038
+      *190503!HLR! Innført 24.12 som fridag.                     !JR68! 00310038
+      *      !   ! Siden 2412 allerede var definert som          !    ! 00320038
+      *      !   ! "spesiell", var det tilstrekkelig å flytte    !    ! 00330038
+      *      !   ! '2412' fra 88-nivået SW-Spes-Ikke-Helligdag   !    ! 00340038
+      *      !   ! til 88-nivået SW-Spes-Helligdag.              !    ! 00350038
+      *100295!HLR! Ny modul                                      !JR68! 00360038
+      *################################################################*00370038
+       Environment Division.                                            00380038
+       Configuration Section.                                           00390038
+       Special-Names.                                                   00400038
+           Decimal-Point is comma.                                      00410038
+      *################################################################*00420038
+       Data Division.                                                   00430038
+       Working-Storage Section.                                         00440038
+      *                                                                 00450038
+       Copy R7919090.                                                   00460038
+      *                                                                 00470038
+      *----------------------------------------------------------------*00480038
+      *                                                                 00490038
+       01  W-Arbeids-Felter.                                            00500038
+      *                                                                 00510038
+           05  W-Current-Dato            Pic S9(09)              Comp-3.00520038
+           05  W-Orig-Dag-Nr             Pic S9(05)              Comp-3.00530038
+           05  W-Curr-Dag-Nr             Pic S9(05)              Comp-3.00540038
+      *                                                                 00550038
+           05  W-Dato                    Pic S9(09)              Comp-3.00560038
+           05  W-Integer                 Pic S9(09)              Comp-3.00570038
+      *                                                                 00580038
+           05  W-Max-Spes-Tab            Pic S9(04)              Comp.  00590038
+           05  Ind-Spes                  Pic S9(04)              Comp.  00600038
+      *                                                                 00610038
+           05  SW-Fridag-Kode            Pic  X(01).                    00620038
+             88  SW-Ikke-Fridag                     Value 'N'.          00630038
+             88  SW-Fridag                          Value 'J'.          00640038
+           05  W-Dag-Type                Pic  X(04).                    00650038
+      *                                                                 00660038
+           05  SW-Bank-Dag-Kode          Pic  X(01).                    00670038
+             88  SW-Ikke-Bank-Dag                   Value 'N'.          00680038
+             88  SW-Bank-Dag                        Value 'J'.          00690038
+      *                                                                 00700038
+           05  W-Split-Dato-8            Pic  9(08).                    00710038
+           05  Filler                    Redefines W-Split-Dato-8.      00720038
+               10  W-SD8-Aar             Pic  9(04).                    00730038
+               10  W-SD8-Mnd             Pic  9(02).                    00740038
+               10  W-SD8-Dag             Pic  9(02).                    00750038
+      *                                                                 00760038
+           05  W-Merge-Dato-8            Pic  9(08).                    00770038
+           05  Filler                    Redefines W-Merge-Dato-8.      00780038
+               10  W-MD8-Aar             Pic  9(04).                    00790038
+      *                                                                 00800038
+           05  W-Disp-Ant-Dager          Pic  9(03).                    00810038
+      *----------------------------------------------------------------*00820038
+      * Resultater                                                      00830038
+      *                                                                 00840038
+           05  W-Ukedag                  Pic S9(03)              Comp-3.00850038
+      *                                                                 00860038
+      *----------------------------------------------------------------*00870038
+      * Konstanter                                                      00880038
+      *   - W-Start-Dag er ukedag for W-Start-Dato (mandag = +1)        00890038
+      *                                                                 00900038
+           05  W-Start-Dato              Pic S9(09)              Comp-3.00910038
+           05  W-Start-Dag               Pic S9(03)              Comp-3.00920038
+      *                                                                 00930038
+      *----------------------------------------------------------------*00940038
+      * Fridager                                                        00950038
+      *                                                                 00960038
+           05  W-1ste-Nyttaarsdag        Pic S9(09) Value +00000101     00970038
+                                                                 Comp-3.00980038
+           05  W-1ste-Mai                Pic S9(09) Value +00000501     00990038
+                                                                 Comp-3.01000038
+           05  W-17de-Mai                Pic S9(09) Value +00000517     01010038
+                                                                 Comp-3.01020038
+           05  W-Julaften                Pic S9(09) Value +00001224     01030038
+                                                                 Comp-3.01040038
+           05  W-1ste-Juledag            Pic S9(09) Value +00001225     01050038
+                                                                 Comp-3.01060038
+           05  W-2ndre-Juledag           Pic S9(09) Value +00001226     01070038
+                                                                 Comp-3.01080038
+           05  W-Nyttaarsaften           Pic S9(09) Value +00001231     01090038
+                                                                 Comp-3.01100038
+      *                                                                 01110038
+           05  W-1ste-Paaske-Dag         Pic S9(09)              Comp-3.01120038
+      *                                                                 01130038
+      * Antall dager fra 1ste påskedag:                                 01140038
+      *                                                                 01150038
+           05  W-Diff-Skjaertorsdag      Pic S9(05) Value -003   Comp-3.01160038
+           05  W-Diff-Langfredag         Pic S9(05) Value -002   Comp-3.01170038
+           05  W-Diff-Paaskeaften        Pic S9(05) Value -001   Comp-3.01180038
+           05  W-Diff-2ndre-Paaske-Dag   Pic S9(05) Value +001   Comp-3.01190038
+           05  W-Diff-Kristi-Himmelfart  Pic S9(05) Value +039   Comp-3.01200038
+           05  W-Diff-Pinseaften         Pic S9(05) Value +048   Comp-3.01210038
+           05  W-Diff-1ste-Pinse-Dag     Pic S9(05) Value +049   Comp-3.01220038
+           05  W-Diff-2ndre-Pinse-Dag    Pic S9(05) Value +050   Comp-3.01230038
+      *                                                                 01240038
+           05  W-Spes-Dag-Tab.                                          01250038
+             07  W-Spes-Dag-Element      Occurs 20 Times.               01260038
+               10  W-Spes-Dato           Pic S9(09)              Comp-3.01270038
+               10  W-Spes-Type           Pic  X(04).                    01280038
+                 88  Sw-Spes-Ikke-Helligdag         Value Space,        01290038
+                                                        'PÅLØ', 'PILØ', 01300038
+                                                        '3112'.         01310038
+                 88  Sw-Spes-Helligdag              Value               01320038
+                                                        '0101', 'PÅTO', 01330038
+                                                        'PÅFR', 'PÅSØ', 01340038
+                                                        'PÅMA', '0105', 01350038
+                                                        '1705', 'KRHI', 01360038
+                                                        'PISØ', 'PIMA', 01370038
+                                                        '2412', '2512', 01380038
+                                                        '2612'.         01390038
+      *                                                                 01400038
+                 88  Sw-Spes-1-Nyttaarsdag          Value '0101'.       01410038
+                 88  Sw-Spes-Skjaertorsdag          Value 'PÅTO'.       01420038
+                 88  Sw-Spes-Langfredag             Value 'PÅFR'.       01430038
+                 88  Sw-Spes-Paaskeaften            Value 'PÅLØ'.       01440038
+                 88  Sw-Spes-1-Paaskedag            Value 'PÅSØ'.       01450038
+                 88  Sw-Spes-2-Paaskedag            Value 'PÅMA'.       01460038
+                 88  Sw-Spes-1-Mai                  Value '0105'.       01470038
+                 88  Sw-Spes-17-Mai                 Value '1705'.       01480038
+                 88  Sw-Spes-Himmelspretten         Value 'KRHI'.       01490038
+                 88  Sw-Spes-Pinseaften             Value 'PILØ'.       01500038
+                 88  Sw-Spes-1-Pinsedag             Value 'PISØ'.       01510038
+                 88  Sw-Spes-2-Pinsedag             Value 'PIMA'.       01520038
+                 88  Sw-Spes-Julaften               Value '2412'.       01530038
+                 88  Sw-Spes-1-Juledag              Value '2512'.       01540038
+                 88  Sw-Spes-2-Juledag              Value '2612'.       01550038
+                 88  Sw-Spes-Nyttaarsaften          Value '3112'.       01560038
+      *                                                                 01570038
+      *----------------------------------------------------------------*01580038
+      * Arbeidsfelter for beregning av 1ste påskedag:                   01590038
+      *                                                                 01600038
+           05  W-Kalk-1ste-Paaskedag.                                   01610038
+               10  W-K1P-Temp            Pic S9(09)V9(07)        Comp-3.01620038
+               10  W-K1P-T               Pic S9(04)              Comp.  01630038
+               10  W-K1P-G               Pic S9(04)              Comp.  01640038
+               10  W-K1P-G-I             Pic S9(04)              Comp.  01650038
+               10  W-K1P-C               Pic S9(04)              Comp.  01660038
+               10  W-K1P-X               Pic S9(04)              Comp.  01670038
+               10  W-K1P-Z               Pic S9(04)              Comp.  01680038
+               10  W-K1P-D               Pic S9(04)              Comp.  01690038
+               10  W-K1P-E               Pic S9(04)              Comp.  01700038
+               10  W-K1P-E-I             Pic S9(04)              Comp.  01710038
+               10  W-K1P-N               Pic S9(04)              Comp.  01720038
+               10  W-K1P-Y               Pic S9(04)              Comp.  01730038
+               10  W-K1P-Y-I             Pic S9(04)              Comp.  01740038
+               10  W-K1P-M               Pic S9(04)              Comp.  01750038
+      *                                                                 01760038
+      *----------------------------------------------------------------*01770038
+      *                                                                 01780038
+       Copy R7919010.                                                   01790038
+       Copy R791901W.                                                   01800038
+      *                                                                 01810038
+       Copy R7919020.                                                   01820038
+       Copy R791902W.                                                   01830038
+      *                                                                 01840038
+       Copy R7919040.                                                   01850038
+       Copy R791904W.                                                   01860038
+      *                                                                 01870038
+       Copy R7919050.                                                   01880038
+       Copy R791905W.                                                   01890038
+      *                                                                 01900038
+       Copy R7919060.                                                   01910038
+       Copy R791906W.                                                   01920038
+      *                                                                 01930038
+      *################################################################*01940038
+       Linkage Section.                                                 01950038
+      *                                                                 01960038
+       Copy R7919090                     Replacing                      01970038
+                                               R7919090-Helligdager     01980038
+                                         By    F7919090-Ext-IO-Area.    01990038
+       Copy R7919999.                                                   02000038
+      *                                                                 02010038
+      *----------------------------------------------------------------*02020038
+      * Her ligger gamle versjoner av copy-området, på grunn av         02030038
+      * versjonshåndtering.                                             02040038
+      * Vi skal konvertere til og fra ny layout.                        02050038
+      *                                                                 02060038
+       Copy R791909G.                                                   02070038
+      *                                                                 02080038
+      *################################################################*02090038
+       Procedure Division                Using F7919090-Ext-IO-Area     02100038
+                                               R7919999-Error.          02110038
+                                                                        02120038
+       A000-Main                         Section.                       02130038
+      *                                                                 02140038
+           Set   R7919999-Retur-Ok       To    True                     02150038
+      *                                                                 02160038
+             Perform ZI00-Konv-Input-Versjon                            02170038
+             Perform F7919090-Helligdager                               02180038
+             Perform ZO00-Konv-Output-Versjon                           02190038
+      *                                                                 02200038
+      *        Display 'Resultat Fra F7919090'                          02210038
+      *        Display 'Ut-Dag-Type (Bankdag JN)   : '                  02220038
+      *                                        R7919090-UT-DAG-TYPE     02230038
+      *                                  In    F7919090-Ext-IO-Area     02240038
+      *        Display 'Ut-Ukedag                  : '                  02250038
+      *                                        R7919090-UT-UKEDAG       02260038
+      *                                  In    F7919090-Ext-IO-Area     02270038
+      *        Move R7919090-UT-DGR-NESTE-BANKDAG                       02280038
+      *                                  In    F7919090-Ext-IO-Area     02290038
+      *                                  To W-Disp-Ant-Dager            02300038
+      *        Display 'Dager til neste bankdag    : '                  02310038
+      *                                  W-Disp-Ant-Dager               02320038
+      *        Move R7919090-UT-DGR-FORR-BANKDAG                        02330038
+      *                                  In    F7919090-Ext-IO-Area     02340038
+      *                                  To W-Disp-Ant-Dager            02350038
+      *        Display 'Dager til forrige bankdag  : '                  02360038
+      *                                  W-Disp-Ant-Dager               02370038
+      *        Display 'Ut-Fri-Type                : '                  02380038
+      *                                  R7919090-UT-FRI-TYPE           02390038
+      *                                  In    F7919090-Ext-IO-Area     02400038
+           .                                                            02410038
+       A099-Goback.                                                     02420038
+           Goback.                                                      02430038
+      *################################################################*02440038
+       F7919090-Helligdager              Section.                       02450038
+      *                                                                 02460038
+           Perform B000-Initialize                                      02470038
+           Perform C000-Beregning                                       02480038
+      *                                                                 02490038
+           .                                                            02500038
+       F7919090-Exit.                                                   02510038
+           Exit.                                                        02520038
+      *################################################################*02530038
+       B000-Initialize                   Section.                       02540038
+      *                                                                 02550038
+           Set   R7919999-Retur-Ok       To    True                     02560038
+           Initialize                          R7919090-Resultat        02570038
+                                         In    R7919090-Helligdager     02580038
+      *                                                                 02590038
+           Initialize                          W-Spes-Dag-Tab           02600038
+           Compute  W-Max-Spes-Tab                                      02610038
+               =    Length               Of    W-Spes-Dag-Tab           02620038
+               /    Length               Of    W-Spes-Dag-Element       02630038
+      *                                                                 02640038
+           .                                                            02650038
+       B099-Exit.                                                       02660038
+           Exit.                                                        02670038
+      *################################################################*02680038
+       C000-Beregning                    Section.                       02690038
+      *                                                                 02700038
+      * Validerer input-dato:                                           02710038
+      *                                                                 02720038
+           Initialize                          R7919040-Valider-Dato    02730038
+           Set   R7919040-Versjon        To    True                     02740038
+           Move  R7919090-In-Dato        In    R7919090-Helligdager     02750038
+                                         To    R7919040-In-Dato         02760038
+           Perform F7919040-Valider-Dato                                02770038
+           If  R7919999-Retur-Feil                                      02780038
+           or  R7919999-Retur-Abend                                     02790038
+               Move  'C001'              To    R7919999-Paragraf        02800038
+               Perform Z900-Abend                                       02810038
+           End-If                                                       02820038
+      *                                                                 02830038
+           Perform C100-Start-Dato-Dag                                  02840038
+           If  Not R7919999-Retur-OK                                    02850038
+               Move  'C002'              To    R7919999-Paragraf        02860038
+               Perform Z900-Abend                                       02870038
+           End-If                                                       02880038
+      *                                                                 02890038
+           Perform C200-Input-Dag                                       02900038
+           If  Not R7919999-Retur-OK                                    02910038
+               Move  'C003'              To    R7919999-Paragraf        02920038
+               Perform Z900-Abend                                       02930038
+           End-If                                                       02940038
+      *                                                                 02950038
+           Perform C300-Neste-Bankdag                                   02960038
+           If  Not R7919999-Retur-OK                                    02970038
+               Move  'C004'              To    R7919999-Paragraf        02980038
+               Perform Z900-Abend                                       02990038
+           End-If                                                       03000038
+      *                                                                 03010038
+           Perform C400-Forrige-Bankdag                                 03020038
+           If  Not R7919999-Retur-OK                                    03030038
+               Move  'C005'              To    R7919999-Paragraf        03040038
+               Perform Z900-Abend                                       03050038
+           End-If                                                       03060038
+      *                                                                 03070038
+           .                                                            03080038
+       C099-Exit.                                                       03090038
+           Exit.                                                        03100038
+      *################################################################*03110038
+       C100-Start-Dato-Dag               Section.                       03120038
+      *                                                                 03130038
+      * Finner start-dato og start-dag.                                 03140038
+      * 1ste påskedag er alltid en søndag.                              03150038
+      *                                                                 03160038
+           Move  R7919090-In-Dato        In    R7919090-Helligdager     03170038
+                                         To    W-Split-Dato-8           03180038
+           Move  01                      To    W-SD8-Mnd                03190038
+           Move  01                      To    W-SD8-Dag                03200038
+           Move  W-Split-Dato-8          To    W-Start-Dato             03210038
+      *                                                                 03220038
+           Move  R7919090-In-Dato        In    R7919090-Helligdager     03230038
+                                         To    W-Dato                   03240038
+           Perform H000-1ste-Paaskedag                                  03250038
+           If  Not R7919999-Retur-OK                                    03260038
+               Move  'C101'              To    R7919999-Paragraf        03270038
+               Perform Z900-Abend                                       03280038
+           End-If                                                       03290038
+      *                                                                 03300038
+           Move  W-1ste-Paaske-Dag       To    W-Current-Dato           03310038
+           Perform D000-Dag-Nr-Fra-Start                                03320038
+           If  Not R7919999-Retur-OK                                    03330038
+               Move  'C102'              To    R7919999-Paragraf        03340038
+               Perform Z900-Abend                                       03350038
+           End-If                                                       03360038
+      *                                                                 03370038
+           Divide W-Curr-Dag-Nr                                         03380038
+               By        7                                              03390038
+               Giving    W-Integer                                      03400038
+               Remainder W-Start-Dag                                    03410038
+      *                                                                 03420038
+           If  W-Start-Dag               <     +1                       03430038
+               Add   +7                  To    W-Start-Dag              03440038
+           End-If                                                       03450038
+      *                                                                 03460038
+           Compute  W-Start-Dag                                         03470038
+               =    ( W-Start-Dag - 8)                                  03480038
+               *    -1                                                  03490038
+      *                                                                 03500038
+           .                                                            03510038
+       C199-Exit.                                                       03520038
+           Exit.                                                        03530038
+      *################################################################*03540038
+       C200-Input-Dag                    Section.                       03550038
+      *                                                                 03560038
+      * Finner ukedagen for input dato.                                 03570038
+      *                                                                 03580038
+           Move  R7919090-In-Dato        In    R7919090-Helligdager     03590038
+                                         To    W-Current-Dato           03600038
+           Perform D000-Dag-Nr-Fra-Start                                03610038
+           If  Not R7919999-Retur-OK                                    03620038
+               Move  'C201'              To    R7919999-Paragraf        03630038
+               Perform Z900-Abend                                       03640038
+           End-If                                                       03650038
+      *                                                                 03660038
+           Move  W-Curr-Dag-Nr           To    W-Orig-Dag-Nr            03670038
+      *                                                                 03680038
+           Perform E000-Ukedag                                          03690038
+           If  Not R7919999-Retur-OK                                    03700038
+               Move  'C202'              To    R7919999-Paragraf        03710038
+               Perform Z900-Abend                                       03720038
+           End-If                                                       03730038
+      *                                                                 03740038
+           Move  W-Ukedag                To    R7919090-Ut-Ukedag       03750038
+                                         In    R7919090-Helligdager     03760038
+      *                                                                 03770038
+      * Finner type dag - virkedag eller fridag.                        03780038
+      *                                                                 03790038
+           Perform F000-Fridager                                        03800038
+           If  Not R7919999-Retur-OK                                    03810038
+               Move  'C203'              To    R7919999-Paragraf        03820038
+               Perform Z900-Abend                                       03830038
+           End-If                                                       03840038
+      *                                                                 03850038
+           Perform G000-Bank-Dag                                        03860038
+           If  Not R7919999-Retur-OK                                    03870038
+               Move  'C204'              To    R7919999-Paragraf        03880038
+               Perform Z900-Abend                                       03890038
+           End-If                                                       03900038
+      *                                                                 03910038
+           Move  SW-Bank-Dag-Kode        To    R7919090-Ut-Dag-Type     03920038
+                                         In    R7919090-Helligdager     03930038
+           Move  W-Dag-Type              To    R7919090-Ut-Fri-Type     03940038
+                                         In    R7919090-Helligdager     03950038
+      *                                                                 03960038
+           .                                                            03970038
+       C299-Exit.                                                       03980038
+           Exit.                                                        03990038
+      *################################################################*04000038
+       C300-Neste-Bankdag                Section.                       04010038
+      *                                                                 04020038
+      * Finner neste bank-dag.                                          04030038
+      *                                                                 04040038
+           Move  R7919090-In-Dato        In    R7919090-Helligdager     04050038
+                                         To    W-Current-Dato           04060038
+      *                                                                 04070038
+           Perform With Test After                                      04080038
+                   Until SW-Bank-Dag                                    04090038
+      *                                                                 04100038
+               Initialize                      R7919010-Dato-Pluss-Dager04110038
+               Set   R7919010-Versjon    To    True                     04120038
+               Move  W-Current-Dato      To    R7919010-In-Dato         04130038
+               Move  +1                  To    R7919010-In-Adder-Dag    04140038
+               Perform F7919010-Dato-Pluss-Dager                        04150038
+               If  R7919999-Retur-Abend                                 04160038
+                   Move  'C301'          To    R7919999-Paragraf        04170038
+                   Perform Z900-Abend                                   04180038
+               End-If                                                   04190038
+      *                                                                 04200038
+               Move  R7919010-Ut-Dato    To    W-Current-Dato           04210038
+      *                                                                 04220038
+               Perform D000-Dag-Nr-Fra-Start                            04230038
+               If  Not R7919999-Retur-OK                                04240038
+                   Move  'C302'          To    R7919999-Paragraf        04250038
+                   Perform Z900-Abend                                   04260038
+               End-If                                                   04270038
+      *                                                                 04280038
+               Perform E000-Ukedag                                      04290038
+               If  Not R7919999-Retur-OK                                04300038
+                   Move  'C303'          To    R7919999-Paragraf        04310038
+                   Perform Z900-Abend                                   04320038
+               End-If                                                   04330038
+      *                                                                 04340038
+               Perform F000-Fridager                                    04350038
+               If  Not R7919999-Retur-OK                                04360038
+                   Move  'C304'          To    R7919999-Paragraf        04370038
+                   Perform Z900-Abend                                   04380038
+               End-If                                                   04390038
+      *                                                                 04400038
+               Perform G000-Bank-Dag                                    04410038
+               If  Not R7919999-Retur-OK                                04420038
+                   Move  'C305'          To    R7919999-Paragraf        04430038
+                   Perform Z900-Abend                                   04440038
+               End-If                                                   04450038
+      *                                                                 04460038
+           End-Perform                                                  04470038
+      *                                                                 04480038
+           Compute  R7919090-Ut-Dgr-Neste-Bankdag                       04490038
+                                         In    R7919090-Helligdager     04500038
+               =    W-Curr-Dag-Nr                                       04510038
+               -    W-Orig-Dag-Nr                                       04520038
+      *                                                                 04530038
+           .                                                            04540038
+       C399-Exit.                                                       04550038
+           Exit.                                                        04560038
+      *################################################################*04570038
+       C400-Forrige-Bankdag              Section.                       04580038
+      *                                                                 04590038
+      * Finner forrige bank-dag.                                        04600038
+      *                                                                 04610038
+           Move  R7919090-In-Dato        In    R7919090-Helligdager     04620038
+                                         To    W-Current-Dato           04630038
+      *                                                                 04640038
+           Perform With Test After                                      04650038
+                   Until SW-Bank-Dag                                    04660038
+      *                                                                 04670038
+               Initialize                      R7919010-Dato-Pluss-Dager04680038
+               Set   R7919010-Versjon    To    True                     04690038
+               Move  W-Current-Dato      To    R7919010-In-Dato         04700038
+               Move  -1                  To    R7919010-In-Adder-Dag    04710038
+               Perform F7919010-Dato-Pluss-Dager                        04720038
+               If  R7919999-Retur-Abend                                 04730038
+                   Move  'C401'          To    R7919999-Paragraf        04740038
+                   Perform Z900-Abend                                   04750038
+               End-If                                                   04760038
+      *                                                                 04770038
+               Move  R7919010-Ut-Dato    To    W-Current-Dato           04780038
+      *                                                                 04790038
+               Perform D000-Dag-Nr-Fra-Start                            04800038
+               If  Not R7919999-Retur-OK                                04810038
+                   Move  'C402'          To    R7919999-Paragraf        04820038
+                   Perform Z900-Abend                                   04830038
+               End-If                                                   04840038
+      *                                                                 04850038
+               Perform E000-Ukedag                                      04860038
+               If  Not R7919999-Retur-OK                                04870038
+                   Move  'C403'          To    R7919999-Paragraf        04880038
+                   Perform Z900-Abend                                   04890038
+               End-If                                                   04900038
+      *                                                                 04910038
+               Perform F000-Fridager                                    04920038
+               If  Not R7919999-Retur-OK                                04930038
+                   Move  'C404'          To    R7919999-Paragraf        04940038
+                   Perform Z900-Abend                                   04950038
+               End-If                                                   04960038
+      *                                                                 04970038
+               Perform G000-Bank-Dag                                    04980038
+               If  Not R7919999-Retur-OK                                04990038
+                   Move  'C405'          To    R7919999-Paragraf        05000038
+                   Perform Z900-Abend                                   05010038
+               End-If                                                   05020038
+      *                                                                 05030038
+           End-Perform                                                  05040038
+      *                                                                 05050038
+           Compute  R7919090-Ut-Dgr-Forr-Bankdag                        05060038
+                                         In    R7919090-Helligdager     05070038
+               =    W-Orig-Dag-Nr                                       05080038
+               -    W-Curr-Dag-Nr                                       05090038
+      *                                                                 05100038
+           .                                                            05110038
+       C499-Exit.                                                       05120038
+           Exit.                                                        05130038
+      *################################################################*05140038
+       D000-Dag-Nr-Fra-Start             Section.                       05150038
+      *                                                                 05160038
+      * Finner dagen før start-dato.                                    05170038
+      *                                                                 05180038
+           Initialize                          R7919010-Dato-Pluss-Dager05190038
+           Set   R7919010-Versjon        To    True                     05200038
+           Move  W-Start-Dato            To    R7919010-In-Dato         05210038
+           Move  -1                      To    R7919010-In-Adder-Dag    05220038
+      *                                                                 05230038
+           Perform F7919010-Dato-Pluss-Dager                            05240038
+           If  R7919999-Retur-Abend                                     05250038
+               Move  'D001'              To    R7919999-Paragraf        05260038
+               Perform Z900-Abend                                       05270038
+           End-If                                                       05280038
+      *                                                                 05290038
+           Move  R7919010-Ut-Dato        To    W-Dato                   05300038
+      *                                                                 05310038
+      * Finner antall dager mellom current-dato og dagen før start-dato.05320038
+      *                                                                 05330038
+           Initialize                          R7919020-Intervall       05340038
+           Set   R7919020-Versjon        To    True                     05350038
+           Move  W-Dato                  To    R7919020-In-Fra-Dato     05360038
+           Move  W-Current-Dato          To    R7919020-In-Til-Dato     05370038
+      *                                                                 05380038
+           Perform F7919020-Intervall                                   05390038
+           If  R7919999-Retur-Abend                                     05400038
+               Move  'D002'              To    R7919999-Paragraf        05410038
+               Perform Z900-Abend                                       05420038
+           End-If                                                       05430038
+      *                                                                 05440038
+           Move  R7919020-Ut-Intervall   To    W-Curr-Dag-Nr            05450038
+      *                                                                 05460038
+           .                                                            05470038
+       D099-Exit.                                                       05480038
+           Exit.                                                        05490038
+      *################################################################*05500038
+       E000-Ukedag                       Section.                       05510038
+      *                                                                 05520038
+           Divide W-Curr-Dag-Nr                                         05530038
+               By        7                                              05540038
+               Giving    W-Integer                                      05550038
+               Remainder W-Ukedag                                       05560038
+      *                                                                 05570038
+           Compute  W-Ukedag                                            05580038
+               =    W-Ukedag                                            05590038
+               +    W-Start-Dag - 1                                     05600038
+      *                                                                 05610038
+           If  W-Ukedag                  <     +1                       05620038
+               Add   +7                  To    W-Ukedag                 05630038
+           End-If                                                       05640038
+           If  W-Ukedag                  >     +7                       05650038
+               Subtract +7               From  W-Ukedag                 05660038
+           End-If                                                       05670038
+      *                                                                 05680038
+           .                                                            05690038
+       E099-Exit.                                                       05700038
+           Exit.                                                        05710038
+      *################################################################*05720038
+       F000-Fridager                     Section.                       05730038
+      *                                                                 05740038
+           Set   SW-Ikke-Fridag          To    True                     05750038
+           Move  Space                   To    W-Dag-Type               05760038
+           Move  +0                      To    Ind-Spes                 05770038
+      *                                                                 05780038
+           Perform F100-Faste-Fridager                                  05790038
+           If  Not R7919999-Retur-OK                                    05800038
+               Move  'F001'              To    R7919999-Paragraf        05810038
+               Perform Z900-Abend                                       05820038
+           End-If                                                       05830038
+      *                                                                 05840038
+           Perform F200-Var-Fridager                                    05850038
+           If  Not R7919999-Retur-OK                                    05860038
+               Move  'F002'              To    R7919999-Paragraf        05870038
+               Perform Z900-Abend                                       05880038
+           End-If                                                       05890038
+      *                                                                 05900038
+           Perform Varying Ind-Spes                                     05910038
+                   From +1                                              05920038
+                   By   +1                                              05930038
+                   Until Ind-Spes        >     W-Max-Spes-Tab           05940038
+                   Or    W-Spes-Dato (Ind-Spes)                         05950038
+                                         =     +0                       05960038
+                   Or    W-Spes-Dato (Ind-Spes)                         05970038
+                                         =     W-Current-Dato           05980038
+      *                                                                 05990038
+           End-Perform                                                  06000038
+      *                                                                 06010038
+           If  Ind-Spes                  >     W-Max-Spes-Tab           06020038
+           or  W-Spes-Dato (Ind-Spes)    =     +0                       06030038
+             Then                                                       06040038
+               Continue                                                 06050038
+             Else                                                       06060038
+               Move  W-Spes-Type (Ind-Spes)                             06070038
+                                         To    W-Dag-Type               06080038
+               If  Not Sw-Spes-Ikke-Helligdag (Ind-Spes)                06090038
+                   Set   SW-Fridag       To    True                     06100038
+               End-If                                                   06110038
+           End-If                                                       06120038
+      *                                                                 06130038
+           .                                                            06140038
+       F099-Exit.                                                       06150038
+           Exit.                                                        06160038
+      *################################################################*06170038
+       F100-Faste-Fridager               Section.                       06180038
+      *                                                                 06190038
+           Move  W-Current-Dato          To    W-Split-Dato-8           06200038
+      *                                                                 06210038
+           Add   +1                      To    Ind-Spes                 06220038
+           Move  W-Nyttaarsaften         To    W-Merge-Dato-8           06230038
+           Move  W-SD8-Aar               To    W-MD8-Aar                06240038
+           Move  W-Merge-Dato-8          To    W-Spes-Dato (Ind-Spes)   06250038
+           Set   Sw-Spes-Nyttaarsaften (Ind-Spes)                       06260038
+                                         To    True                     06270038
+      *                                                                 06280038
+           Add   +1                      To    Ind-Spes                 06290038
+           Move  W-1ste-Nyttaarsdag      To    W-Merge-Dato-8           06300038
+           Move  W-SD8-Aar               To    W-MD8-Aar                06310038
+           Move  W-Merge-Dato-8          To    W-Spes-Dato (Ind-Spes)   06320038
+           Set   Sw-Spes-1-Nyttaarsdag (Ind-Spes)                       06330038
+                                         To    True                     06340038
+      *                                                                 06350038
+           Add   +1                      To    Ind-Spes                 06360038
+           Move  W-1ste-Mai              To    W-Merge-Dato-8           06370038
+           Move  W-SD8-Aar               To    W-MD8-Aar                06380038
+           Move  W-Merge-Dato-8          To    W-Spes-Dato (Ind-Spes)   06390038
+           Set   Sw-Spes-1-Mai (Ind-Spes)                               06400038
+                                         To    True                     06410038
+      *                                                                 06420038
+           Add   +1                      To    Ind-Spes                 06430038
+           Move  W-17de-Mai              To    W-Merge-Dato-8           06440038
+           Move  W-SD8-Aar               To    W-MD8-Aar                06450038
+           Move  W-Merge-Dato-8          To    W-Spes-Dato (Ind-Spes)   06460038
+           Set   Sw-Spes-17-Mai (Ind-Spes)                              06470038
+                                         To    True                     06480038
+      *                                                                 06490038
+           Add   +1                      To    Ind-Spes                 06500038
+           Move  W-Julaften              To    W-Merge-Dato-8           06510038
+           Move  W-SD8-Aar               To    W-MD8-Aar                06520038
+           Move  W-Merge-Dato-8          To    W-Spes-Dato (Ind-Spes)   06530038
+           Set   Sw-Spes-Julaften (Ind-Spes)                            06540038
+                                         To    True                     06550038
+      *                                                                 06560038
+           Add   +1                      To    Ind-Spes                 06570038
+           Move  W-1ste-Juledag          To    W-Merge-Dato-8           06580038
+           Move  W-SD8-Aar               To    W-MD8-Aar                06590038
+           Move  W-Merge-Dato-8          To    W-Spes-Dato (Ind-Spes)   06600038
+           Set   Sw-Spes-1-Juledag (Ind-Spes)                           06610038
+                                         To    True                     06620038
+      *                                                                 06630038
+           Add   +1                      To    Ind-Spes                 06640038
+           Move  W-2ndre-Juledag         To    W-Merge-Dato-8           06650038
+           Move  W-SD8-Aar               To    W-MD8-Aar                06660038
+           Move  W-Merge-Dato-8          To    W-Spes-Dato (Ind-Spes)   06670038
+           Set   Sw-Spes-2-Juledag (Ind-Spes)                           06680038
+                                         To    True                     06690038
+      *                                                                 06700038
+           .                                                            06710038
+       F199-Exit.                                                       06720038
+           Exit.                                                        06730038
+      *################################################################*06740038
+       F200-Var-Fridager                 Section.                       06750038
+      *                                                                 06760038
+           Move  W-Current-Dato          To    W-Dato                   06770038
+           Perform H000-1ste-Paaskedag                                  06780038
+           If  Not R7919999-Retur-OK                                    06790038
+               Move  'F201'              To    R7919999-Paragraf        06800038
+               Perform Z900-Abend                                       06810038
+           End-If                                                       06820038
+      *                                                                 06830038
+           Add   +1                      To    Ind-Spes                 06840038
+           Move  W-1ste-Paaske-Dag       To    W-Spes-Dato (Ind-Spes)   06850038
+           Set   Sw-Spes-1-Paaskedag (Ind-Spes)                         06860038
+                                         To    True                     06870038
+      *                                                                 06880038
+           Add   +1                      To    Ind-Spes                 06890038
+           Initialize                          R7919010-Dato-Pluss-Dager06900038
+           Set   R7919010-Versjon        To    True                     06910038
+           Move  W-1ste-Paaske-Dag       To    R7919010-In-Dato         06920038
+           Move  W-Diff-Skjaertorsdag    To    R7919010-In-Adder-Dag    06930038
+           Perform F7919010-Dato-Pluss-Dager                            06940038
+           If  R7919999-Retur-Abend                                     06950038
+               Move  'F202'              To    R7919999-Paragraf        06960038
+               Perform Z900-Abend                                       06970038
+           End-If                                                       06980038
+           Move  R7919010-Ut-Dato        To    W-Spes-Dato (Ind-Spes)   06990038
+           Set   Sw-Spes-Skjaertorsdag (Ind-Spes)                       07000038
+                                         To    True                     07010038
+      *                                                                 07020038
+           Add   +1                      To    Ind-Spes                 07030038
+           Initialize                          R7919010-Dato-Pluss-Dager07040038
+           Set   R7919010-Versjon        To    True                     07050038
+           Move  W-1ste-Paaske-Dag       To    R7919010-In-Dato         07060038
+           Move  W-Diff-Langfredag       To    R7919010-In-Adder-Dag    07070038
+           Perform F7919010-Dato-Pluss-Dager                            07080038
+           If  R7919999-Retur-Abend                                     07090038
+               Move  'F203'              To    R7919999-Paragraf        07100038
+               Perform Z900-Abend                                       07110038
+           End-If                                                       07120038
+           Move  R7919010-Ut-Dato        To    W-Spes-Dato (Ind-Spes)   07130038
+           Set   Sw-Spes-Langfredag (Ind-Spes)                          07140038
+                                         To    True                     07150038
+      *                                                                 07160038
+           Add   +1                      To    Ind-Spes                 07170038
+           Initialize                          R7919010-Dato-Pluss-Dager07180038
+           Set   R7919010-Versjon        To    True                     07190038
+           Move  W-1ste-Paaske-Dag       To    R7919010-In-Dato         07200038
+           Move  W-Diff-Paaskeaften      To    R7919010-In-Adder-Dag    07210038
+           Perform F7919010-Dato-Pluss-Dager                            07220038
+           If  R7919999-Retur-Abend                                     07230038
+               Move  'F204'              To    R7919999-Paragraf        07240038
+               Perform Z900-Abend                                       07250038
+           End-If                                                       07260038
+           Move  R7919010-Ut-Dato        To    W-Spes-Dato (Ind-Spes)   07270038
+           Set   Sw-Spes-Paaskeaften (Ind-Spes)                         07280038
+                                         To    True                     07290038
+      *                                                                 07300038
+           Add   +1                      To    Ind-Spes                 07310038
+           Initialize                          R7919010-Dato-Pluss-Dager07320038
+           Set   R7919010-Versjon        To    True                     07330038
+           Move  W-1ste-Paaske-Dag       To    R7919010-In-Dato         07340038
+           Move  W-Diff-2ndre-Paaske-Dag To    R7919010-In-Adder-Dag    07350038
+           Perform F7919010-Dato-Pluss-Dager                            07360038
+           If  R7919999-Retur-Abend                                     07370038
+               Move  'F205'              To    R7919999-Paragraf        07380038
+               Perform Z900-Abend                                       07390038
+           End-If                                                       07400038
+           Move  R7919010-Ut-Dato        To    W-Spes-Dato (Ind-Spes)   07410038
+           Set   Sw-Spes-2-Paaskedag (Ind-Spes)                         07420038
+                                         To    True                     07430038
+      *                                                                 07440038
+           Add   +1                      To    Ind-Spes                 07450038
+           Initialize                          R7919010-Dato-Pluss-Dager07460038
+           Set   R7919010-Versjon        To    True                     07470038
+           Move  W-1ste-Paaske-Dag       To    R7919010-In-Dato         07480038
+           Move  W-Diff-Kristi-Himmelfart                               07490038
+                                         To    R7919010-In-Adder-Dag    07500038
+           Perform F7919010-Dato-Pluss-Dager                            07510038
+           If  R7919999-Retur-Abend                                     07520038
+               Move  'F206'              To    R7919999-Paragraf        07530038
+               Perform Z900-Abend                                       07540038
+           End-If                                                       07550038
+           Move  R7919010-Ut-Dato        To    W-Spes-Dato (Ind-Spes)   07560038
+           Set   Sw-Spes-Himmelspretten (Ind-Spes)                      07570038
+                                         To    True                     07580038
+      *                                                                 07590038
+           Add   +1                      To    Ind-Spes                 07600038
+           Initialize                          R7919010-Dato-Pluss-Dager07610038
+           Set   R7919010-Versjon        To    True                     07620038
+           Move  W-1ste-Paaske-Dag       To    R7919010-In-Dato         07630038
+           Move  W-Diff-Pinseaften       To    R7919010-In-Adder-Dag    07640038
+           Perform F7919010-Dato-Pluss-Dager                            07650038
+           If  R7919999-Retur-Abend                                     07660038
+               Move  'F207'              To    R7919999-Paragraf        07670038
+               Perform Z900-Abend                                       07680038
+           End-If                                                       07690038
+           Move  R7919010-Ut-Dato        To    W-Spes-Dato (Ind-Spes)   07700038
+           Set   Sw-Spes-Pinseaften (Ind-Spes)                          07710038
+                                         To    True                     07720038
+      *                                                                 07730038
+           Add   +1                      To    Ind-Spes                 07740038
+           Initialize                          R7919010-Dato-Pluss-Dager07750038
+           Set   R7919010-Versjon        To    True                     07760038
+           Move  W-1ste-Paaske-Dag       To    R7919010-In-Dato         07770038
+           Move  W-Diff-1ste-Pinse-Dag   To    R7919010-In-Adder-Dag    07780038
+           Perform F7919010-Dato-Pluss-Dager                            07790038
+           If  R7919999-Retur-Abend                                     07800038
+               Move  'F208'              To    R7919999-Paragraf        07810038
+               Perform Z900-Abend                                       07820038
+           End-If                                                       07830038
+           Move  R7919010-Ut-Dato        To    W-Spes-Dato (Ind-Spes)   07840038
+           Set   Sw-Spes-1-Pinsedag (Ind-Spes)                          07850038
+                                         To    True                     07860038
+      *                                                                 07870038
+           Add   +1                      To    Ind-Spes                 07880038
+           Initialize                          R7919010-Dato-Pluss-Dager07890038
+           Set   R7919010-Versjon        To    True                     07900038
+           Move  W-1ste-Paaske-Dag       To    R7919010-In-Dato         07910038
+           Move  W-Diff-2ndre-Pinse-Dag  To    R7919010-In-Adder-Dag    07920038
+           Perform F7919010-Dato-Pluss-Dager                            07930038
+           If  R7919999-Retur-Abend                                     07940038
+               Move  'F209'              To    R7919999-Paragraf        07950038
+               Perform Z900-Abend                                       07960038
+           End-If                                                       07970038
+           Move  R7919010-Ut-Dato        To    W-Spes-Dato (Ind-Spes)   07980038
+           Set   Sw-Spes-2-Pinsedag (Ind-Spes)                          07990038
+                                         To    True                     08000038
+      *                                                                 08010038
+           .                                                            08020038
+       F299-Exit.                                                       08030038
+           Exit.                                                        08040038
+      *################################################################*08050038
+       G000-Bank-Dag                     Section.                       08060038
+      *                                                                 08070038
+           Evaluate True                                                08080038
+             When W-Ukedag               =     +7                       08090038
+               Set  SW-Ikke-Bank-Dag     To    True                     08100038
+      *                                                                 08110038
+             When W-Ukedag               =     +6                       08120038
+               Set  SW-Ikke-Bank-Dag     To    True                     08130038
+      *                                                                 08140038
+             When SW-Fridag                                             08150038
+               Set  SW-Ikke-Bank-Dag     To    True                     08160038
+      *                                                                 08170038
+             When Other                                                 08180038
+               Set  SW-Bank-Dag          To    True                     08190038
+      *                                                                 08200038
+           End-Evaluate                                                 08210038
+      *                                                                 08220038
+           .                                                            08230038
+       G099-Exit.                                                       08240038
+           Exit.                                                        08250038
+      *################################################################*08260038
+       H000-1ste-Paaskedag               Section.                       08270038
+      *                                                                 08280038
+      * Formel utviklet av Lilius/Clavius i det 16de århundre!          08290038
+      *                                                                 08300038
+           Move  W-Dato                  To    W-Split-Dato-8           08310038
+           Move  W-SD8-Aar               To    W-K1P-T                  08320038
+      *                                                                 08330038
+           Compute  W-K1P-Temp                                          08340038
+               =    W-K1P-T / 19                                        08350038
+           Move  W-K1P-Temp              To    W-K1P-G-I                08360038
+           Compute  W-K1P-Temp                                          08370038
+               =    ( ( ( W-K1P-T / 19 ) - W-K1P-G-I ) * 19 + 1,5 )     08380038
+           Move  W-K1P-Temp              To    W-K1P-G                  08390038
+      *                                                                 08400038
+           Compute  W-K1P-Temp                                          08410038
+               =    W-K1P-T / 100 + 1                                   08420038
+           Move  W-K1P-Temp              To    W-K1P-C                  08430038
+      *                                                                 08440038
+           Compute  W-K1P-Temp                                          08450038
+               =    ( 3 * W-K1P-C ) / 4 - 12                            08460038
+           Move  W-K1P-Temp              To    W-K1P-X                  08470038
+      *                                                                 08480038
+           Compute  W-K1P-Temp                                          08490038
+               =    ( 8 * W-K1P-C + 5 ) / 25 - 5                        08500038
+           Move  W-K1P-Temp              To    W-K1P-Z                  08510038
+      *                                                                 08520038
+           Compute  W-K1P-Temp                                          08530038
+               =    ( 5 * W-K1P-T ) / 4 - W-K1P-X - 10                  08540038
+           Move  W-K1P-Temp              To    W-K1P-D                  08550038
+      *                                                                 08560038
+           Compute  W-K1P-Temp                                          08570038
+               =    ( 11 * W-K1P-G + 20 + W-K1P-Z - W-K1P-X ) / 30      08580038
+           Move  W-K1P-Temp              To    W-K1P-E-I                08590038
+           Compute  W-K1P-Temp                                          08600038
+               =    ( ( ( 11 * W-K1P-G + 20 + W-K1P-Z - W-K1P-X )       08610038
+                        / 30 - W-K1P-E-I )                              08620038
+                      * 30 + 0,5 )                                      08630038
+           Move  W-K1P-Temp              To    W-K1P-E                  08640038
+      *                                                                 08650038
+           Evaluate True                                                08660038
+             When W-K1P-E                =     25                       08670038
+             and  W-K1P-G                >     11                       08680038
+               Add   +1                  To    W-K1P-E                  08690038
+             When W-K1P-E                =     24                       08700038
+               Add   +1                  To    W-K1P-E                  08710038
+           End-Evaluate                                                 08720038
+      *                                                                 08730038
+           Compute  W-K1P-N                                             08740038
+               =    44 - W-K1P-E                                        08750038
+      *                                                                 08760038
+           If  W-K1P-N                   <     21                       08770038
+               Add   +30                 To    W-K1P-N                  08780038
+           End-If                                                       08790038
+      *                                                                 08800038
+           Compute  W-K1P-Temp                                          08810038
+               =    ( W-K1P-D + W-K1P-N ) / 7                           08820038
+           Move  W-K1P-Temp              To    W-K1P-Y-I                08830038
+           Compute  W-K1P-Temp                                          08840038
+               =    ( ( ( W-K1P-D + W-K1P-N ) / 7 - W-K1P-Y-I )         08850038
+                      * 7 + 0,5 )                                       08860038
+           Move  W-K1P-Temp              To    W-K1P-Y                  08870038
+      *                                                                 08880038
+           Compute  W-K1P-N                                             08890038
+               =    W-K1P-N + 7 - W-K1P-Y                               08900038
+      *                                                                 08910038
+           If  W-K1P-N                   >     31                       08920038
+               Subtract 31               From  W-K1P-N                  08930038
+               Move  04                  To    W-K1P-M                  08940038
+           Else                                                         08950038
+               Move  03                  To    W-K1P-M                  08960038
+           End-If                                                       08970038
+      *                                                                 08980038
+           Move  W-K1P-N                 To    W-SD8-Dag                08990038
+           Move  W-K1P-M                 To    W-SD8-Mnd                09000038
+           Move  W-K1P-T                 To    W-SD8-Aar                09010038
+      *                                                                 09020038
+           Move  W-Split-Dato-8          To    W-1ste-Paaske-Dag        09030038
+      *                                                                 09040038
+           .                                                            09050038
+       H099-Exit.                                                       09060038
+           EXIT.                                                        09070038
+      *################################################################*09080038
+       Z900-Abend                        Section.                       09090038
+      *                                                                 09100038
+           If  Not R7919999-Retur-Abend                                 09110038
+               Move  +0                  To    R7919999-Modul-Ind       09120038
+           End-If                                                       09130038
+      *                                                                 09140038
+           Add   +1                      To    R7919999-Modul-Ind       09150038
+      *                                                                 09160038
+           If  R7919999-Modul-Ind        Not >                          09170038
+                             ( Length    Of    R7919999-Modul-Tab       09180038
+                             / Length    Of    R7919999-Modul-Element ) 09190038
+               Move  'F7919090'          To    R7919999-Modul-Navn      09200038
+                                                    (R7919999-Modul-Ind)09210038
+               Move  R7919999-Paragraf   To    R7919999-Modul-Para      09220038
+                                                    (R7919999-Modul-Ind)09230038
+           End-If                                                       09240038
+      *                                                                 09250038
+           Set   R7919999-Retur-Abend    To    True                     09260038
+      *                                                                 09270038
+           .                                                            09280038
+       Z999-Goback.                                                     09290038
+           Goback.                                                      09300038
+      *################################################################*09310038
+       ZI00-Konv-Input-Versjon           Section.                       09320038
+      *                                                                 09330038
+           Evaluate True                                                09340038
+             When R7919090-Versjon       In    F7919090-Ext-IO-Area     09350038
+               Move  F7919090-Ext-IO-Area                               09360038
+                                         To    R7919090-Helligdager     09370038
+      *                                                                 09380038
+      *----------------------------------------------------------------*09390038
+      *                                                                 09400038
+             When R7919090-Versjons-Nr   In    F7919090-Ext-IO-Area     09410038
+                                         =     '19961007'               09420038
+      *                                                                 09430038
+               Set   Address             Of    F7919090-Versjon-1996100709440038
+                 To  Address             Of    F7919090-Ext-IO-Area     09450038
+      *                                                                 09460038
+               Initialize                      R7919090-Helligdager     09470038
+               Set   R7919090-Versjon    In    R7919090-Helligdager     09480038
+                                         To    True                     09490038
+      *                                                                 09500038
+               Move  Corresponding                                      09510038
+                     R7919090-Kvalifisering                             09520038
+                                         In    F7919090-Versjon-1996100709530038
+                 To  R7919090-Kvalifisering                             09540038
+                                         In    R7919090-Helligdager     09550038
+      *                                                                 09560038
+      *----------------------------------------------------------------*09570038
+      *                                                                 09580038
+             When R7919090-Versjons-Nr   In    F7919090-Ext-IO-Area     09590038
+                                         =     '19950210'               09600038
+      *                                                                 09610038
+               Set   Address             Of    F7919090-Versjon-1995021009620038
+                 To  Address             Of    F7919090-Ext-IO-Area     09630038
+      *                                                                 09640038
+               Initialize                      R7919090-Helligdager     09650038
+               Set   R7919090-Versjon    In    R7919090-Helligdager     09660038
+                                         To    True                     09670038
+      *                                                                 09680038
+               Move  R7919090-In-Dato    In    F7919090-Versjon-1995021009690038
+                 To  R7919090-In-Dato    In    R7919090-Helligdager     09700038
+      *                                                                 09710038
+      *----------------------------------------------------------------*09720038
+      *                                                                 09730038
+             When Other                                                 09740038
+               Move  Space               To    R7919999-Melding         09750038
+               String 'Beklager, vi håndterer ikke versjon "'           09760038
+                                               Delimited by size        09770038
+                      R7919090-Versjons-Nr                              09780038
+                                         In    F7919090-Ext-IO-Area     09790038
+                                               Delimited by size        09800038
+                      '". Ta i bruk ny versjon.'                        09810038
+                                               Delimited by size        09820038
+                                         Into  R7919999-Melding         09830038
+               End-String                                               09840038
+               Move  'ZI01'              To    R7919999-Paragraf        09850038
+               Perform Z900-Abend                                       09860038
+      *                                                                 09870038
+           End-Evaluate                                                 09880038
+      *                                                                 09890038
+           .                                                            09900038
+       ZI99-Ex.                                                         09910038
+           Exit.                                                        09920038
+      *################################################################*09930038
+       ZO00-Konv-Output-Versjon          Section.                       09940038
+      *                                                                 09950038
+           Evaluate True                                                09960038
+             When R7919090-Versjon       In    F7919090-Ext-IO-Area     09970038
+               Move  R7919090-Helligdager                               09980038
+                                         To    F7919090-Ext-IO-Area     09990038
+      *                                                                 10000038
+      *----------------------------------------------------------------*10010038
+      *                                                                 10020038
+             When R7919090-Versjons-Nr   In    F7919090-Ext-IO-Area     10030038
+                                         =     '19961007'               10040038
+      *                                                                 10050038
+               Set   Address             Of    F7919090-Versjon-1996100710060038
+                 To  Address             Of    F7919090-Ext-IO-Area     10070038
+      *                                                                 10080038
+               Initialize                                               10090038
+                     R7919090-Resultat   In    F7919090-Versjon-1996100710100038
+      *                                                                 10110038
+               Move  Corresponding                                      10120038
+                     R7919090-Resultat   In    R7919090-Helligdager     10130038
+                 To  R7919090-Resultat   In    F7919090-Versjon-1996100710140038
+      *                                                                 10150038
+      *----------------------------------------------------------------*10160038
+      *                                                                 10170038
+             When R7919090-Versjons-Nr   In    F7919090-Ext-IO-Area     10180038
+                                         =     '19950210'               10190038
+      *                                                                 10200038
+               Set   Address             Of    F7919090-Versjon-1995021010210038
+                 To  Address             Of    F7919090-Ext-IO-Area     10220038
+      *                                                                 10230038
+               Initialize                                               10240038
+                     R7919090-Resultat   In    F7919090-Versjon-1995021010250038
+               Move  R7919090-Ut-Dag-Type                               10260038
+                                         In    R7919090-Helligdager     10270038
+                 To  R7919090-Ut-Dag-Type                               10280038
+                                         In    F7919090-Versjon-1995021010290038
+               Move  R7919090-Ut-Ukedag  In    R7919090-Helligdager     10300038
+                 To  R7919090-Ut-Ukedag  In    F7919090-Versjon-1995021010310038
+               Move  R7919090-Ut-Dgr-Neste-Bankdag                      10320038
+                                         In    R7919090-Helligdager     10330038
+                 To  R7919090-Ut-Dgr-Neste-Bankdag                      10340038
+                                         In    F7919090-Versjon-1995021010350038
+      *                                                                 10360038
+      *----------------------------------------------------------------*10370038
+      *                                                                 10380038
+             When Other                                                 10390038
+               Move  Space               To    R7919999-Melding         10400038
+               String 'Systemfeil, vi håndterte versjon "'              10410038
+                                               Delimited by size        10420038
+                      R7919090-Versjons-Nr                              10430038
+                                         In    F7919090-Ext-IO-Area     10440038
+                                               Delimited by size        10450038
+                      '" inn, skulle også gjort det ut.'                10460038
+                                               Delimited by size        10470038
+                                         Into  R7919999-Melding         10480038
+               End-String                                               10490038
+               Move  'ZO01'              To    R7919999-Paragraf        10500038
+               Perform Z900-Abend                                       10510038
+      *                                                                 10520038
+           End-Evaluate                                                 10530038
+      *                                                                 10540038
+           .                                                            10550038
+       ZO99-Ex.                                                         10560038
+           Exit.                                                        10570038
+      *################################################################*10580038
+           Copy R791901P.                                               10590038
+           Copy R791902P.                                               10600038
+           Copy R791904P.                                               10610038
+           Copy R791905P.                                               10620038
+           Copy R791906P.                                               10630038

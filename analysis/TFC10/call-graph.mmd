@@ -1,0 +1,15 @@
+graph TD
+  EP[FTFCH100 entry]:::entry
+  EP --> K[FTFCK100]
+  EP --> L[FTFCL100]
+  K --> L050[F115L050]
+  L --> L020[F115L020]
+  L --> L090[F115L090]
+  L --> F9070[F7919070]
+  L --> F9270[F7919270]
+  L --> F9010[F7919010]
+  L --> F9090[F7919090]
+  L050 --> EXT[F115I* DB modules external]
+  K --> EXT2[F7919040 F115ISC0 external]
+  L --> EXT
+  classDef entry fill:#6bb85a,stroke:#333,color:#111;

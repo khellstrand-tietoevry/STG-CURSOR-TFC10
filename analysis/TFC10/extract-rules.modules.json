@@ -1,0 +1,82 @@
+[
+ {
+  "name": "FTFCH100",
+  "domain": "STG H/K/L",
+  "files": [
+   "src/FTFCH100.src"
+  ],
+  "loc": 384
+ },
+ {
+  "name": "FTFCK100",
+  "domain": "STG H/K/L",
+  "files": [
+   "src/FTFCK100.src"
+  ],
+  "loc": 1472
+ },
+ {
+  "name": "FTFCL100",
+  "domain": "STG H/K/L",
+  "files": [
+   "src/FTFCL100.src"
+  ],
+  "loc": 1483
+ },
+ {
+  "name": "F115L020",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L020.src"
+  ],
+  "loc": 390
+ },
+ {
+  "name": "F115L050",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L050.src"
+  ],
+  "loc": 563
+ },
+ {
+  "name": "F115L090",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F115L090.src"
+  ],
+  "loc": 379
+ },
+ {
+  "name": "In-repo helpers:small-1",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F7919010.src"
+  ],
+  "loc": 181
+ },
+ {
+  "name": "F7919070",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F7919070.src"
+  ],
+  "loc": 383
+ },
+ {
+  "name": "F7919090",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F7919090.src"
+  ],
+  "loc": 1065
+ },
+ {
+  "name": "F7919270",
+  "domain": "In-repo helpers",
+  "files": [
+   "src/F7919270.src"
+  ],
+  "loc": 627
+ }
+]

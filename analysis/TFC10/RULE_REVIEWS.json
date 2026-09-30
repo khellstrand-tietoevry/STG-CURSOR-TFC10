@@ -1,0 +1,42 @@
+{
+  "system": "TFC10",
+  "version": 1,
+  "reviews": {
+    "RULE-001": {
+      "verdict": "confirmed",
+      "at": "2026-09-29T22:20:00+02:00",
+      "title": "Date plus days (F7919010)",
+      "note": "Implement 360-day path via port/stub until F7919060 imported."
+    },
+    "RULE-003": {
+      "verdict": "confirmed",
+      "at": "2026-09-29T22:20:00+02:00",
+      "title": "Bank-day lookup (F7919090)",
+      "note": "Parity via Oracle/stub matching legacy tables when exercised."
+    },
+    "RULE-008": {
+      "verdict": "confirmed",
+      "at": "2026-09-29T22:21:00+02:00",
+      "title": "K-module initial check calls F115L050",
+      "note": "P0 contract; F115L050.src in legacy; trace/implement in ftfc-l050 backend port."
+    },
+    "RULE-009": {
+      "verdict": "confirmed",
+      "at": "2026-09-29T22:20:00+02:00",
+      "title": "Return-Error stops K path",
+      "note": "Match legacy: Return-Error stops K; Return-Warning handled separately per COBOL."
+    },
+    "RULE-012": {
+      "verdict": "confirmed",
+      "at": "2026-09-29T22:21:00+02:00",
+      "title": "Contract number via F115L020",
+      "note": "Parity from in-repo F115L020; production sequence via port if needed."
+    },
+    "RULE-018": {
+      "verdict": "confirmed",
+      "at": "2026-09-29T22:20:00+02:00",
+      "title": "F115L050 update-timestamp check disabled on main path",
+      "note": "Java parity must keep E000 disabled on main path (match commented COBOL)."
+    }
+  }
+}

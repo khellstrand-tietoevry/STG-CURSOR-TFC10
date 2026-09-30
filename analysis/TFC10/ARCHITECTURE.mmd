@@ -1,0 +1,13 @@
+flowchart TB
+  subgraph stg [TFC10 STG entry]
+    H[FTFCH100 H-module]
+    K[FTFCK100 K-module]
+    L[FTFCL100 L-module]
+  end
+  H --> K
+  H --> L
+  K --> F115L050[F115L050 in-repo]
+  F115L050 --> ExtDB[External F115ICA0 F115IMC0 F115IPA0 etc]
+  K --> ExtVal[F7919040 F115ISC0 F115ISR0]
+  L --> Helpers[F115L020 F115L090 F7919 helpers]
+  L --> ExtDB

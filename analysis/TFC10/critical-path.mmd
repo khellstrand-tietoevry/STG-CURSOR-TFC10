@@ -1,0 +1,10 @@
+flowchart TD
+  A[User: create hovedkontrakt] --> B[FTFCH100 H-module]
+  B --> C[FTFCK100 K validate]
+  C --> D[F115L050 initial check]
+  D --> E{K OK?}
+  E -->|yes| F[FTFCL100 L load]
+  E -->|no| G[R7918030 error return]
+  F --> H[F115L020 contract number]
+  F --> I[Persist via F115IMC0 external]
+  F --> J[Return to client]

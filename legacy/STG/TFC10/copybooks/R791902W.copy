@@ -1,0 +1,37 @@
+      *################################################################*00010000
+      *                                                                 00020000
+      * Copy-område R791902W.                                           00030000
+      * Generell submodul for beregning av intervall mellom to datoer.  00040000
+      *                                                                 00050000
+      * Felter til Working-Storage.                                     00060000
+      *                                                                 00070000
+      * Kan benyttes sammen med R791902P dersom man ønsker å unngå kall.00080000
+      *                                                                 00090000
+      * Krever i tilfelle også copy-områdene                            00100000
+      *   - R791904W og R791904P.                                       00110000
+      *   - R791905W og R791905P.                                       00120000
+      *   - R791906W og R791906P.                                       00130000
+      *                                                                 00140000
+      *################################################################*00150000
+      * DATO ! SI! ENDRINGENS ART                                ! 3A ! 00160000
+      *---------------------------------------------------------------- 00170000
+      *130195!HLR! Nytt copy-område                              !JR68! 00180000
+      *################################################################*00190000
+       01  F7919020-Arbeids-Felter.                                     00200000
+      *                                                                 00210000
+           05  W9020-Display-Dgr         Pic  9(03).                    00220000
+      *                                                                 00230000
+           05  W9020-Fra-Dato            Pic  9(08).                    00240000
+           05  Filler                    Redefines W9020-Fra-Dato.      00250001
+               10  W9020-FD-Aar          Pic  9(04).                    00260000
+               10  W9020-FD-Mnd          Pic  9(02).                    00270000
+               10  W9020-FD-Dag          Pic  9(02).                    00280000
+      *                                                                 00290000
+           05  W9020-Til-Dato            Pic  9(08).                    00300000
+           05  Filler                    Redefines W9020-Til-Dato.      00310001
+               10  W9020-TD-Aar          Pic  9(04).                    00320000
+               10  W9020-TD-Mnd          Pic  9(02).                    00330000
+               10  W9020-TD-Dag          Pic  9(02).                    00340000
+      *                                                                 00350000
+           05  W9020-Intervall           Pic S9(05)              Comp-3.00360001
+      *                                                                 00370001

@@ -1,0 +1,183 @@
+{
+  "date": "2026-09-29",
+  "legacy": {
+    "ran": false,
+    "how": "GnuCOBOL partial compile only; no DB2/CICS runtime",
+    "why": "H/K/L cluster requires mainframe DB2 and external F115I* modules; COBOL not executed for equivalence here"
+  },
+  "leftOut": [
+    "End-to-end COBOL execution for FTFCH100/FTFCK100/FTFCL100/F115L050",
+    "Fresh-input legacy vs Java comparison (legacy.ran false)",
+    "equivalence/cases.json not present",
+    "F115IMC0/F115ICA0/F115IPA0 and other DB boundary CALL targets without .src",
+    "RULE-016 decimal-comma characterization beyond COBOL Special-Names declaration"
+  ],
+  "suites": [
+    {
+      "module": "ftfc-h100",
+      "name": "unit tests",
+      "command": "cd modernized/TFC10 && mvn -q clean test",
+      "junit": [
+        "modernized/TFC10/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorIntegrationTest.xml",
+        "modernized/TFC10/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/mvn-logs/mvn-test-20260929-verify-post-l050.log"
+      ],
+      "skippedReason": "",
+      "note": "Post-L050 verify; full reactor clean test 2026-09-29."
+    },
+    {
+      "module": "ftfc-k100",
+      "name": "unit tests",
+      "command": "cd modernized/TFC10 && mvn -q clean test",
+      "junit": [
+        "modernized/TFC10/ftfc-k100/target/surefire-reports/TEST-no.tieto.tfc10.k.KModuleValidatorTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/mvn-logs/mvn-test-20260929-verify-post-l050.log"
+      ],
+      "skippedReason": "",
+      "note": ""
+    },
+    {
+      "module": "ftfc-l100",
+      "name": "unit tests",
+      "command": "cd modernized/TFC10 && mvn -q clean test",
+      "junit": [
+        "modernized/TFC10/ftfc-l100/target/surefire-reports/TEST-no.tieto.tfc10.l.LModuleLoaderTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/mvn-logs/mvn-test-20260929-verify-post-l050.log"
+      ],
+      "skippedReason": "",
+      "note": ""
+    },
+    {
+      "module": "ftfc-l020",
+      "name": "unit tests",
+      "command": "cd modernized/TFC10 && mvn -q clean test",
+      "junit": [
+        "modernized/TFC10/ftfc-l020/target/surefire-reports/TEST-no.tieto.tfc10.l020.ContractNumberGeneratorTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/mvn-logs/mvn-test-20260929-verify-post-l050.log"
+      ],
+      "skippedReason": "",
+      "note": ""
+    },
+    {
+      "module": "ftfc-l090",
+      "name": "unit tests",
+      "command": "cd modernized/TFC10 && mvn -q clean test",
+      "junit": [
+        "modernized/TFC10/ftfc-l090/target/surefire-reports/TEST-no.tieto.tfc10.l090.ShadowChargeCleanupTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/mvn-logs/mvn-test-20260929-verify-post-l050.log"
+      ],
+      "skippedReason": "",
+      "note": ""
+    },
+    {
+      "module": "ftfc-f7919",
+      "name": "unit tests",
+      "command": "cd modernized/TFC10 && mvn -q clean test",
+      "junit": [
+        "modernized/TFC10/ftfc-f7919/target/surefire-reports/TEST-no.tieto.tfc10.f7919.F7919HelpersTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/mvn-logs/mvn-test-20260929-verify-post-l050.log"
+      ],
+      "skippedReason": "",
+      "note": ""
+    },
+    {
+      "module": "ftfc-l050",
+      "name": "unit tests",
+      "command": "cd modernized/TFC10 && mvn -q clean test",
+      "junit": [
+        "modernized/TFC10/ftfc-l050/target/surefire-reports/TEST-no.tieto.tfc10.l050.InitialCheckServiceTest.xml",
+        "modernized/TFC10/ftfc-l050/target/surefire-reports/TEST-no.tieto.tfc10.l050.TracedInitialCheckBackendTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/mvn-logs/mvn-test-20260929-verify-post-l050.log"
+      ],
+      "skippedReason": "",
+      "note": "TracedInitialCheckBackend + RULE-005/006/007 tests"
+    }
+  ],
+  "canaries": [
+    {
+      "module": "ftfc-h100",
+      "change": "HModuleOrchestrator: skip real L load (always return LResult.ok)",
+      "junit": [
+        "analysis/TFC10/equivalence/canary/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorIntegrationTest.xml",
+        "analysis/TFC10/equivalence/canary/ftfc-h100/target/surefire-reports/TEST-no.tieto.tfc10.h.HModuleOrchestratorTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/canary/ftfc-h100/canary.test-output.txt"
+      ]
+    },
+    {
+      "module": "ftfc-k100",
+      "change": "KModuleValidator: ignore initial-check error flag",
+      "junit": [
+        "analysis/TFC10/equivalence/canary/ftfc-k100/target/surefire-reports/TEST-no.tieto.tfc10.k.KModuleValidatorTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/canary/ftfc-k100/canary.test-output.txt"
+      ]
+    },
+    {
+      "module": "ftfc-l100",
+      "change": "LModuleLoader unique-row check: rel.totalRows() > 1 → >= 1",
+      "junit": [
+        "analysis/TFC10/equivalence/canary/ftfc-l100/target/surefire-reports/TEST-no.tieto.tfc10.l.LModuleLoaderTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/canary/ftfc-l100/canary.test-output.txt"
+      ]
+    },
+    {
+      "module": "ftfc-l020",
+      "change": "ContractRangeRules: disable primary range exhaustion check",
+      "junit": [
+        "analysis/TFC10/equivalence/canary/ftfc-l020/target/surefire-reports/TEST-no.tieto.tfc10.l020.ContractNumberGeneratorTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/canary/ftfc-l020/canary.test-output.txt"
+      ]
+    },
+    {
+      "module": "ftfc-l090",
+      "change": "ShadowChargeCleanup: ignore part-charge delete errors",
+      "junit": [
+        "analysis/TFC10/equivalence/canary/ftfc-l090/target/surefire-reports/TEST-no.tieto.tfc10.l090.ShadowChargeCleanupTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/canary/ftfc-l090/canary.test-output.txt"
+      ]
+    },
+    {
+      "module": "ftfc-f7919",
+      "change": "BankDayCalculator: always treat weekday as bank day (ignore holidays)",
+      "junit": [
+        "analysis/TFC10/equivalence/canary/ftfc-f7919/target/surefire-reports/TEST-no.tieto.tfc10.f7919.F7919HelpersTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/canary/ftfc-f7919/canary.test-output.txt"
+      ]
+    },
+    {
+      "module": "ftfc-l050",
+      "change": "InitialCheckService: ignore backend.error() return path",
+      "junit": [
+        "analysis/TFC10/equivalence/canary/ftfc-l050/target/surefire-reports/TEST-no.tieto.tfc10.l050.InitialCheckServiceTest.xml"
+      ],
+      "log": [
+        "analysis/TFC10/equivalence/canary/ftfc-l050/canary.test-output.txt"
+      ]
+    }
+  ]
+}

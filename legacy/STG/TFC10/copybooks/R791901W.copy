@@ -1,0 +1,76 @@
+      *################################################################*00010000
+      *                                                                 00020000
+      * Copy-område R791901W.                                           00030000
+      * Generell submodul for beregning av dato +/- dager.              00040000
+      *                                                                 00050000
+      * Felter til Working-Storage.                                     00060000
+      *                                                                 00070000
+      * Kan benyttes sammen med R791901P dersom man ønsker å unngå kall.00080000
+      *                                                                 00090001
+      * Krever i tilfelle også copy-områdene                            00100001
+      *   - R791906W og R791906P                                        00110003
+      *                                                                 00120000
+      *################################################################*00130000
+      * DATO ! SI! ENDRINGENS ART                                ! 3A ! 00140000
+      *---------------------------------------------------------------- 00150000
+      *130195!HLR! Nytt copy-område                              !JR68! 00160000
+      *################################################################*00170000
+       01  F7919010-Arbeids-Felter.                                     00180004
+      *                                                                 00190004
+           05  W9010-Split-Dato          Pic  9(08).                    00200004
+           05  Filler                    Redefines W9010-Split-Dato.    00210004
+               10  W9010-SD-Aar          Pic  9(04).                    00220004
+               10  W9010-SD-Mnd          Pic  9(02).                    00230004
+               10  W9010-SD-Dag          Pic  9(02).                    00240004
+      *                                                                 00250004
+           05  W9010-Aar                 Pic S9(05)              Comp-3.00260004
+           05  W9010-Mnd                 Pic S9(05)              Comp-3.00270004
+           05  W9010-Dag                 Pic S9(05)              Comp-3.00280004
+      *                                                                 00290004
+           05  Filler                    Pic  X(01).                    00300004
+             88  W9010-Siste-Dag-I-Mnd              Value 'J'.          00310004
+             88  W9010-Ikke-Siste-Dag-I-Mnd         Value 'N'.          00320004
+      *                                                                 00330004
+      * Felter til bruk i sections:                                     00340004
+      *                                                                 00350004
+           05  W9010-C100-Dato           Pic  9(08).                    00360004
+           05  Filler                    Redefines W9010-C100-Dato.     00370004
+               10  W9010-C100-Aar        Pic  9(04).                    00380004
+               10  W9010-C100-Mnd        Pic  9(02).                    00390004
+               10  W9010-C100-Dag        Pic  9(02).                    00400004
+      *                                                                 00410004
+           05  W9010-C200-Dato           Pic  9(08).                    00420004
+           05  Filler                    Redefines W9010-C200-Dato.     00430004
+               10  W9010-C200-Aar        Pic  9(04).                    00440004
+               10  W9010-C200-Mnd        Pic  9(02).                    00450004
+               10  W9010-C200-Dag        Pic  9(02).                    00460004
+      *                                                                 00470004
+           05  W9010-C300-Dato           Pic  9(08).                    00480004
+           05  Filler                    Redefines W9010-C300-Dato.     00490004
+               10  W9010-C300-Aar        Pic  9(04).                    00500004
+               10  W9010-C300-Mnd        Pic  9(02).                    00510004
+               10  W9010-C300-Dag        Pic  9(02).                    00520004
+           05  W9010-C300-Dgr-Just       Pic  9(02).                    00530004
+           05  W9010-C300-Dgr-Reell      Pic  9(02).                    00540004
+      *                                                                 00550004
+      * Antall dager i måneden:                                         00560004
+      *                                                                 00570004
+           05  W9010-Mnds-Tabell.                                       00580004
+               10  W9010-Januar          Pic  9(03) Value 31.           00590004
+               10  W9010-Februar         Pic  9(03).                    00600004
+                 88  W9010-Ikke-Skudd-Aar           Value 28.           00610004
+                 88  W9010-Skudd-Aar                Value 29.           00620004
+               10  W9010-Mars            Pic  9(03) Value 31.           00630004
+               10  W9010-April           Pic  9(03) Value 30.           00640004
+               10  W9010-Mai             Pic  9(03) Value 31.           00650004
+               10  W9010-Juni            Pic  9(03) Value 30.           00660004
+               10  W9010-Juli            Pic  9(03) Value 31.           00670004
+               10  W9010-August          Pic  9(03) Value 31.           00680004
+               10  W9010-September       Pic  9(03) Value 30.           00690004
+               10  W9010-Oktober         Pic  9(03) Value 31.           00700004
+               10  W9010-November        Pic  9(03) Value 30.           00710004
+               10  W9010-Desember        Pic  9(03) Value 31.           00720004
+           05  Filler                    Redefines W9010-Mnds-Tabell.   00730004
+               10  W9010-Dgr-I-Mnd       Occurs 12 Times                00740004
+                                         Pic  9(03).                    00750004
+      *                                                                 00760004

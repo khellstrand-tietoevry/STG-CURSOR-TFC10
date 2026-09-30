@@ -1,0 +1,72 @@
+      *################################################################*00010000
+      *                                                                 00020000
+      * Copy-område R791909G.                                           00030000
+      * Generell submodul for å beregne virke- og hellig-dager.         00040000
+      *                                                                 00050000
+      * Her ligger gamle versjoner av copy-området, på grunn av         00060000
+      * versjonshåndtering.                                             00070000
+      * Vi skal konvertere til og fra ny layout.                        00080000
+      *                                                                 00090000
+      * Ved innleggelse av "gammel" versjon:                            00100000
+      *  - Lag nytt 01-nivå                                             00110000
+      *  - Kopier inn copy-området før dette endres                     00120000
+      *                                                                 00130000
+      *################################################################*00140000
+      * DATO ! SI! ENDRINGENS ART                                ! 3A ! 00150000
+      *---------------------------------------------------------------- 00160000
+      *220198!HLR! Lagt inn versjon 19961007.                    !    ! 00170002
+      *100295!HLR! Nytt copy-område                              !JR68! 00180002
+      *################################################################*00190000
+       01  F7919090-Versjon-19961007.                                   00200002
+      *                                                                 00210000
+           05  R7919090-VERSJONS-NR      PIC  X(08).                    00220002
+             88  R7919090-VERSJON                   VALUE '19961007'.   00230002
+      *                                                                 00240002
+           05  R7919090-KVALIFISERING.                                  00250002
+               10  R7919090-IN-DATO      PIC S9(09)              COMP-3.00260002
+      *                                                                 00270002
+           05  R7919090-RESULTAT.                                       00280002
+               10  R7919090-UT-DAG-TYPE  PIC  X(01).                    00290002
+                 88  R7919090-UT-BANK-DAG           VALUE 'J'.          00300002
+                 88  R7919090-UT-IKKE-BANK-DAG      VALUE 'N'.          00310002
+      *                                                                 00320002
+               10  R7919090-UT-UKEDAG    PIC S9(01)              COMP-3.00330002
+                 88  R7919090-UT-MANDAG             VALUE +1.           00340002
+                 88  R7919090-UT-TIRSDAG            VALUE +2.           00350002
+                 88  R7919090-UT-ONSDAG             VALUE +3.           00360002
+                 88  R7919090-UT-TORSDAG            VALUE +4.           00370002
+                 88  R7919090-UT-FREDAG             VALUE +5.           00380002
+                 88  R7919090-UT-LORDAG             VALUE +6.           00390002
+                 88  R7919090-UT-SONDAG             VALUE +7.           00400002
+      *                                                                 00410002
+               10  R7919090-UT-DGR-NESTE-BANKDAG                        00420002
+                                         PIC S9(03)              COMP-3.00430002
+               10  R7919090-UT-DGR-FORR-BANKDAG                         00440002
+                                         PIC S9(03)              COMP-3.00450002
+      *                                                                 00460002
+      *################################################################*00470002
+       01  F7919090-Versjon-19950210.                                   00480002
+      *                                                                 00490002
+           05  R7919090-VERSJONS-NR      PIC  X(08).                    00500001
+             88  R7919090-VERSJON                   VALUE '19950210'.   00510001
+      *                                                                 00520001
+           05  R7919090-KVALIFISERING.                                  00530001
+               10  R7919090-IN-DATO      PIC S9(09)              COMP-3.00540001
+      *                                                                 00550001
+           05  R7919090-RESULTAT.                                       00560001
+               10  R7919090-UT-DAG-TYPE  PIC  X(01).                    00570001
+                 88  R7919090-UT-BANK-DAG           VALUE 'J'.          00580001
+                 88  R7919090-UT-IKKE-BANK-DAG      VALUE 'N'.          00590001
+      *                                                                 00600001
+               10  R7919090-UT-UKEDAG    PIC S9(01)              COMP-3.00610001
+                 88  R7919090-UT-MANDAG             VALUE +1.           00620001
+                 88  R7919090-UT-TIRSDAG            VALUE +2.           00630001
+                 88  R7919090-UT-ONSDAG             VALUE +3.           00640001
+                 88  R7919090-UT-TORSDAG            VALUE +4.           00650001
+                 88  R7919090-UT-FREDAG             VALUE +5.           00660001
+                 88  R7919090-UT-LORDAG             VALUE +6.           00670001
+                 88  R7919090-UT-SONDAG             VALUE +7.           00680001
+      *                                                                 00690001
+               10  R7919090-UT-DGR-NESTE-BANKDAG                        00700001
+                                         PIC S9(03)              COMP-3.00710001
+      *                                                                 00720001

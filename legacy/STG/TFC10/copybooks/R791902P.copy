@@ -1,0 +1,495 @@
+      *################################################################*00010000
+      *                                                                 00020000
+      * Copy-område R791902P.                                           00030000
+      * Generell submodul for beregning av intervall mellom to datoer.  00040000
+      *                                                                 00050000
+      * Logikk til Procedure Division.                                  00060000
+      *                                                                 00070000
+      * Kan benyttes sammen med R791902W dersom man ønsker å unngå kall.00080000
+      *                                                                 00090000
+      * Krever i tilfelle også copy-områdene                            00100000
+      *   - R791904W og R791904P.                                       00110000
+      *   - R791905W og R791905P.                                       00120000
+      *   - R791906W og R791906P.                                       00130000
+      *                                                                 00140000
+      *################################################################*00150000
+      * DATO ! SI! ENDRINGENS ART                                ! 3A ! 00160000
+      *---------------------------------------------------------------- 00170000
+      *050696!HLR! Lagt inn G000-section, -Ut-Ant-Dgr/Mnd/Aar    !    ! 00180014
+      *130195!HLR! Nytt copy-område                              !JR68! 00190014
+      *################################################################*00200000
+       F7919020-Intervall                Section.                       00210000
+      *                                                                 00220000
+           Perform F7919020-B000-Initialize                             00230000
+           Perform F7919020-C000-Beregning                              00240000
+      *                                                                 00250000
+           .                                                            00260000
+       F7919020-Exit.                                                   00270000
+           Exit.                                                        00280000
+      *################################################################*00290000
+       F7919020-B000-Initialize          Section.                       00300000
+      *                                                                 00310000
+           Set   R7919999-Retur-Ok       To    True                     00320000
+           Initialize                          R7919020-Resultat        00330000
+                                         In    R7919020-Intervall       00340000
+      *                                                                 00350000
+           .                                                            00360000
+       F7919020-B099-Exit.                                              00370000
+           Exit.                                                        00380000
+      *################################################################*00390000
+       F7919020-C000-Beregning           Section.                       00400000
+      *                                                                 00410000
+      * Validerer fra- og til-datoene:                                  00420000
+      *                                                                 00430000
+           Initialize                          R7919040-Valider-Dato    00440000
+           Set   R7919040-Versjon        To    True                     00450000
+           Move  R7919020-In-Fra-Dato    In    R7919020-Intervall       00460000
+                                         To    R7919040-In-Dato         00470000
+           Perform F7919040-Valider-Dato                                00480000
+           If  R7919999-Retur-Feil                                      00490015
+           or  R7919999-Retur-Abend                                     00500015
+               Move  'C001'              To    R7919999-Paragraf        00510005
+               Perform F7919020-Z900-Abend                              00520005
+               Go To F7919020-C099-Exit                                 00530000
+           End-If                                                       00540000
+      *                                                                 00550000
+           Initialize                          R7919040-Valider-Dato    00560000
+           Set   R7919040-Versjon        To    True                     00570000
+           Move  R7919020-In-Til-Dato    In    R7919020-Intervall       00580000
+                                         To    R7919040-In-Dato         00590000
+           Perform F7919040-Valider-Dato                                00600000
+           If  R7919999-Retur-Feil                                      00610015
+           or  R7919999-Retur-Abend                                     00620015
+               Move  'C002'              To    R7919999-Paragraf        00630005
+               Perform F7919020-Z900-Abend                              00640005
+               Go To F7919020-C099-Exit                                 00650000
+           End-If                                                       00660000
+      *                                                                 00670000
+      * Forbereder beregningen:                                         00680000
+      *                                                                 00690008
+           Move  R7919020-In-Fra-Dato    In    R7919020-Intervall       00700003
+                                         To    W9020-Fra-Dato           00710000
+           Move  R7919020-In-Til-Dato    In    R7919020-Intervall       00720003
+                                         To    W9020-Til-Dato           00730000
+      *                                                                 00740000
+           Evaluate True                                                00750000
+             When R7919020-In-360-Dgr-Pr-Aar                            00760000
+                                         In    R7919020-Intervall       00770000
+               Perform F7919020-D000-360-Dgr                            00780000
+               If  R7919999-Retur-Abend                                 00790012
+                   Move  'C003'          To    R7919999-Paragraf        00800012
+                   Perform F7919020-Z900-Abend                          00810012
+                   Go To F7919020-C099-Exit                             00820012
+               End-If                                                   00830012
+               Move  W9020-Intervall     To    R7919020-Ut-Intervall    00840002
+                                         in    R7919020-Intervall       00850002
+      *                                                                 00860000
+             When R7919020-In-365-Dgr-Pr-Aar                            00870000
+                                         In    R7919020-Intervall       00880000
+               Perform F7919020-E000-365-Dgr                            00890000
+               If  R7919999-Retur-Abend                                 00900012
+                   Move  'C004'          To    R7919999-Paragraf        00910012
+                   Perform F7919020-Z900-Abend                          00920012
+                   Go To F7919020-C099-Exit                             00930012
+               End-If                                                   00940012
+               Move  W9020-Intervall     To    R7919020-Ut-Intervall    00950002
+                                         in    R7919020-Intervall       00960002
+      *                                                                 00970000
+             When R7919020-In-Default-Dgr-Pr-Aar                        00980000
+                                         In    R7919020-Intervall       00990000
+               Perform F7919020-F000-366-Dgr                            01000000
+               If  R7919999-Retur-Abend                                 01010012
+                   Move  'C005'          To    R7919999-Paragraf        01020012
+                   Perform F7919020-Z900-Abend                          01030012
+                   Go To F7919020-C099-Exit                             01040012
+               End-If                                                   01050012
+               Move  W9020-Intervall     To    R7919020-Ut-Intervall    01060002
+                                         in    R7919020-Intervall       01070002
+      *                                                                 01080000
+             When Other                                                 01090000
+               Move  Space               To    R7919999-Melding         01100000
+               Move  R7919020-In-Dgr-Pr-Aar                             01110000
+                                         In    R7919020-Intervall       01120000
+                                         To    W9020-Display-Dgr        01130000
+               String 'Ugyldig periode: '      Delimited by size        01140000
+                      W9020-Display-Dgr        Delimited by size        01150000
+                      '.'                      Delimited by size        01160000
+                                         Into  R7919999-Melding         01170000
+               End-String                                               01180000
+               Move  'C006'              To    R7919999-Paragraf        01190012
+               Perform F7919020-Z900-Abend                              01200000
+      *                                                                 01210000
+           End-Evaluate                                                 01220000
+      *                                                                 01230000
+      * Finner antall dager, måneder og år:                             01240013
+      *                                                                 01250013
+           Perform F7919020-G000-Ant                                    01260013
+      *                                                                 01270013
+           .                                                            01280000
+       F7919020-C099-Exit.                                              01290000
+           Exit.                                                        01300000
+      *################################################################*01310000
+       F7919020-D000-360-Dgr             Section.                       01320000
+      *                                                                 01330000
+      * Siste dag i måneden skal alltid være 30.                        01340000
+      *                                                                 01350000
+      * Fra-dato:                                                       01360011
+      *                                                                 01370011
+           Evaluate True                                                01380011
+             When W9020-FD-Dag           <     28                       01390011
+               Continue                                                 01400011
+      *                                                                 01410011
+             When W9020-FD-Dag           =     31                       01420011
+               Move  30                  To    W9020-FD-Dag             01430011
+      *                                                                 01440011
+             When W9020-FD-Mnd           =     02                       01450011
+             and  W9020-FD-Dag           =     29                       01460011
+               Move  30                  To    W9020-FD-Dag             01470011
+      *                                                                 01480011
+             When W9020-FD-Mnd           =     02                       01490011
+             and  W9020-FD-Dag           =     28                       01500011
+               Initialize                      R7919050-Dager-I-Periode 01510011
+               Set   R7919050-Versjon    To    True                     01520011
+               Move  W9020-Fra-Dato      To    R7919050-In-Dato         01530011
+               Perform F7919050-Dager-I-Periode                         01540011
+               If  R7919999-Retur-Abend                                 01550011
+                   Move  'D001'          To    R7919999-Paragraf        01560011
+                   Perform F7919020-Z900-Abend                          01570011
+                   Go To F7919020-D099-Exit                             01580011
+               End-If                                                   01590011
+               If  W9020-FD-Dag          =     R7919050-Ut-Dgr-I-Per    01600011
+                   Move  30              To    W9020-FD-Dag             01610011
+               End-If                                                   01620011
+      *                                                                 01630011
+           End-Evaluate                                                 01640011
+      *                                                                 01650000
+      * Til-dato:                                                       01660011
+      *                                                                 01670011
+           Evaluate True                                                01680011
+             When W9020-TD-Dag           <     28                       01690011
+               Continue                                                 01700011
+      *                                                                 01710011
+             When W9020-TD-Dag           =     31                       01720011
+               Move  30                  To    W9020-TD-Dag             01730011
+      *                                                                 01740011
+             When W9020-TD-Mnd           =     02                       01750011
+             and  W9020-TD-Dag           =     29                       01760011
+               Move  30                  To    W9020-TD-Dag             01770011
+      *                                                                 01780011
+             When W9020-TD-Mnd           =     02                       01790011
+             and  W9020-TD-Dag           =     28                       01800011
+               Initialize                      R7919050-Dager-I-Periode 01810011
+               Set   R7919050-Versjon    To    True                     01820011
+               Move  W9020-Til-Dato      To    R7919050-In-Dato         01830011
+               Perform F7919050-Dager-I-Periode                         01840011
+               If  R7919999-Retur-Abend                                 01850011
+                   Move  'D002'          To    R7919999-Paragraf        01860011
+                   Perform F7919020-Z900-Abend                          01870011
+                   Go To F7919020-D099-Exit                             01880011
+               End-If                                                   01890011
+               If  W9020-TD-Dag          =     R7919050-Ut-Dgr-I-Per    01900011
+                   Move  30              To    W9020-TD-Dag             01910011
+               End-If                                                   01920011
+      *                                                                 01930011
+           End-Evaluate                                                 01940011
+      *                                                                 01950000
+      * Da kan intervallet beregnes:                                    01960000
+      *                                                                 01970000
+           Compute  W9020-Intervall                                     01980000
+               =  ( W9020-TD-Aar * 360 )                                01990000
+               +  ( W9020-TD-Mnd *  30 )                                02000000
+               +    W9020-TD-Dag                                        02010000
+               -  ( W9020-FD-Aar * 360 )                                02020000
+               -  ( W9020-FD-Mnd *  30 )                                02030000
+               -    W9020-FD-Dag                                        02040000
+      *                                                                 02050000
+           .                                                            02060000
+       F7919020-D099-Exit.                                              02070000
+           Exit.                                                        02080000
+      *################################################################*02090000
+       F7919020-E000-365-Dgr             Section.                       02100000
+      *                                                                 02110000
+      * 29. februar eksisterer ikke.                                    02120000
+      *                                                                 02130000
+           If  W9020-FD-Mnd              =     02                       02140000
+           and W9020-FD-Dag              =     29                       02150000
+               Move  28                  To    W9020-FD-Dag             02160000
+           End-If                                                       02170000
+      *                                                                 02180000
+           If  W9020-TD-Mnd              =     02                       02190000
+           and W9020-TD-Dag              =     29                       02200000
+               Move  28                  To    W9020-TD-Dag             02210000
+           End-If                                                       02220000
+      *                                                                 02230000
+      * For resten av beregningen kan vi bruke samme logikk som 366 dgr.02240010
+      *                                                                 02250010
+           Perform F7919020-F000-366-Dgr                                02260010
+           If  R7919999-Retur-Abend                                     02270012
+               Move  'E001'              To    R7919999-Paragraf        02280012
+               Perform F7919020-Z900-Abend                              02290012
+               Go To F7919020-E099-Exit                                 02300012
+           End-If                                                       02310012
+      *                                                                 02320000
+           .                                                            02330000
+       F7919020-E099-Exit.                                              02340000
+           Exit.                                                        02350000
+      *################################################################*02360000
+       F7919020-F000-366-Dgr             Section.                       02370000
+      *                                                                 02380000
+      * Da kan intervallet beregnes:                                    02390000
+      *                                                                 02400000
+           Compute  W9020-Intervall                                     02410000
+               =    W9020-TD-Dag                                        02420000
+               -    W9020-FD-Dag                                        02430000
+      *                                                                 02440000
+      * Når Til-Dato er størst, reduserer vi denne ned til Fra-Dato,    02450010
+      * når Fra-Dato er størst, reduserer vi denne ned til Til-Dato.    02460010
+      *                                                                 02470010
+           Evaluate True                                                02480010
+             When W9020-Til-Dato         >     W9020-Fra-Dato           02490010
+               Perform F7919020-F100-Reduser-Til-Dato                   02500010
+               If  R7919999-Retur-Abend                                 02510012
+                   Move  'F001'          To    R7919999-Paragraf        02520012
+                   Perform F7919020-Z900-Abend                          02530012
+                   Go To F7919020-F099-Exit                             02540012
+               End-If                                                   02550012
+      *                                                                 02560010
+             When W9020-Fra-Dato         >     W9020-Til-Dato           02570010
+               Perform F7919020-F200-Reduser-Fra-Dato                   02580010
+               If  R7919999-Retur-Abend                                 02590012
+                   Move  'F002'          To    R7919999-Paragraf        02600012
+                   Perform F7919020-Z900-Abend                          02610012
+                   Go To F7919020-F099-Exit                             02620012
+               End-If                                                   02630012
+      *                                                                 02640010
+           End-Evaluate                                                 02650010
+      *                                                                 02660010
+           .                                                            02670000
+       F7919020-F099-Exit.                                              02680000
+           Exit.                                                        02690000
+      *################################################################*02700000
+       F7919020-F100-Reduser-Til-Dato    Section.                       02710010
+      *                                                                 02720000
+           Perform Until W9020-TD-Mnd    =     W9020-FD-Mnd             02730010
+                   and   W9020-TD-Aar    =     W9020-FD-Aar             02740010
+      *                                                                 02750010
+               Subtract +1               From  W9020-TD-Mnd             02760010
+               If  W9020-TD-Mnd          <     01                       02770010
+                   Add   12              To    W9020-TD-Mnd             02780010
+                   Subtract 01           From  W9020-TD-Aar             02790010
+               End-If                                                   02800010
+      *                                                                 02810010
+      * Vi legger til antall dager i måneden vi går inn i:              02820010
+      *                                                                 02830010
+               Initialize                      R7919050-Dager-I-Periode 02840010
+               Set   R7919050-Versjon    To    True                     02850010
+               Move  W9020-Til-Dato      To    R7919050-In-Dato         02860010
+               Move  R7919020-In-Dgr-Pr-Aar                             02870010
+                                         In    R7919020-Intervall       02880010
+                                         To    R7919050-In-Dgr-Pr-Aar   02890010
+               Perform F7919050-Dager-I-Periode                         02900010
+               If  R7919999-Retur-Abend                                 02910010
+                   Move  'F101'          To    R7919999-Paragraf        02920010
+                   Perform F7919020-Z900-Abend                          02930010
+                   Go To F7919020-F199-Exit                             02940010
+               End-If                                                   02950010
+      *                                                                 02960010
+               Add   R7919050-Ut-Dgr-I-Per                              02970010
+                                         To    W9020-Intervall          02980010
+      *                                                                 02990010
+           End-Perform                                                  03000010
+      *                                                                 03010010
+           .                                                            03020010
+       F7919020-F199-Exit.                                              03030010
+           Exit.                                                        03040010
+      *################################################################*03050010
+       F7919020-F200-Reduser-Fra-Dato    Section.                       03060010
+      *                                                                 03070010
+           Perform Until W9020-FD-Mnd    =     W9020-TD-Mnd             03080010
+                   and   W9020-FD-Aar    =     W9020-TD-Aar             03090010
+      *                                                                 03100010
+               Subtract +1               From  W9020-FD-Mnd             03110010
+               If  W9020-FD-Mnd          <     01                       03120010
+                   Add   12              To    W9020-FD-Mnd             03130010
+                   Subtract 01           From  W9020-FD-Aar             03140010
+               End-If                                                   03150010
+      *                                                                 03160010
+      * Vi trekker fra antall dager i måneden vi går inn i:             03170010
+      *                                                                 03180010
+               Initialize                      R7919050-Dager-I-Periode 03190010
+               Set   R7919050-Versjon    To    True                     03200010
+               Move  W9020-Fra-Dato      To    R7919050-In-Dato         03210010
+               Move  R7919020-In-Dgr-Pr-Aar                             03220010
+                                         In    R7919020-Intervall       03230010
+                                         To    R7919050-In-Dgr-Pr-Aar   03240010
+               Perform F7919050-Dager-I-Periode                         03250010
+               If  R7919999-Retur-Abend                                 03260010
+                   Move  'F201'          To    R7919999-Paragraf        03270010
+                   Perform F7919020-Z900-Abend                          03280010
+                   Go To F7919020-F199-Exit                             03290010
+               End-If                                                   03300010
+      *                                                                 03310010
+               Subtract R7919050-Ut-Dgr-I-Per                           03320010
+                                         From  W9020-Intervall          03330010
+      *                                                                 03340010
+           End-Perform                                                  03350010
+      *                                                                 03360010
+           .                                                            03370010
+       F7919020-F299-Exit.                                              03380010
+           Exit.                                                        03390010
+      *################################################################*03400013
+       F7919020-G000-Ant                 Section.                       03410013
+      *                                                                 03420013
+           If  R7919020-In-Fra-Dato      In    R7919020-Intervall       03430013
+           <   R7919020-In-Til-Dato      In    R7919020-Intervall       03440013
+               Move  R7919020-In-Fra-Dato                               03450013
+                                         In    R7919020-Intervall       03460013
+                                         To    W9020-Fra-Dato           03470013
+               Move  R7919020-In-Til-Dato                               03480013
+                                         In    R7919020-Intervall       03490013
+                                         To    W9020-Til-Dato           03500013
+           Else                                                         03510013
+               Move  R7919020-In-Fra-Dato                               03520013
+                                         In    R7919020-Intervall       03530013
+                                         To    W9020-Til-Dato           03540013
+               Move  R7919020-In-Til-Dato                               03550013
+                                         In    R7919020-Intervall       03560013
+                                         To    W9020-Fra-Dato           03570013
+           End-If                                                       03580013
+      *                                                                 03590013
+      * Dersom begge datoene er lik siste dag i sine respektive måneder,03600016
+      * skal vi ha et helt antall måneder.                              03610016
+      * Dette krever at dag-nr er det samme, så vi ikke snubler i       03620016
+      * f.eks. 31.mars og 30.april, som ellers ville bli 0 mnd, 30 dgr. 03630016
+      *                                                                 03640016
+           Initialize                          R7919050-Dager-I-Periode 03650017
+           Set   R7919050-Versjon        To    True                     03660017
+           Move  W9020-Fra-Dato          To    R7919050-In-Dato         03670016
+           Perform F7919050-Dager-I-Periode                             03680016
+           If  R7919999-Retur-Abend                                     03690016
+               Move  'G001'              To    R7919999-Paragraf        03700016
+               Perform F7919020-Z900-Abend                              03710016
+               Go To F7919020-G099-Exit                                 03720016
+           End-If                                                       03730016
+                                                                        03740016
+      *    Hvis fra-dato er lik siste dag i måneden, sjekker vi til-dato03750016
+           If  W9020-FD-Dag              =     R7919050-Ut-Dgr-I-Per    03760016
+                                                                        03770016
+               Initialize                      R7919050-Dager-I-Periode 03780017
+               Set   R7919050-Versjon    To    True                     03790017
+               Move  W9020-Til-Dato      To    R7919050-In-Dato         03800016
+               Perform F7919050-Dager-I-Periode                         03810016
+               If  R7919999-Retur-Abend                                 03820016
+                   Move  'G002'          To    R7919999-Paragraf        03830016
+                   Perform F7919020-Z900-Abend                          03840016
+                   Go To F7919020-G099-Exit                             03850016
+               End-If                                                   03860016
+                                                                        03870016
+      *        Hvis til-dato også er siste dag i måneden, setter        03880016
+      *        vi begge dagene til 30, så stemmer antall måneder.       03890016
+               If  W9020-TD-Dag          =     R7919050-Ut-Dgr-I-Per    03900016
+                   Move  30              To    W9020-FD-Dag             03910016
+                   Move  30              To    W9020-TD-Dag             03920016
+               End-If                                                   03930016
+                                                                        03940016
+           End-If                                                       03950016
+      *                                                                 03960016
+      * Antall dager:                                                   03970013
+      *                                                                 03980013
+           Compute  R7919020-Ut-Ant-Dgr  In    R7919020-Intervall       03990013
+                                         =     W9020-TD-Dag             04000013
+                                         -     W9020-FD-Dag             04010013
+           If  R7919020-Ut-Ant-Dgr       In    R7919020-Intervall       04020013
+                                         <     +0                       04030013
+               Perform F7919020-G100-Oek-Fra-Mnd                        04040013
+               If  R7919999-Retur-Abend                                 04050013
+                   Move  'G001'          To    R7919999-Paragraf        04060013
+                   Perform F7919020-Z900-Abend                          04070013
+                   Go To F7919020-G099-Exit                             04080013
+               End-If                                                   04090013
+           End-If                                                       04100013
+      *                                                                 04110013
+           Compute  R7919020-Ut-Ant-Mnd  In    R7919020-Intervall       04120013
+                                         =     W9020-TD-Mnd             04130013
+                                         -     W9020-FD-Mnd             04140013
+           If  R7919020-Ut-Ant-Mnd       In    R7919020-Intervall       04150013
+                                         <     +0                       04160013
+               Perform F7919020-G200-Oek-Fra-Aar                        04170013
+               If  R7919999-Retur-Abend                                 04180013
+                   Move  'G002'          To    R7919999-Paragraf        04190013
+                   Perform F7919020-Z900-Abend                          04200013
+                   Go To F7919020-G099-Exit                             04210013
+               End-If                                                   04220013
+           End-If                                                       04230013
+      *                                                                 04240013
+           Compute  R7919020-Ut-Ant-Aar  In    R7919020-Intervall       04250013
+                                         =     W9020-TD-Aar             04260013
+                                         -     W9020-FD-Aar             04270013
+      *                                                                 04280013
+           .                                                            04290013
+       F7919020-G099-Exit.                                              04300013
+           Exit.                                                        04310013
+      *################################################################*04320013
+       F7919020-G100-Oek-Fra-Mnd         Section.                       04330013
+      *                                                                 04340013
+      * Vi legger til antall dager i måneden vi går fra:                04350013
+      *                                                                 04360013
+           Initialize                          R7919050-Dager-I-Periode 04370013
+           Set   R7919050-Versjon        To    True                     04380013
+           Move  W9020-Fra-Dato          To    R7919050-In-Dato         04390013
+           Perform F7919050-Dager-I-Periode                             04400013
+           If  R7919999-Retur-Abend                                     04410013
+               Move  'G101'              To    R7919999-Paragraf        04420013
+               Perform F7919020-Z900-Abend                              04430013
+               Go To F7919020-F199-Exit                                 04440013
+           End-If                                                       04450013
+      *                                                                 04460013
+           Add   R7919050-Ut-Dgr-I-Per   To    R7919020-Ut-Ant-Dgr      04470013
+                                         In    R7919020-Intervall       04480013
+      *                                                                 04490013
+           Add   01                      To    W9020-FD-Mnd             04500013
+           If  W9020-FD-Mnd              >     12                       04510013
+               Subtract 12               From  W9020-FD-Mnd             04520013
+               Add   0001                To    W9020-FD-Aar             04530013
+           End-If                                                       04540013
+      *                                                                 04550013
+           .                                                            04560013
+       F7919020-G199-Exit.                                              04570013
+           Exit.                                                        04580013
+      *################################################################*04590013
+       F7919020-G200-Oek-Fra-Aar         Section.                       04600013
+      *                                                                 04610013
+      * Vi legger til antall måneder i året:                            04620013
+      *                                                                 04630013
+           Add   12                      To    R7919020-Ut-Ant-Mnd      04640013
+                                         In    R7919020-Intervall       04650013
+      *                                                                 04660013
+           Add   0001                    To    W9020-FD-Aar             04670013
+      *                                                                 04680013
+           .                                                            04690013
+       F7919020-G299-Exit.                                              04700013
+           Exit.                                                        04710013
+      *################################################################*04720010
+       F7919020-Z900-Abend               Section.                       04730010
+      *                                                                 04740010
+           If  Not R7919999-Retur-Abend                                 04750000
+               Move  +0                  To    R7919999-Modul-Ind       04760000
+           End-If                                                       04770000
+      *                                                                 04780000
+           Add   +1                      To    R7919999-Modul-Ind       04790000
+      *                                                                 04800000
+           If  R7919999-Modul-Ind        Not >                          04810000
+                             ( Length    Of    R7919999-Modul-Tab       04820000
+                             / Length    Of    R7919999-Modul-Element   04830000
+                                                                   (1) )04840000
+               Move  'F7919020'          To    R7919999-Modul-Navn      04850000
+                                                    (R7919999-Modul-Ind)04860000
+               Move  R7919999-Paragraf   To    R7919999-Modul-Para      04870000
+                                                    (R7919999-Modul-Ind)04880000
+           End-If                                                       04890000
+      *                                                                 04900000
+           Set   R7919999-Retur-Abend    To    True                     04910000
+      *                                                                 04920000
+           .                                                            04930000
+       F7919020-Z999-Exit.                                              04940000
+           Exit.                                                        04950000

@@ -1,0 +1,927 @@
+{
+  "system": "TFC10",
+  "generated": "2026-09-29",
+  "root": {
+    "id": "sys",
+    "name": "TFC10",
+    "kind": "system",
+    "children": [
+      {
+        "id": "dom:stg",
+        "name": "STG H/K/L",
+        "kind": "domain",
+        "children": [
+          {
+            "id": "FTFCH100",
+            "name": "FTFCH100",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/FTFCH100.src",
+            "loc": 384,
+            "description": "FTFCH100 is the TFC10 H-module orchestrator for create hovedkontrakt. It receives the STG header and payload, invokes FTFCK100 for control validation, then FTFCL100 for load and persistence logic when K succeeds. It calls F791TRAC for trace and F7918030 for structured errors. Trade-finance operators experience this as the server entry that sequences K then L."
+          },
+          {
+            "id": "FTFCK100",
+            "name": "FTFCK100",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/FTFCK100.src",
+            "loc": 1472,
+            "description": "FTFCK100 is the K-module validator for TFC10. It enforces function, medium, dates via F7919040, system codes via F115ISC0 and F115ISR0, and the initial-check gate via F115L050 using R115L050-Initial-Check. Failures route through R7918030 and R7919999. It is called only from FTFCH100 and is on the critical path before L runs."
+          },
+          {
+            "id": "FTFCL100",
+            "name": "FTFCL100",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/FTFCL100.src",
+            "loc": 1483,
+            "description": "FTFCL100 is the L-module loader for contract create. It reads and writes main contract and amount data through F115IMC0 and F115ICA0, events via F115IEI0, contract numbers via F115L020, charges via F115L090, timestamps via F7919070 and F7919270, and calendar helpers F7919010 and F7919090. It is invoked from FTFCH100 after K returns success."
+          }
+        ]
+      },
+      {
+        "id": "dom:helpers",
+        "name": "In-repo helpers",
+        "kind": "domain",
+        "children": [
+          {
+            "id": "F115L020",
+            "name": "F115L020",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L020.src",
+            "loc": 390,
+            "description": "F115L020 generates contract numbers for the create flow. FTFCL100 calls it with R115L020-Gen-Contract-No. It uses F115ISC0 for system code reads and F7918030 on errors; F115L999 handles abend paths. It is a helper in the L-module contract-number step."
+          },
+          {
+            "id": "F115L050",
+            "name": "F115L050",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L050.src",
+            "loc": 563,
+            "description": "F115L050 performs initial checks before downstream business logic, as described in its header by Rune Mesel. It reads main contract via F115IMC0, contract and part amounts via F115ICA0 and F115IPA0, system code relation via F115ISR0, status via F115ISC0, and system type via F115IST0. FTFCK100 calls it with R115L050-Initial-Check; errors use F7918030 and F115L999 abend."
+          },
+          {
+            "id": "F115L090",
+            "name": "F115L090",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F115L090.src",
+            "loc": 379,
+            "description": "F115L090 deletes or adjusts shadow charges during create. FTFCL100 invokes it with R115L090-Del-Charges. It calls F115IPC0 for part charges and F115ICH0 for main charges, with F7918030 and F115L999 on failure paths."
+          },
+          {
+            "id": "F7919010",
+            "name": "F7919010",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F7919010.src",
+            "loc": 181,
+            "description": "F7919010 adds days to dates (R7919010-Dato-Pluss-Dager). FTFCL100 uses it when computing dates in the create flow alongside F7919090 holiday checks. No outbound CALL targets appear in the in-repo source; it is a leaf helper in the F7919 family."
+          },
+          {
+            "id": "F7919070",
+            "name": "F7919070",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F7919070.src",
+            "loc": 383,
+            "description": "F7919070 builds DB2-style timestamps (R7919070-Timestamp). FTFCL100 calls it during load; it delegates to F7919071 and F7919072 for TMS and COBOL date conversion. Those callees are not present as .src in this repository."
+          },
+          {
+            "id": "F7919090",
+            "name": "F7919090",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F7919090.src",
+            "loc": 1065,
+            "description": "F7919090 evaluates holidays (R7919090-Helligdager). FTFCL100 calls it when adjusting dates with F7919010. The in-repo program has no outbound CALL statements in executable code."
+          },
+          {
+            "id": "F7919270",
+            "name": "F7919270",
+            "kind": "module",
+            "language": "cobol",
+            "file": "src/F7919270.src",
+            "loc": 627,
+            "description": "F7919270 converts timestamps (R7919270-Konv-Timestamp). FTFCL100 calls it after F7919070 in the timestamp path. No further CALL targets appear in the in-repo source."
+          }
+        ]
+      },
+      {
+        "id": "dom:boundary",
+        "name": "External CALL targets",
+        "kind": "domain",
+        "children": [
+          {
+            "id": "F115ICA0",
+            "name": "F115ICA0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ICA0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L050, FTFCL100."
+          },
+          {
+            "id": "F115ICH0",
+            "name": "F115ICH0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ICH0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L090."
+          },
+          {
+            "id": "F115IEI0",
+            "name": "F115IEI0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IEI0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: FTFCL100."
+          },
+          {
+            "id": "F115IMC0",
+            "name": "F115IMC0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IMC0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L050, FTFCL100."
+          },
+          {
+            "id": "F115IPA0",
+            "name": "F115IPA0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IPA0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L050."
+          },
+          {
+            "id": "F115IPC0",
+            "name": "F115IPC0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IPC0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L090."
+          },
+          {
+            "id": "F115ISC0",
+            "name": "F115ISC0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ISC0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L020, F115L050, FTFCK100."
+          },
+          {
+            "id": "F115ISR0",
+            "name": "F115ISR0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115ISR0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L050, FTFCK100, FTFCL100."
+          },
+          {
+            "id": "F115IST0",
+            "name": "F115IST0",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115IST0 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L050."
+          },
+          {
+            "id": "F115L030",
+            "name": "F115L030",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115L030 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: FTFCL100."
+          },
+          {
+            "id": "F115L040",
+            "name": "F115L040",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115L040 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: FTFCL100."
+          },
+          {
+            "id": "F115L999",
+            "name": "F115L999",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F115L999 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L020, F115L050, F115L090."
+          },
+          {
+            "id": "F7918030",
+            "name": "F7918030",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7918030 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F115L020, F115L050, F115L090, FTFCH100, FTFCK100."
+          },
+          {
+            "id": "F7919040",
+            "name": "F7919040",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7919040 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: FTFCK100."
+          },
+          {
+            "id": "F7919071",
+            "name": "F7919071",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7919071 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F7919070."
+          },
+          {
+            "id": "F7919072",
+            "name": "F7919072",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F7919072 is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: F7919070."
+          },
+          {
+            "id": "F791TRAC",
+            "name": "F791TRAC",
+            "kind": "module",
+            "language": "cobol",
+            "loc": 0,
+            "description": "F791TRAC is called from in-repo TFC10 programs but has no .src in legacy/STG/TFC10. Callers: FTFCH100."
+          }
+        ]
+      },
+      {
+        "id": "dom:data",
+        "name": "Data stores",
+        "kind": "domain",
+        "children": [
+          {
+            "id": "ds:TFCE100",
+            "name": "TFCE100 STG payload",
+            "kind": "datastore"
+          },
+          {
+            "id": "ds:DB2-CONTRACT",
+            "name": "Contract tables (via F115I* modules)",
+            "kind": "datastore"
+          },
+          {
+            "id": "ds:SYS-CODES",
+            "name": "System code tables (F115ISC0/F115ISR0)",
+            "kind": "datastore"
+          }
+        ]
+      }
+    ]
+  },
+  "edges": [
+    {
+      "source": "F115L020",
+      "target": "F115ISC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L020",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L020",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IPA0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ISR0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ISC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IST0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115IPC0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115ICH0",
+      "kind": "call"
+    },
+    {
+      "source": "F115L090",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115L999",
+      "kind": "call"
+    },
+    {
+      "source": "F7919010",
+      "target": "F7919010",
+      "kind": "call"
+    },
+    {
+      "source": "F7919070",
+      "target": "F7919071",
+      "kind": "call"
+    },
+    {
+      "source": "F7919070",
+      "target": "F7919072",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCH100",
+      "target": "FTFCK100",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCH100",
+      "target": "FTFCL100",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCH100",
+      "target": "F791TRAC",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCH100",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F7919040",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F115ISC0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F115ISR0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F115L050",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F7918030",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115ISR0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F7919070",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F7919270",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115IMC0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115ICA0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115IEI0",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115L030",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115L020",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F7919010",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F7919090",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115L090",
+      "kind": "call"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115L040",
+      "kind": "call"
+    }
+  ],
+  "entryPoints": [
+    "FTFCH100"
+  ],
+  "deadEnds": [],
+  "observations": [
+    "FTFCK100 \u2192 F115L050 is now an in-repo edge after importing F115L050.src; F115L050 fans out to six F115I* DB boundary programs still missing locally.",
+    "FTFCL100 concentrates the widest CALL surface (F115IMC0, F115ICA0, F115IEI0, helpers F115L020/L090).",
+    "F7919070 depends on F7919071/F7919072 outside the tree \u2014 timestamp parity needs those imports or stubs.",
+    "Decimal-Point Is Comma appears on H/K/L and F115L050 \u2014 numeric formatting must stay in parity tests.",
+    "F115L050 has commented-out update-timestamp checks (Nina, July); Java must preserve legacy quirk if still disabled in source."
+  ],
+  "flows": [
+    {
+      "name": "Create hovedkontrakt (TFC10)",
+      "persona": "Trade finance user creating a main contract",
+      "description": "User submits create contract; STG runs H then K then L with validation and load.",
+      "steps": [
+        {
+          "label": "STG invokes H-module",
+          "nodes": [
+            "FTFCH100"
+          ]
+        },
+        {
+          "label": "H calls K validation",
+          "nodes": [
+            "FTFCH100",
+            "FTFCK100"
+          ]
+        },
+        {
+          "label": "K runs initial check (F115L050)",
+          "nodes": [
+            "FTFCK100",
+            "F115L050"
+          ]
+        },
+        {
+          "label": "K passes control to L on success",
+          "nodes": [
+            "FTFCH100",
+            "FTFCL100"
+          ]
+        },
+        {
+          "label": "L loads contract, amounts, charges, timestamps",
+          "nodes": [
+            "FTFCL100",
+            "F115L020",
+            "F115L090",
+            "F7919070"
+          ]
+        }
+      ]
+    }
+  ],
+  "in_repo_modules": [
+    "F115L020",
+    "F115L050",
+    "F115L090",
+    "F7919010",
+    "F7919070",
+    "F7919090",
+    "F7919270",
+    "FTFCH100",
+    "FTFCK100",
+    "FTFCL100"
+  ],
+  "external_call_targets_missing_source": [
+    "F115ICA0",
+    "F115ICH0",
+    "F115IEI0",
+    "F115IMC0",
+    "F115IPA0",
+    "F115IPC0",
+    "F115ISC0",
+    "F115ISR0",
+    "F115IST0",
+    "F115L030",
+    "F115L040",
+    "F115L999",
+    "F7918030",
+    "F7919040",
+    "F7919071",
+    "F7919072",
+    "F791TRAC"
+  ],
+  "call_edge_count": 61,
+  "edges_detail_sample": [
+    {
+      "source": "F115L020",
+      "target": "F115ISC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 151,
+      "using": "R115ISC0-Sys-Code",
+      "source_path": "src/F115L020.src"
+    },
+    {
+      "source": "F115L020",
+      "target": "F115ISC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 202,
+      "using": "R115ISC0-Sys-Code",
+      "source_path": "src/F115L020.src"
+    },
+    {
+      "source": "F115L020",
+      "target": "F115L999",
+      "kind": "call",
+      "boundary": "external",
+      "line": 305,
+      "using": null,
+      "source_path": "src/F115L020.src"
+    },
+    {
+      "source": "F115L020",
+      "target": "F115L999",
+      "kind": "call",
+      "boundary": "external",
+      "line": 335,
+      "using": null,
+      "source_path": "src/F115L020.src"
+    },
+    {
+      "source": "F115L020",
+      "target": "F7918030",
+      "kind": "call",
+      "boundary": "external",
+      "line": 362,
+      "using": "R7918030-ErrorMessage",
+      "source_path": "src/F115L020.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IMC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 190,
+      "using": "R115IMC0-Main-Contract",
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IMC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 203,
+      "using": "R115IMC0-Main-Contract",
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ICA0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 232,
+      "using": "R115ICA0-Contract-Amount",
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IPA0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 262,
+      "using": "R115IPA0-Part-Amount",
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ISR0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 326,
+      "using": "R115ISR0-Sys-Code-Rel",
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115ISC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 370,
+      "using": "R115ISC0-Sys-Code",
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115IST0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 394,
+      "using": "R115IST0-Sys-Type",
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F7918030",
+      "kind": "call",
+      "boundary": "external",
+      "line": 449,
+      "using": "R7918030-ErrorMessage",
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115L999",
+      "kind": "call",
+      "boundary": "external",
+      "line": 474,
+      "using": null,
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L050",
+      "target": "F115L999",
+      "kind": "call",
+      "boundary": "external",
+      "line": 504,
+      "using": null,
+      "source_path": "src/F115L050.src"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115IPC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 119,
+      "using": "R115IPC0-Part-Charge",
+      "source_path": "src/F115L090.src"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115IPC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 142,
+      "using": "R115IPC0-Part-Charge",
+      "source_path": "src/F115L090.src"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115ICH0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 184,
+      "using": "R115ICH0-Main-Charge",
+      "source_path": "src/F115L090.src"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115ICH0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 207,
+      "using": "R115ICH0-Main-Charge",
+      "source_path": "src/F115L090.src"
+    },
+    {
+      "source": "F115L090",
+      "target": "F7918030",
+      "kind": "call",
+      "boundary": "external",
+      "line": 236,
+      "using": "R7918030-ErrorMessage",
+      "source_path": "src/F115L090.src"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115L999",
+      "kind": "call",
+      "boundary": "external",
+      "line": 261,
+      "using": null,
+      "source_path": "src/F115L090.src"
+    },
+    {
+      "source": "F115L090",
+      "target": "F115L999",
+      "kind": "call",
+      "boundary": "external",
+      "line": 291,
+      "using": null,
+      "source_path": "src/F115L090.src"
+    },
+    {
+      "source": "F7919010",
+      "target": "F7919010",
+      "kind": "call",
+      "boundary": "internal",
+      "line": 28,
+      "using": "R7919010-Dato-Pluss-Dager00280015",
+      "source_path": "src/F7919010.src"
+    },
+    {
+      "source": "F7919070",
+      "target": "F7919071",
+      "kind": "call",
+      "boundary": "external",
+      "line": 181,
+      "using": "W-DB2-TMS",
+      "source_path": "src/F7919070.src"
+    },
+    {
+      "source": "F7919070",
+      "target": "F7919072",
+      "kind": "call",
+      "boundary": "external",
+      "line": 201,
+      "using": "W-COB-Date",
+      "source_path": "src/F7919070.src"
+    },
+    {
+      "source": "FTFCH100",
+      "target": "FTFCK100",
+      "kind": "call",
+      "boundary": "internal",
+      "line": 139,
+      "using": "L-STG-Header",
+      "source_path": "src/FTFCH100.src"
+    },
+    {
+      "source": "FTFCH100",
+      "target": "FTFCL100",
+      "kind": "call",
+      "boundary": "internal",
+      "line": 172,
+      "using": "L-STG-Header",
+      "source_path": "src/FTFCH100.src"
+    },
+    {
+      "source": "FTFCH100",
+      "target": "F791TRAC",
+      "kind": "call",
+      "boundary": "external",
+      "line": 319,
+      "using": null,
+      "source_path": "src/FTFCH100.src"
+    },
+    {
+      "source": "FTFCH100",
+      "target": "F7918030",
+      "kind": "call",
+      "boundary": "external",
+      "line": 346,
+      "using": "R7918030-ErrorMessage",
+      "source_path": "src/FTFCH100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F7919040",
+      "kind": "call",
+      "boundary": "external",
+      "line": 416,
+      "using": "R7919040-Validate-Date",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F7919040",
+      "kind": "call",
+      "boundary": "external",
+      "line": 451,
+      "using": "R7919040-Validate-Date",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F7919040",
+      "kind": "call",
+      "boundary": "external",
+      "line": 486,
+      "using": "R7919040-Validate-Date",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F7919040",
+      "kind": "call",
+      "boundary": "external",
+      "line": 521,
+      "using": "R7919040-Validate-Date",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F115ISC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 664,
+      "using": "R115ISC0-Sys-Code",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F115ISR0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 1084,
+      "using": "R115ISR0-Sys-Code-Rel",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F115L050",
+      "kind": "call",
+      "boundary": "internal",
+      "line": 1286,
+      "using": "R115L050-Initial-Check",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F115ISC0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 1322,
+      "using": "R115ISC0-Sys-Code",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCK100",
+      "target": "F7918030",
+      "kind": "call",
+      "boundary": "external",
+      "line": 1368,
+      "using": "R7918030-ErrorMessage",
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F115ISR0",
+      "kind": "call",
+      "boundary": "external",
+      "line": 188,
+      "using": "R115ISR0-Sys-Code-Rel",
+      "source_path": "src/FTFCL100.src"
+    },
+    {
+      "source": "FTFCL100",
+      "target": "F7919070",
+      "kind": "call",
+      "boundary": "internal",
+      "line": 222,
+      "using": "R7919070-Timestamp",
+      "source_path": "src/FTFCL100.src"
+    }
+  ]
+}

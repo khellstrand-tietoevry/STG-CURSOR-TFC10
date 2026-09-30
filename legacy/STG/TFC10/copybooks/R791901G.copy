@@ -1,0 +1,35 @@
+      *################################################################*00010000
+      *                                                                 00020000
+      * Copy-område R791901G.                                           00030001
+      * Generell submodul for beregning av dato +/- dager.              00040000
+      *                                                                 00050000
+      * Her ligger gamle versjoner av copy-området, på grunn av         00060000
+      * versjonshåndtering.                                             00070000
+      * Vi skal konvertere til og fra ny layout.                        00080000
+      *                                                                 00090000
+      * Ved innleggelse av "gammel" versjon:                            00100000
+      *  - Lag nytt 01-nivå                                             00110000
+      *  - Kopier inn copy-området før dette endres                     00120000
+      *                                                                 00130000
+      *################################################################*00140000
+      * DATO ! SI! ENDRINGENS ART                                ! 3A ! 00150000
+      *---------------------------------------------------------------- 00160000
+      *130195!HLR! Nytt copy-område                              !JR68! 00170000
+      *################################################################*00180000
+       01  F7919010-Versjon-19941231.                                   00190001
+      *                                                                 00200000
+           05  R7919010-Versjons-Nr      PIC  X(08).                    00210000
+             88  R7919010-Versjon                   Value '19941231'.   00220001
+      *                                                                 00230000
+           05  R7919010-Kvalifisering.                                  00240000
+               10  R7919010-In-Dato      Pic S9(09)              Comp-3.00250000
+               10  R7919010-In-Dager     Pic S9(03)              Comp-3.00260000
+               10  R7919010-In-Dgr-Pr-Aar                               00270000
+                                         Pic S9(03)              Comp-3.00280000
+                 88  R7919010-In-360-Dgr-Pr-Aar     Value +360.         00290000
+                 88  R7919010-In-365-Dgr-Pr-Aar     Value +365.         00300000
+                 88  R7919010-In-Kalender-Aar       Value +366.         00310000
+      *                                                                 00320000
+           05  R7919010-Resultat.                                       00330000
+               10  R7919010-Ut-Dato      Pic S9(09)              Comp-3.00340000
+      *                                                                 00350000

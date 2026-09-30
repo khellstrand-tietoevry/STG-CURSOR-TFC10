@@ -1,0 +1,21 @@
+---
+description: TFC10 code-modernization orchestration and intent
+globs:
+  - analysis/TFC10/**
+  - legacy/**
+  - modernized/**
+alwaysApply: true
+---
+
+# TFC10 modernization (Cursor + code-modernization plugin)
+
+- **System label:** `TFC10`. Artifacts: `analysis/TFC10/`. Legacy: `legacy/STG/TFC10/` (also `legacy/TFC10/` symlink).
+- **Intent:** Read `analysis/TFC10/INTENT.md` before plugin steps. Track: **transform** to **Java 21 / Spring Boot**. Parity: **exact legacy behavior including quirks**.
+- **Orchestration:** At most **5** Task subagents in parallel unless the user explicitly approves more.
+- **Legacy COBOL is frozen:** Do **not** edit `legacy/**`. Write Java under `modernized/` and docs under `analysis/TFC10/`.
+- **Repository boundary:** Use only this repo; import missing COBOL into `legacy/` instead of reading external checkouts.
+- **Journal:** Append substantive steps to repo-root `RUN_SEQUENCE.md`.
+
+When the user starts a modernization step, honor:
+
+> Cap parallel Task subagents at 5 for this project.

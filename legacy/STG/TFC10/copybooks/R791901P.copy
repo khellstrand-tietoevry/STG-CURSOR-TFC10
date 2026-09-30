@@ -1,0 +1,550 @@
+      *################################################################*00010000
+      *                                                                 00020000
+      * Copy-område R791901P.                                           00030000
+      * Generell submodul for beregning av dato +/- dager.              00040000
+      *                                                                 00050000
+      * Logikk til Procedure Division.                                  00060004
+      *                                                                 00070000
+      * Kan benyttes sammen med R791901W dersom man ønsker å unngå kall.00080000
+      *                                                                 00090000
+      * Krever i tilfelle også copy-områdene                            00100002
+      *   - R791906W og R791906P                                        00110006
+      *                                                                 00120002
+      *################################################################*00130000
+      * DATO ! SI! ENDRINGENS ART                                ! 3A ! 00140000
+      *---------------------------------------------------------------- 00150000
+      *121004!MRE! Endret feilmeld                               !    ! 00160024
+      *220695!HLR! Skrevet om, tuning.                           !JR68! 00161024
+      *130195!HLR! Nytt copy-område                              !JR68! 00170019
+      *################################################################*00180000
+       F7919010-Dato-Pluss-Dager         Section.                       00190019
+      *                                                                 00200019
+           Perform F7919010-B000-Initialize                             00210019
+           Perform F7919010-C000-Beregning                              00220019
+      *                                                                 00230019
+           .                                                            00240019
+       F7919010-Exit.                                                   00250019
+           Exit.                                                        00260019
+      *################################################################*00270019
+       F7919010-B000-Initialize          Section.                       00280019
+      *                                                                 00290019
+           Set   R7919999-Retur-Ok       To    True                     00300019
+           Initialize                          R7919010-Resultat        00310019
+                                         In    R7919010-Dato-Pluss-Dager00320019
+      *                                                                 00330019
+           .                                                            00340019
+       F7919010-B099-Exit.                                              00350019
+           Exit.                                                        00360019
+      *################################################################*00370019
+       F7919010-C000-Beregning           Section.                       00380019
+      *                                                                 00390019
+           Move  R7919010-In-Dato        In    R7919010-Dato-Pluss-Dager00400019
+                                         To    W9010-C100-Dato          00410019
+           Perform F7919010-C100-Valider-Dato                           00420019
+           If  R7919999-Retur-Abend                                     00430019
+               Move  'C001'              To    R7919999-Paragraf        00440019
+               Perform F7919010-Z900-Abend                              00450019
+               Go To F7919010-C099-Exit                                 00460019
+           End-If                                                       00470019
+      *                                                                 00480019
+      * Starter balletten                                               00490019
+      *                                                                 00500019
+           Move  R7919010-In-Dato        In    R7919010-Dato-Pluss-Dager00510019
+                                         To    W9010-Split-Dato         00520019
+      *                                                                 00530019
+           If  R7919010-In-Adder-Aar     In    R7919010-Dato-Pluss-Dager00540019
+                                         Not = +0                       00550019
+           or  R7919010-In-Adder-Mnd     In    R7919010-Dato-Pluss-Dager00560019
+                                         Not = +0                       00570019
+               Perform F7919010-D000-Adder-Aar-Mnd                      00580019
+               If  R7919999-Retur-Abend                                 00590019
+                   Move  'C005'          To    R7919999-Paragraf        00600019
+                   Perform F7919010-Z900-Abend                          00610019
+                   Go To F7919010-C099-Exit                             00620019
+               End-If                                                   00630019
+           End-If                                                       00640019
+      *                                                                 00650019
+           If  R7919010-In-Adder-Dag     In    R7919010-Dato-Pluss-Dager00660019
+                                         Not = +0                       00670019
+               If  R7919010-In-360-Dgr-Pr-Aar                           00680019
+                                         In    R7919010-Dato-Pluss-Dager00690019
+                   Perform F7919010-F000-Adder-Dag-360                  00700019
+               Else                                                     00710019
+                   Perform F7919010-E000-Adder-Dag                      00720019
+               End-If                                                   00730019
+               If  R7919999-Retur-Abend                                 00740019
+                   Move  'C003'          To    R7919999-Paragraf        00750019
+                   Perform F7919010-Z900-Abend                          00760019
+                   Go To F7919010-C099-Exit                             00770019
+               End-If                                                   00780019
+           End-If                                                       00790019
+      *                                                                 00800019
+      * Nå skulle datoen være klar.                                     00810019
+      *                                                                 00820019
+           Move  W9010-Split-Dato        To    R7919010-Ut-Dato         00830019
+                                         In    R7919010-Dato-Pluss-Dager00840019
+      *                                                                 00850019
+           .                                                            00860019
+       F7919010-C099-Exit.                                              00870019
+           Exit.                                                        00880019
+      *################################################################*00890019
+       F7919010-C100-Valider-Dato        Section.                       00900019
+      *                                                                 00910019
+      * Sjekker skuddår:                                                00920019
+      *                                                                 00930019
+           Move  W9010-C100-Dato         To    W9010-C300-Dato          00940019
+           Perform F7919010-C300-Dgr-I-Mnd                              00950019
+           If  R7919999-Retur-Abend                                     00960019
+               Move  'C101'              To    R7919999-Paragraf        00970019
+               Perform F7919010-Z900-Abend                              00980019
+               Go To F7919010-C199-Exit                                 00990019
+           End-If                                                       01000019
+      *                                                                 01010019
+      * Validerer datoen:                                               01020019
+      *                                                                 01030019
+           If  W9010-C100-Aar            <     1                        01040019
+           or  W9010-C100-Mnd            <     1                        01050019
+           or  W9010-C100-Mnd            >     12                       01060019
+           or  W9010-C100-Dag            <     1                        01070019
+           or  W9010-C100-Dag            >     W9010-C300-Dgr-Reell     01080019
+               Move  Space               To    R7919999-Melding         01090019
+               String 'Ugyldig dato - '        Delimited by size        01100019
+                      W9010-C100-Aar           Delimited by size        01110021
+                      '.'                      Delimited by size        01120019
+                      W9010-C100-Mnd           Delimited by size        01130021
+                      '.'                      Delimited by size        01140019
+                      W9010-C100-Dag           Delimited by size        01150021
+                      '.'                      Delimited by size        01160019
+                                         Into  R7919999-Melding         01170019
+               End-String                                               01180019
+               Move  'C102'              To    R7919999-Paragraf        01190019
+               Perform F7919010-Z900-Abend                              01200019
+               Go To F7919010-C199-Exit                                 01210019
+           End-If                                                       01220019
+      *                                                                 01230019
+      * Vi avgjør om vi starter med siste dag i måneden:                01240019
+      *                                                                 01250019
+           Evaluate True                                                01260019
+             When W9010-C100-Dag         =     W9010-C300-Dgr-Reell     01270019
+               Set   W9010-Siste-Dag-I-Mnd                              01280019
+                                         To    True                     01290019
+      *                                                                 01300019
+             When R7919010-In-360-Dgr-Pr-Aar                            01310019
+                                         In    R7919010-Dato-Pluss-Dager01320019
+             and  W9010-C100-Dag         =     30                       01330019
+               Set   W9010-Siste-Dag-I-Mnd                              01340019
+                                         To    True                     01350019
+      *                                                                 01360019
+             When Other                                                 01370019
+               Set   W9010-Ikke-Siste-Dag-I-Mnd                         01380019
+                                         To    True                     01390019
+      *                                                                 01400019
+           End-Evaluate                                                 01410019
+      *                                                                 01420019
+           .                                                            01430019
+       F7919010-C199-Exit.                                              01440019
+           Exit.                                                        01450019
+      *################################################################*01460019
+       F7919010-C200-Skudd-Aar           Section.                       01470019
+      *                                                                 01480019
+           Initialize                          R7919060-Skudd-Aar       01490019
+           Set   R7919060-Versjon        To    True                     01500019
+           Move  W9010-C200-Dato         To    R7919060-In-Dato         01510023
+           Perform F7919060-Skudd-Aar                                   01520019
+           If  R7919999-Retur-Abend                                     01530019
+               Move  'C201'              To    R7919999-Paragraf        01540019
+               Perform F7919010-Z900-Abend                              01550019
+               Go To F7919010-C299-Exit                                 01560019
+           End-If                                                       01570019
+      *                                                                 01580019
+           If  R7919060-Ut-Skudd-Aar                                    01590019
+               Set   W9010-Skudd-Aar     To    True                     01600019
+           Else                                                         01610019
+               Set   W9010-Ikke-Skudd-Aar                               01620019
+                                         To    True                     01630019
+           End-If                                                       01640019
+      *                                                                 01650019
+           .                                                            01660019
+       F7919010-C299-Exit.                                              01670019
+           Exit.                                                        01680019
+      *################################################################*01690019
+       F7919010-C300-Dgr-I-Mnd           Section.                       01700019
+      *                                                                 01710019
+           If  W9010-C300-Mnd            =     02                       01720019
+               Move  W9010-C300-Dato     To    W9010-C200-Dato          01730019
+               Perform F7919010-C200-Skudd-Aar                          01740019
+               If  R7919999-Retur-Abend                                 01750019
+                   Move  'C301'          To    R7919999-Paragraf        01760019
+                   Perform F7919010-Z900-Abend                          01770019
+                   Go To F7919010-C399-Exit                             01780019
+               End-If                                                   01790019
+           End-If                                                       01800019
+      *                                                                 01810019
+           If  W9010-C300-Mnd            <     01                       01820021
+           or  W9010-C300-Mnd            >     12                       01830021
+               Move  00                  To    W9010-C300-Dgr-Reell     01840021
+               Move  00                  To    W9010-C300-Dgr-Just      01850021
+           Else                                                         01860021
+               Move  W9010-Dgr-I-Mnd (W9010-C300-Mnd)                   01870021
+                                         To    W9010-C300-Dgr-Reell     01880021
+               Move  W9010-Dgr-I-Mnd (W9010-C300-Mnd)                   01890021
+                                         To    W9010-C300-Dgr-Just      01900021
+           End-If                                                       01910021
+      *                                                                 01920021
+           Evaluate True                                                01930019
+             When R7919010-In-360-Dgr-Pr-Aar                            01940019
+                                         In    R7919010-Dato-Pluss-Dager01950019
+               Move  30                  To    W9010-C300-Dgr-Just      01960019
+      *                                                                 01970019
+             When R7919010-In-365-Dgr-Pr-Aar                            01980019
+                                         In    R7919010-Dato-Pluss-Dager01990019
+               If  W9010-C300-Dgr-Just   =     29                       02000019
+                   Move  28              To    W9010-C300-Dgr-Just      02010019
+               End-If                                                   02020019
+      *                                                                 02030019
+           End-Evaluate                                                 02040019
+      *                                                                 02050019
+           .                                                            02060019
+       F7919010-C399-Exit.                                              02070019
+           Exit.                                                        02080019
+      *################################################################*02090019
+       F7919010-D000-Adder-Aar-Mnd       Section.                       02100019
+      *                                                                 02110019
+      * Ved justering av år og måneder betyr det ingenting hva          02120019
+      * som er angitt av antall dager i året.                           02130019
+      *                                                                 02140019
+      * Da kan vi begynne med beregningene:                             02150019
+      *                                                                 02160019
+           Move  W9010-SD-Aar            To    W9010-Aar                02170019
+           Add   R7919010-In-Adder-Aar   In    R7919010-Dato-Pluss-Dager02180019
+                                         To    W9010-Aar                02190019
+      *                                                                 02200019
+           Move  W9010-SD-Mnd            To    W9010-Mnd                02210019
+           Add   R7919010-In-Adder-Mnd   In    R7919010-Dato-Pluss-Dager02220019
+                                         To    W9010-Mnd                02230019
+      *                                                                 02240019
+      * Vi justerer år og måneder:                                      02250019
+      *                                                                 02260019
+           Perform Until W9010-Mnd       >     +0                       02270019
+               Add      +12              To    W9010-Mnd                02280019
+               Subtract  +1              From  W9010-Aar                02290019
+           End-Perform                                                  02300019
+      *                                                                 02310019
+           Perform Until W9010-Mnd       Not > +12                      02320019
+               Subtract +12              From  W9010-Mnd                02330019
+               Add       +1              To    W9010-Aar                02340019
+           End-Perform                                                  02350019
+      *                                                                 02360019
+           If  W9010-Aar                 <     +0001                    02370019
+           Or  W9010-Aar                 >     +9999                    02380019
+               Move  'Beregning av årstall feiler - kontakt EDB.'       02390024
+                                         To    R7919999-Melding         02400019
+               Move  'D001'              To    R7919999-Paragraf        02410019
+               Perform F7919010-Z900-Abend                              02420019
+               Go To F7919010-D099-Exit                                 02430019
+           End-If                                                       02440019
+      *                                                                 02450019
+           Move  W9010-Aar               To    W9010-SD-Aar             02460019
+           Move  W9010-Mnd               To    W9010-SD-Mnd             02470019
+      *                                                                 02480019
+      * Dersom vi er på siste dag i måneden før endring, skal vi også   02490019
+      * være det etter endring.                                         02500019
+      * Vi må også kontrollere at vi ikke har endt opp med              02510019
+      * en "for stor dag" i henhold til ny måned.                       02520019
+      *                                                                 02530022
+      * Denne sjekken gjør vi selv om man også skal addere dager.       02540022
+      * 1997.03.06 HLR.                                                 02550022
+      *                                                                 02560019
+      * Sjekker gammel dato:                                            02570019
+      *                                                                 02580019
+           If  W9010-Siste-Dag-I-Mnd                                    02590019
+      *    and R7919010-In-Adder-Dag     In    R7919010-Dato-Pluss-Dager02600022
+      *                                  =     +0                       02610022
+               Move  31                  To    W9010-SD-Dag             02620019
+           End-If                                                       02630019
+      *                                                                 02640019
+      * Sjekker så om dagen er for stor i henhold til ny dato:          02650019
+      *                                                                 02660019
+           If  W9010-SD-Dag              >     28                       02670019
+               Move  W9010-Split-Dato    To    W9010-C300-Dato          02680019
+               Perform F7919010-C300-Dgr-I-Mnd                          02690019
+               If  R7919999-Retur-Abend                                 02700019
+                   Move  'D002'          To    R7919999-Paragraf        02710019
+                   Perform F7919010-Z900-Abend                          02720019
+                   Go To F7919010-D099-Exit                             02730019
+               End-If                                                   02740019
+               If  W9010-SD-Dag          >     W9010-C300-Dgr-Reell     02750019
+                   Move  W9010-C300-Dgr-Reell                           02760019
+                                         To    W9010-SD-Dag             02770019
+               End-If                                                   02780019
+           End-If                                                       02790019
+      *                                                                 02800019
+           .                                                            02810019
+       F7919010-D099-Exit.                                              02820019
+           Exit.                                                        02830019
+      *################################################################*02840019
+       F7919010-E000-Adder-Dag           Section.                       02850019
+      *                                                                 02860019
+      * Dersom man har bedt om 365-dagers år, eksisterer ikke 29/2.     02870019
+      *                                                                 02880019
+           If  R7919010-In-365-Dgr-Pr-Aar                               02890019
+                                         In    R7919010-Dato-Pluss-Dager02900019
+           and W9010-SD-Mnd              =     02                       02910019
+           and W9010-SD-Dag              >     28                       02920019
+               Move  28                  To    W9010-SD-Dag             02930019
+           End-If                                                       02940019
+      *                                                                 02950019
+      * Da kan vi begynne med beregningene:                             02960019
+      *                                                                 02970019
+           Move  W9010-SD-Dag            To    W9010-Dag                02980019
+           Add   R7919010-In-Adder-Dag   In    R7919010-Dato-Pluss-Dager02990019
+                                         To    W9010-Dag                03000019
+      *                                                                 03010019
+      * Vi justerer dagene:                                             03020019
+      *                                                                 03030019
+           Evaluate True                                                03040019
+             When W9010-Dag              <     +1                       03050019
+               Perform F7919010-E100-Dager-Minus                        03060019
+               If  R7919999-Retur-Abend                                 03070019
+                   Move  'E001'          To    R7919999-Paragraf        03080019
+                   Perform F7919010-Z900-Abend                          03090019
+                   Go To F7919010-E099-Exit                             03100019
+               End-If                                                   03110019
+      *                                                                 03120019
+             When W9010-Dag              >     +28                      03130019
+             and  R7919010-In-Adder-Dag  In    R7919010-Dato-Pluss-Dager03140019
+                                         >     +0                       03150019
+               Perform F7919010-E200-Dager-Pluss                        03160019
+               If  R7919999-Retur-Abend                                 03170019
+                   Move  'E002'          To    R7919999-Paragraf        03180019
+                   Perform F7919010-Z900-Abend                          03190019
+                   Go To F7919010-E099-Exit                             03200019
+               End-If                                                   03210019
+      *                                                                 03220019
+           End-Evaluate                                                 03230019
+      *                                                                 03240019
+           Move  W9010-Dag               To    W9010-SD-Dag             03250019
+      *                                                                 03260019
+           .                                                            03270019
+       F7919010-E099-Exit.                                              03280019
+           Exit.                                                        03290019
+      *################################################################*03300019
+       F7919010-E100-Dager-Minus         Section.                       03310019
+      *                                                                 03320019
+           Perform Until W9010-Dag       >     +0                       03330019
+      *                                                                 03340019
+               Subtract 01               From  W9010-SD-Mnd             03350019
+      *                                                                 03360019
+               If  W9010-SD-Mnd          <     01                       03370019
+                   If  W9010-SD-Aar      Not > 0001                     03380019
+                     Move  'Beregning av årstall feiler - kontakt EDB.' 03390024
+                                         To    R7919999-Melding         03400019
+                       Move  'E101'      To    R7919999-Paragraf        03410019
+                       Perform F7919010-Z900-Abend                      03420019
+                       Go To F7919010-E199-Exit                         03430019
+                   End-If                                               03440019
+                   Add   12              To    W9010-SD-Mnd             03450019
+                   Subtract  01          From  W9010-SD-Aar             03460019
+               End-If                                                   03470019
+      *                                                                 03480019
+               Move  W9010-Split-Dato    To    W9010-C300-Dato          03490019
+               Perform F7919010-C300-Dgr-I-Mnd                          03500019
+               If  R7919999-Retur-Abend                                 03510019
+                   Move  'E102'          To    R7919999-Paragraf        03520019
+                   Perform F7919010-Z900-Abend                          03530019
+                   Go To F7919010-E199-Exit                             03540019
+               End-If                                                   03550019
+               Add   W9010-C300-Dgr-Just                                03560019
+                                         To    W9010-Dag                03570019
+      *                                                                 03580019
+           End-Perform                                                  03590019
+      *                                                                 03600019
+           .                                                            03610019
+       F7919010-E199-Exit.                                              03620019
+           Exit.                                                        03630019
+      *################################################################*03640019
+       F7919010-E200-Dager-Pluss         Section.                       03650019
+      *                                                                 03660019
+           Move  W9010-Split-Dato        To    W9010-C300-Dato          03670019
+           Perform F7919010-C300-Dgr-I-Mnd                              03680019
+           If  R7919999-Retur-Abend                                     03690019
+               Move  'E201'              To    R7919999-Paragraf        03700019
+               Perform F7919010-Z900-Abend                              03710019
+               Go To F7919010-E299-Exit                                 03720019
+           End-If                                                       03730019
+      *                                                                 03740019
+           Perform Until W9010-Dag       Not > W9010-C300-Dgr-Just      03750019
+      *                                                                 03760019
+               Subtract W9010-C300-Dgr-Just                             03770019
+                                         From  W9010-Dag                03780019
+               Add   01                  To    W9010-SD-Mnd             03790019
+      *                                                                 03800019
+               If  W9010-SD-Mnd          >     12                       03810019
+                   If  W9010-SD-Aar      Not < 9999                     03820019
+                     Move  'Beregning av årstall feiler - kontakt EDB.' 03830024
+                                         To    R7919999-Melding         03840019
+                       Move  'E202'      To    R7919999-Paragraf        03850019
+                       Perform F7919010-Z900-Abend                      03860019
+                       Go To F7919010-E299-Exit                         03870019
+                   End-If                                               03880019
+                   Subtract 12           From  W9010-SD-Mnd             03890019
+                   Add   01              To    W9010-SD-Aar             03900019
+               End-If                                                   03910019
+      *                                                                 03920019
+               Move  W9010-Split-Dato    To    W9010-C300-Dato          03930019
+               Perform F7919010-C300-Dgr-I-Mnd                          03940019
+               If  R7919999-Retur-Abend                                 03950019
+                   Move  'E203'          To    R7919999-Paragraf        03960019
+                   Perform F7919010-Z900-Abend                          03970019
+                   Go To F7919010-E299-Exit                             03980019
+               End-If                                                   03990019
+      *                                                                 04000019
+           End-Perform                                                  04010019
+      *                                                                 04020019
+           .                                                            04030019
+       F7919010-E299-Exit.                                              04040019
+           Exit.                                                        04050019
+      *################################################################*04060019
+       F7919010-F000-Adder-Dag-360       Section.                       04070019
+      *                                                                 04080019
+      * Dersom vi har siste dag i måneden, skal vi bruke 30.            04090019
+      *                                                                 04100019
+           If  W9010-Siste-Dag-I-Mnd                                    04110019
+      *                                                                 04120019
+      * Ved 360-dagers år gjelder følgende dersom in-dato er i februar: 04130019
+      * Dersom vi korrigerer februar måned, kan vi risikere at man      04140019
+      * ved å trekke fra 1 eller 2 dager ikke greier å få en mindre     04150019
+      * dato i retur. Derfor endres i tilfelle dagen ikke til 30        04160019
+      * men til 28 eller 29.                                            04170019
+      *                                                                 04180019
+               If  R7919010-In-Adder-Dag In    R7919010-Dato-Pluss-Dager04190019
+                                         <     +0                       04200019
+               and W9010-SD-Mnd          =     02                       04210019
+               and ( 30 + R7919010-In-Adder-Dag                         04220019
+                                         In R7919010-Dato-Pluss-Dager ) 04230019
+                                         Not < W9010-SD-Dag             04240019
+                   Compute  W9010-SD-Dag                                04250019
+                       =    W9010-SD-Dag                                04260019
+                       -    R7919010-In-Adder-Dag                       04270019
+                                         In    R7919010-Dato-Pluss-Dager04280019
+                       -    1                                           04290019
+      *                                                                 04300019
+      * Ellers endres alle måneds-slutter til 30.                       04310019
+      *                                                                 04320019
+               Else                                                     04330019
+                   Move  30              To    W9010-SD-Dag             04340019
+      *                                                                 04350019
+               End-If                                                   04360019
+      *                                                                 04370019
+           End-If                                                       04380019
+      *                                                                 04390019
+      * Da kan vi begynne med beregningene:                             04400019
+      *                                                                 04410019
+           Move  W9010-SD-Dag            To    W9010-Dag                04420019
+           Add   R7919010-In-Adder-Dag   In    R7919010-Dato-Pluss-Dager04430019
+                                         To    W9010-Dag                04440019
+      *                                                                 04450019
+      * Vi justerer dagene.                                             04460019
+      * Først opp over +0:                                              04470019
+      *                                                                 04480019
+           Perform Until W9010-Dag       >     +0                       04490019
+      *                                                                 04500019
+               Subtract 01               From  W9010-SD-Mnd             04510019
+      *                                                                 04520019
+               If  W9010-SD-Mnd          <     01                       04530019
+                   If  W9010-SD-Aar      Not > 0001                     04540019
+                      Move 'Beregning av årstall feiler - kontakt EDB.' 04550024
+                                         To    R7919999-Melding         04560019
+                       Move  'F001'      To    R7919999-Paragraf        04570019
+                       Perform F7919010-Z900-Abend                      04580019
+                       Go To F7919010-F099-Exit                         04590019
+                   End-If                                               04600019
+                   Add   12              To    W9010-SD-Mnd             04610019
+                   Subtract  01          From  W9010-SD-Aar             04620019
+               End-If                                                   04630019
+      *                                                                 04640019
+               Add   30                  To    W9010-Dag                04650019
+      *                                                                 04660019
+           End-Perform                                                  04670019
+      *                                                                 04680019
+      * Dernest ned til +30:                                            04690019
+      *                                                                 04700019
+           Perform Until W9010-Dag       Not > +30                      04710019
+      *                                                                 04720019
+               Subtract +30              From  W9010-Dag                04730019
+               Add   01                  To    W9010-SD-Mnd             04740019
+      *                                                                 04750019
+               If  W9010-SD-Mnd          >     12                       04760019
+                   If  W9010-SD-Aar      Not < 9999                     04770019
+                      Move 'Beregning av årstall feiler - kontakt EDB.' 04780024
+                                         To    R7919999-Melding         04790019
+                       Move  'F002'      To    R7919999-Paragraf        04800019
+                       Perform F7919010-Z900-Abend                      04810019
+                       Go To F7919010-F099-Exit                         04820019
+                   End-If                                               04830019
+                   Subtract 12           From  W9010-SD-Mnd             04840019
+                   Add   01              To    W9010-SD-Aar             04850019
+               End-If                                                   04860019
+      *                                                                 04870019
+           End-Perform                                                  04880019
+      *                                                                 04890019
+           Move  W9010-Dag               To    W9010-SD-Dag             04900019
+      *                                                                 04910019
+      * Vi endrer evt. siste dag i måneden tilbake til reell dag.       04920019
+      *                                                                 04930019
+           If  W9010-SD-Dag              >     28                       04940019
+      *                                                                 04950019
+               Move  W9010-Split-Dato    To    W9010-C300-Dato          04960019
+               Perform F7919010-C300-Dgr-I-Mnd                          04970019
+               If  R7919999-Retur-Abend                                 04980019
+                   Move  'F003'          To    R7919999-Paragraf        04990019
+                   Perform F7919010-Z900-Abend                          05000019
+                   Go To F7919010-F099-Exit                             05010019
+               End-If                                                   05020019
+      *                                                                 05030019
+               Evaluate True                                            05040019
+      *                                                                 05050019
+      * Ved 360-dagers år kan vi ha endt opp med en ugyldig             05060019
+      * februar-dag, noe vi forsøker å rette opp med følgende:          05070019
+      *                                                                 05080019
+                 When W9010-SD-Dag       >     W9010-C300-Dgr-Reell     05090019
+                   Compute  W9010-SD-Dag                                05100019
+                       =    W9010-SD-Dag                                05110019
+                       +    W9010-C300-Dgr-Reell                        05120019
+                       -    W9010-C300-Dgr-Just                         05130019
+      *                                                                 05140019
+                 When W9010-SD-Dag       =     W9010-C300-Dgr-Just      05150019
+                   Move  W9010-C300-Dgr-Reell                           05160019
+                                         To    W9010-SD-Dag             05170019
+      *                                                                 05180019
+               End-Evaluate                                             05190019
+      *                                                                 05200019
+           End-If                                                       05210019
+      *                                                                 05220019
+           .                                                            05230019
+       F7919010-F099-Exit.                                              05240019
+           Exit.                                                        05250019
+      *################################################################*05260019
+       F7919010-Z900-Abend               Section.                       05270019
+      *                                                                 05280019
+           If  Not R7919999-Retur-Abend                                 05290019
+               Move  +0                  To    R7919999-Modul-Ind       05300019
+           End-If                                                       05310019
+      *                                                                 05320019
+           Add   +1                      To    R7919999-Modul-Ind       05330019
+      *                                                                 05340019
+           If  R7919999-Modul-Ind        Not >                          05350019
+                             ( Length    Of    R7919999-Modul-Tab       05360019
+                             / Length    Of    R7919999-Modul-Element   05370019
+                                                                   (1) )05380019
+               Move  'F7919010'          To    R7919999-Modul-Navn      05390019
+                                                    (R7919999-Modul-Ind)05400019
+               Move  R7919999-Paragraf   To    R7919999-Modul-Para      05410019
+                                                    (R7919999-Modul-Ind)05420019
+           End-If                                                       05430019
+      *                                                                 05440019
+           Set   R7919999-Retur-Abend    To    True                     05450019
+      *                                                                 05460019
+           .                                                            05470019
+       F7919010-Z999-Exit.                                              05480019
+           Exit.                                                        05490019

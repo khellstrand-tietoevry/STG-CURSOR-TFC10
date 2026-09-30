@@ -1,0 +1,2657 @@
+{
+  "call_edges": [
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 151,
+      "source_path": "src/F115L020.src",
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "using": "R115ISC0-Sys-Code 01330002"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 202,
+      "source_path": "src/F115L020.src",
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "using": "R115ISC0-Sys-Code 01840002"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 305,
+      "source_path": "src/F115L020.src",
+      "target": "F115L999",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 335,
+      "source_path": "src/F115L020.src",
+      "target": "F115L999",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 362,
+      "source_path": "src/F115L020.src",
+      "target": "F7918030",
+      "target_kind": "literal",
+      "using": "R7918030-ErrorMessage 03260002"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 119,
+      "source_path": "src/F115L090.src",
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "using": "R115IPC0-Part-Charge 01190000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 142,
+      "source_path": "src/F115L090.src",
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "using": "R115IPC0-Part-Charge 01420000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 184,
+      "source_path": "src/F115L090.src",
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "using": "R115ICH0-Main-Charge 01840000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 207,
+      "source_path": "src/F115L090.src",
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "using": "R115ICH0-Main-Charge 02070000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 236,
+      "source_path": "src/F115L090.src",
+      "target": "F7918030",
+      "target_kind": "literal",
+      "using": "R7918030-ErrorMessage 02360000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 261,
+      "source_path": "src/F115L090.src",
+      "target": "F115L999",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 291,
+      "source_path": "src/F115L090.src",
+      "target": "F115L999",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "F7919070",
+      "line": 181,
+      "source_path": "src/F7919070.src",
+      "target": "F7919071",
+      "target_kind": "literal",
+      "using": "W-DB2-TMS 01780014"
+    },
+    {
+      "boundary": "external",
+      "caller": "F7919070",
+      "line": 201,
+      "source_path": "src/F7919070.src",
+      "target": "F7919072",
+      "target_kind": "literal",
+      "using": "W-COB-Date 01980014"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCH100",
+      "line": 139,
+      "source_path": "src/FTFCH100.src",
+      "target": "FTFCK100",
+      "target_kind": "literal",
+      "using": "L-STG-Header"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCH100",
+      "line": 172,
+      "source_path": "src/FTFCH100.src",
+      "target": "FTFCL100",
+      "target_kind": "literal",
+      "using": "L-STG-Header"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCH100",
+      "line": 319,
+      "source_path": "src/FTFCH100.src",
+      "target": "F791TRAC",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCH100",
+      "line": 346,
+      "source_path": "src/FTFCH100.src",
+      "target": "F7918030",
+      "target_kind": "literal",
+      "using": "R7918030-ErrorMessage"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 416,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7919040",
+      "target_kind": "literal",
+      "using": "R7919040-Validate-Date"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 451,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7919040",
+      "target_kind": "literal",
+      "using": "R7919040-Validate-Date"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 486,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7919040",
+      "target_kind": "literal",
+      "using": "R7919040-Validate-Date"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 521,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7919040",
+      "target_kind": "literal",
+      "using": "R7919040-Validate-Date"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 664,
+      "source_path": "src/FTFCK100.src",
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "using": "R115ISC0-Sys-Code 06450000"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 1084,
+      "source_path": "src/FTFCK100.src",
+      "target": "F115ISR0",
+      "target_kind": "literal",
+      "using": "R115ISR0-Sys-Code-Rel 10740000"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 1286,
+      "source_path": "src/FTFCK100.src",
+      "target": "F115L050",
+      "target_kind": "literal",
+      "using": "R115L050-Initial-Check 12310000"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 1322,
+      "source_path": "src/FTFCK100.src",
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "using": "R115ISC0-Sys-Code 12549311"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 1368,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7918030",
+      "target_kind": "literal",
+      "using": "R7918030-ErrorMessage 12690000"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 188,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ISR0",
+      "target_kind": "literal",
+      "using": "R115ISR0-Sys-Code-Rel 01780099"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 222,
+      "source_path": "src/FTFCL100.src",
+      "target": "F7919070",
+      "target_kind": "literal",
+      "using": "R7919070-Timestamp 02120099"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 240,
+      "source_path": "src/FTFCL100.src",
+      "target": "F7919270",
+      "target_kind": "literal",
+      "using": "R7919270-Konv-Timestamp 02300099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 616,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "using": "R115IMC0-Main-Contract 05110099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 688,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "using": "R115IMC0-Main-Contract 05830099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 717,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "using": "R115ICA0-Contract-Amount 06120099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 770,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "using": "R115ICA0-Contract-Amount 06650099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 827,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "using": "R115ICA0-Contract-Amount 07220099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 853,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "using": "R115IEI0-Event-Info 07480099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 905,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "using": "R115IEI0-Event-Info 08000099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 958,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "using": "R115IEI0-Event-Info 08470099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 999,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115L030",
+      "target_kind": "literal",
+      "using": "R115L030-Set-Timestamp 08880099"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 1030,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115L020",
+      "target_kind": "literal",
+      "using": "R115L020-Gen-Contract-No 09190099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 1071,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "using": "R115IMC0-Main-Contract 09600099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 1105,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "using": "R115ICA0-Contract-Amount 09940099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 1141,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "using": "R115IEI0-Event-Info 10300099"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 1172,
+      "source_path": "src/FTFCL100.src",
+      "target": "F7919010",
+      "target_kind": "literal",
+      "using": "R7919010-Dato-Pluss-Dager10610099"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 1208,
+      "source_path": "src/FTFCL100.src",
+      "target": "F7919010",
+      "target_kind": "literal",
+      "using": "R7919010-Dato-Pluss-Dager10889999"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 1231,
+      "source_path": "src/FTFCL100.src",
+      "target": "F7919090",
+      "target_kind": "literal",
+      "using": "R7919090-Helligdager 10950099"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 1251,
+      "source_path": "src/FTFCL100.src",
+      "target": "F7919010",
+      "target_kind": "literal",
+      "using": "R7919010-Dato-Pluss-Dager11150099"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 1269,
+      "source_path": "src/FTFCL100.src",
+      "target": "F7919010",
+      "target_kind": "literal",
+      "using": "R7919010-Dato-Pluss-Dager11330099"
+    },
+    {
+      "boundary": "internal",
+      "caller": "FTFCL100",
+      "line": 1295,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115L090",
+      "target_kind": "literal",
+      "using": "R115L090-Del-Charges 11590099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 1331,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115L040",
+      "target_kind": "literal",
+      "using": "R115L040-Count-Statuslist11950099"
+    }
+  ],
+  "copy_edges": [
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115L020.copy",
+      "line": 73,
+      "member": "R115L020",
+      "parent": "F115L020",
+      "parent_path": "src/F115L020.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7918030.copy",
+      "line": 79,
+      "member": "R7918030",
+      "parent": "F115L020",
+      "parent_path": "src/F115L020.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115ISC0.copy",
+      "line": 81,
+      "member": "R115ISC0",
+      "parent": "F115L020",
+      "parent_path": "src/F115L020.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 87,
+      "member": "R7919999",
+      "parent": "F115L020",
+      "parent_path": "src/F115L020.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115L090.copy",
+      "line": 33,
+      "member": "R115L090",
+      "parent": "F115L090",
+      "parent_path": "src/F115L090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115IPC0.copy",
+      "line": 39,
+      "member": "R115IPC0",
+      "parent": "F115L090",
+      "parent_path": "src/F115L090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115ICH0.copy",
+      "line": 41,
+      "member": "R115ICH0",
+      "parent": "F115L090",
+      "parent_path": "src/F115L090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7918030.copy",
+      "line": 43,
+      "member": "R7918030",
+      "parent": "F115L090",
+      "parent_path": "src/F115L090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115X000.copy",
+      "line": 44,
+      "member": "R115X000",
+      "parent": "F115L090",
+      "parent_path": "src/F115L090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 49,
+      "member": "R7919999",
+      "parent": "F115L090",
+      "parent_path": "src/F115L090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919010.copy",
+      "line": 52,
+      "member": "R7919010",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791901W.copy",
+      "line": 53,
+      "member": "R791901W",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919060.copy",
+      "line": 55,
+      "member": "R7919060",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791906W.copy",
+      "line": 56,
+      "member": "R791906W",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919010.copy",
+      "line": 61,
+      "member": "R7919010",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": true
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 64,
+      "member": "R7919999",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791901G.copy",
+      "line": 71,
+      "member": "R791901G",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791901P.copy",
+      "line": 95,
+      "member": "R791901P",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791906P.copy",
+      "line": 96,
+      "member": "R791906P",
+      "parent": "F7919010",
+      "parent_path": "src/F7919010.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919070.copy",
+      "line": 98,
+      "member": "R7919070",
+      "parent": "F7919070",
+      "parent_path": "src/F7919070.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919070.copy",
+      "line": 103,
+      "member": "R7919070",
+      "parent": "F7919070",
+      "parent_path": "src/F7919070.src",
+      "replacing": true
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 106,
+      "member": "R7919999",
+      "parent": "F7919070",
+      "parent_path": "src/F7919070.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791907G.copy",
+      "line": 113,
+      "member": "R791907G",
+      "parent": "F7919070",
+      "parent_path": "src/F7919070.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919090.copy",
+      "line": 48,
+      "member": "R7919090",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919010.copy",
+      "line": 181,
+      "member": "R7919010",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791901W.copy",
+      "line": 182,
+      "member": "R791901W",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919020.copy",
+      "line": 184,
+      "member": "R7919020",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791902W.copy",
+      "line": 185,
+      "member": "R791902W",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919040.copy",
+      "line": 187,
+      "member": "R7919040",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791904W.copy",
+      "line": 188,
+      "member": "R791904W",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919050.copy",
+      "line": 190,
+      "member": "R7919050",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791905W.copy",
+      "line": 191,
+      "member": "R791905W",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919060.copy",
+      "line": 193,
+      "member": "R7919060",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791906W.copy",
+      "line": 194,
+      "member": "R791906W",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919090.copy",
+      "line": 199,
+      "member": "R7919090",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": true
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 202,
+      "member": "R7919999",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791909G.copy",
+      "line": 209,
+      "member": "R791909G",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791901P.copy",
+      "line": 1061,
+      "member": "R791901P",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791902P.copy",
+      "line": 1062,
+      "member": "R791902P",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791904P.copy",
+      "line": 1063,
+      "member": "R791904P",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791905P.copy",
+      "line": 1064,
+      "member": "R791905P",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791906P.copy",
+      "line": 1065,
+      "member": "R791906P",
+      "parent": "F7919090",
+      "parent_path": "src/F7919090.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919270.copy",
+      "line": 60,
+      "member": "R7919270",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919040.copy",
+      "line": 117,
+      "member": "R7919040",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791904W.copy",
+      "line": 118,
+      "member": "R791904W",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919050.copy",
+      "line": 120,
+      "member": "R7919050",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791905W.copy",
+      "line": 121,
+      "member": "R791905W",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919060.copy",
+      "line": 123,
+      "member": "R7919060",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791906W.copy",
+      "line": 124,
+      "member": "R791906W",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919270.copy",
+      "line": 129,
+      "member": "R7919270",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": true
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 132,
+      "member": "R7919999",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791927G.copy",
+      "line": 139,
+      "member": "R791927G",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791904P.copy",
+      "line": 624,
+      "member": "R791904P",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791905P.copy",
+      "line": 625,
+      "member": "R791905P",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791906P.copy",
+      "line": 626,
+      "member": "R791906P",
+      "parent": "F7919270",
+      "parent_path": "src/F7919270.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7918030.copy",
+      "line": 64,
+      "member": "R7918030",
+      "parent": "FTFCH100",
+      "parent_path": "src/FTFCH100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R791TRAC.copy",
+      "line": 66,
+      "member": "R791TRAC",
+      "parent": "FTFCH100",
+      "parent_path": "src/FTFCH100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R400CH02.copy",
+      "line": 74,
+      "member": "R400CH02",
+      "parent": "FTFCH100",
+      "parent_path": "src/FTFCH100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/RTFCE100.copy",
+      "line": 79,
+      "member": "RTFCE100",
+      "parent": "FTFCH100",
+      "parent_path": "src/FTFCH100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 83,
+      "member": "R7919999",
+      "parent": "FTFCH100",
+      "parent_path": "src/FTFCH100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919040.copy",
+      "line": 68,
+      "member": "R7919040",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115ISC0.copy",
+      "line": 77,
+      "member": "R115ISC0",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115ISR0.copy",
+      "line": 79,
+      "member": "R115ISR0",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115L050.copy",
+      "line": 81,
+      "member": "R115L050",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919010.copy",
+      "line": 83,
+      "member": "R7919010",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7918030.copy",
+      "line": 84,
+      "member": "R7918030",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115X000.copy",
+      "line": 85,
+      "member": "R115X000",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R400CH02.copy",
+      "line": 93,
+      "member": "R400CH02",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/RTFCE100.copy",
+      "line": 98,
+      "member": "RTFCE100",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 102,
+      "member": "R7919999",
+      "parent": "FTFCK100",
+      "parent_path": "src/FTFCK100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115IMC0.copy",
+      "line": 94,
+      "member": "R115IMC0",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115ICA0.copy",
+      "line": 95,
+      "member": "R115ICA0",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115IEI0.copy",
+      "line": 96,
+      "member": "R115IEI0",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115ISR0.copy",
+      "line": 97,
+      "member": "R115ISR0",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115L020.copy",
+      "line": 98,
+      "member": "R115L020",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115L030.copy",
+      "line": 99,
+      "member": "R115L030",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115L040.copy",
+      "line": 100,
+      "member": "R115L040",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R115L090.copy",
+      "line": 101,
+      "member": "R115L090",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919010.copy",
+      "line": 103,
+      "member": "R7919010",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919070.copy",
+      "line": 104,
+      "member": "R7919070",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919090.copy",
+      "line": 105,
+      "member": "R7919090",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919270.copy",
+      "line": 106,
+      "member": "R7919270",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R400CH02.copy",
+      "line": 115,
+      "member": "R400CH02",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/RTFCE100.copy",
+      "line": 120,
+      "member": "RTFCE100",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    },
+    {
+      "depth": 1,
+      "inventory_path": "copybook/R7919999.copy",
+      "line": 124,
+      "member": "R7919999",
+      "parent": "FTFCL100",
+      "parent_path": "src/FTFCL100.src",
+      "replacing": false
+    }
+  ],
+  "corpus": "STG/TFC10",
+  "counts": {
+    "calls": 50,
+    "copy_edges": 85,
+    "copybooks": 40,
+    "external_calls": 39,
+    "sources": 9,
+    "unresolved_copybooks": 0
+  },
+  "external_calls": [
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 151,
+      "source_path": "src/F115L020.src",
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "using": "R115ISC0-Sys-Code 01330002"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 202,
+      "source_path": "src/F115L020.src",
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "using": "R115ISC0-Sys-Code 01840002"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 305,
+      "source_path": "src/F115L020.src",
+      "target": "F115L999",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 335,
+      "source_path": "src/F115L020.src",
+      "target": "F115L999",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L020",
+      "line": 362,
+      "source_path": "src/F115L020.src",
+      "target": "F7918030",
+      "target_kind": "literal",
+      "using": "R7918030-ErrorMessage 03260002"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 119,
+      "source_path": "src/F115L090.src",
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "using": "R115IPC0-Part-Charge 01190000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 142,
+      "source_path": "src/F115L090.src",
+      "target": "F115IPC0",
+      "target_kind": "literal",
+      "using": "R115IPC0-Part-Charge 01420000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 184,
+      "source_path": "src/F115L090.src",
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "using": "R115ICH0-Main-Charge 01840000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 207,
+      "source_path": "src/F115L090.src",
+      "target": "F115ICH0",
+      "target_kind": "literal",
+      "using": "R115ICH0-Main-Charge 02070000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 236,
+      "source_path": "src/F115L090.src",
+      "target": "F7918030",
+      "target_kind": "literal",
+      "using": "R7918030-ErrorMessage 02360000"
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 261,
+      "source_path": "src/F115L090.src",
+      "target": "F115L999",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "F115L090",
+      "line": 291,
+      "source_path": "src/F115L090.src",
+      "target": "F115L999",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "F7919070",
+      "line": 181,
+      "source_path": "src/F7919070.src",
+      "target": "F7919071",
+      "target_kind": "literal",
+      "using": "W-DB2-TMS 01780014"
+    },
+    {
+      "boundary": "external",
+      "caller": "F7919070",
+      "line": 201,
+      "source_path": "src/F7919070.src",
+      "target": "F7919072",
+      "target_kind": "literal",
+      "using": "W-COB-Date 01980014"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCH100",
+      "line": 319,
+      "source_path": "src/FTFCH100.src",
+      "target": "F791TRAC",
+      "target_kind": "literal",
+      "using": null
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCH100",
+      "line": 346,
+      "source_path": "src/FTFCH100.src",
+      "target": "F7918030",
+      "target_kind": "literal",
+      "using": "R7918030-ErrorMessage"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 416,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7919040",
+      "target_kind": "literal",
+      "using": "R7919040-Validate-Date"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 451,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7919040",
+      "target_kind": "literal",
+      "using": "R7919040-Validate-Date"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 486,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7919040",
+      "target_kind": "literal",
+      "using": "R7919040-Validate-Date"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 521,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7919040",
+      "target_kind": "literal",
+      "using": "R7919040-Validate-Date"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 664,
+      "source_path": "src/FTFCK100.src",
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "using": "R115ISC0-Sys-Code 06450000"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 1084,
+      "source_path": "src/FTFCK100.src",
+      "target": "F115ISR0",
+      "target_kind": "literal",
+      "using": "R115ISR0-Sys-Code-Rel 10740000"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 1286,
+      "source_path": "src/FTFCK100.src",
+      "target": "F115L050",
+      "target_kind": "literal",
+      "using": "R115L050-Initial-Check 12310000"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 1322,
+      "source_path": "src/FTFCK100.src",
+      "target": "F115ISC0",
+      "target_kind": "literal",
+      "using": "R115ISC0-Sys-Code 12549311"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCK100",
+      "line": 1368,
+      "source_path": "src/FTFCK100.src",
+      "target": "F7918030",
+      "target_kind": "literal",
+      "using": "R7918030-ErrorMessage 12690000"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 188,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ISR0",
+      "target_kind": "literal",
+      "using": "R115ISR0-Sys-Code-Rel 01780099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 616,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "using": "R115IMC0-Main-Contract 05110099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 688,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "using": "R115IMC0-Main-Contract 05830099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 717,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "using": "R115ICA0-Contract-Amount 06120099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 770,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "using": "R115ICA0-Contract-Amount 06650099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 827,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "using": "R115ICA0-Contract-Amount 07220099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 853,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "using": "R115IEI0-Event-Info 07480099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 905,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "using": "R115IEI0-Event-Info 08000099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 958,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "using": "R115IEI0-Event-Info 08470099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 999,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115L030",
+      "target_kind": "literal",
+      "using": "R115L030-Set-Timestamp 08880099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 1071,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IMC0",
+      "target_kind": "literal",
+      "using": "R115IMC0-Main-Contract 09600099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 1105,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115ICA0",
+      "target_kind": "literal",
+      "using": "R115ICA0-Contract-Amount 09940099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 1141,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115IEI0",
+      "target_kind": "literal",
+      "using": "R115IEI0-Event-Info 10300099"
+    },
+    {
+      "boundary": "external",
+      "caller": "FTFCL100",
+      "line": 1331,
+      "source_path": "src/FTFCL100.src",
+      "target": "F115L040",
+      "target_kind": "literal",
+      "using": "R115L040-Count-Statuslist11950099"
+    }
+  ],
+  "members": [
+    {
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/F115L020.src",
+      "member": "F115L020",
+      "parent_copy": null,
+      "sha256": "90fbea456828f19cb5cc78579e57590dc5212255a10a09f1959b4e2e165cf39f",
+      "size": 31590,
+      "source_path": "src/F115L020.src"
+    },
+    {
+      "depth": 0,
+      "encoding": "utf-8",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/F115L090.src",
+      "member": "F115L090",
+      "parent_copy": null,
+      "sha256": "72dce3b2e611d11d32020fad636b0940ce71469b4cfb0826b41b1f56f5d29ec3",
+      "size": 30699,
+      "source_path": "src/F115L090.src"
+    },
+    {
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/F7919010.src",
+      "member": "F7919010",
+      "parent_copy": null,
+      "sha256": "ab18eab208da543a4b2364de71e6532ce050be976701d5acea8a2578ef9db9bd",
+      "size": 14661,
+      "source_path": "src/F7919010.src"
+    },
+    {
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/F7919070.src",
+      "member": "F7919070",
+      "parent_copy": null,
+      "sha256": "0ed70ea6f05c82ad6c1d9f352a7b77fc0c03fbd64b7606a73c72ee40f7708aa0",
+      "size": 31023,
+      "source_path": "src/F7919070.src"
+    },
+    {
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/F7919090.src",
+      "member": "F7919090",
+      "parent_copy": null,
+      "sha256": "284c2e56269dc2fa6525863a18b5a78146076d562d9676f8815bfcbf054bd5f8",
+      "size": 86265,
+      "source_path": "src/F7919090.src"
+    },
+    {
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/F7919270.src",
+      "member": "F7919270",
+      "parent_copy": null,
+      "sha256": "c5212aa184040910a3ae852584cecd6c29271fcea05f67f8faf0234d13bb74ee",
+      "size": 50787,
+      "source_path": "src/F7919270.src"
+    },
+    {
+      "depth": 0,
+      "encoding": "utf-8",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/FTFCH100.src",
+      "member": "FTFCH100",
+      "parent_copy": null,
+      "sha256": "f0e76e6337a0b058e7a835ec736d8b81750e6ba1467e127965681d398a49fcbf",
+      "size": 31104,
+      "source_path": "src/FTFCH100.src"
+    },
+    {
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/FTFCK100.src",
+      "member": "FTFCK100",
+      "parent_copy": null,
+      "sha256": "65a932e7061bd75050f5b34af8fc43576f971b0899f6aacb0bbb0e2b65f32724",
+      "size": 119232,
+      "source_path": "src/FTFCK100.src"
+    },
+    {
+      "depth": 0,
+      "encoding": "iso-8859-1",
+      "inventory_blob": null,
+      "inventory_commit": null,
+      "kind": "source",
+      "legacy_source_path": "onehop/src/FTFCL100.src",
+      "member": "FTFCL100",
+      "parent_copy": null,
+      "sha256": "0c74a5c32b5eb0821883b116802167c74cb01ee666678df8cbc8910ac950e66b",
+      "size": 120123,
+      "source_path": "src/FTFCL100.src"
+    },
+    {
+      "copied_to": "copybook/R115ICA0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "10ab6290715102bc0cbbc78cf5390c453fd2e1bf",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115ICA0.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115ICA0.copy",
+      "member": "R115ICA0",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115ICA0.copy",
+        "line": 95,
+        "member": "R115ICA0",
+        "parent": "FTFCL100",
+        "parent_path": "src/FTFCL100.src",
+        "replacing": false
+      },
+      "sha256": "d5d4ddad0ac9ef2c1d18c9fc64a3ada385f509adf37ad21862f75270c12b0f86",
+      "size": 13689,
+      "source_path": "copybook/R115ICA0.copy"
+    },
+    {
+      "copied_to": "copybook/R115ICH0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "e3880ad0913381637fb64b9eb972a82ec3ae4cf7",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115ICH0.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115ICH0.copy",
+      "member": "R115ICH0",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115ICH0.copy",
+        "line": 41,
+        "member": "R115ICH0",
+        "parent": "F115L090",
+        "parent_path": "src/F115L090.src",
+        "replacing": false
+      },
+      "sha256": "5aa686e2bc45ba08cbfba0c82510a218e7cc71c5a6848342bf5d480fbc589ca1",
+      "size": 15957,
+      "source_path": "copybook/R115ICH0.copy"
+    },
+    {
+      "copied_to": "copybook/R115IEI0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "2cfda41881fa8780ecd797d5e46faa01aefa73bd",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115IEI0.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115IEI0.copy",
+      "member": "R115IEI0",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115IEI0.copy",
+        "line": 96,
+        "member": "R115IEI0",
+        "parent": "FTFCL100",
+        "parent_path": "src/FTFCL100.src",
+        "replacing": false
+      },
+      "sha256": "7223f88e4df6d67dba4aeea76bd4674de49e241674389274568c598802065bf1",
+      "size": 17253,
+      "source_path": "copybook/R115IEI0.copy"
+    },
+    {
+      "copied_to": "copybook/R115IMC0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "00fed1ac6da4f518bc26038db13dfcd9486845a7",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115IMC0.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115IMC0.copy",
+      "member": "R115IMC0",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115IMC0.copy",
+        "line": 94,
+        "member": "R115IMC0",
+        "parent": "FTFCL100",
+        "parent_path": "src/FTFCL100.src",
+        "replacing": false
+      },
+      "sha256": "0359c10029b4595eb9a4d558bc463efccdd22d9c3fdb91e4f570c8b57e831521",
+      "size": 16848,
+      "source_path": "copybook/R115IMC0.copy"
+    },
+    {
+      "copied_to": "copybook/R115IPC0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "ec86d4ee8eb676393bfec25f7f1bdb11aa2797da",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115IPC0.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115IPC0.copy",
+      "member": "R115IPC0",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115IPC0.copy",
+        "line": 39,
+        "member": "R115IPC0",
+        "parent": "F115L090",
+        "parent_path": "src/F115L090.src",
+        "replacing": false
+      },
+      "sha256": "ef6bab9105ecdee260c848a174d89b247f814f4ac9f7fa4843d99595a314424b",
+      "size": 15795,
+      "source_path": "copybook/R115IPC0.copy"
+    },
+    {
+      "copied_to": "copybook/R115ISC0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "d90310c2c00790e5a394ca8e313b3842e2c0ce25",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115ISC0.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115ISC0.copy",
+      "member": "R115ISC0",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115ISC0.copy",
+        "line": 81,
+        "member": "R115ISC0",
+        "parent": "F115L020",
+        "parent_path": "src/F115L020.src",
+        "replacing": false
+      },
+      "sha256": "1e2f5e0072872c1020f2e6499fe07172f981489b0aaab986dab01e8faad2eeea",
+      "size": 13122,
+      "source_path": "copybook/R115ISC0.copy"
+    },
+    {
+      "copied_to": "copybook/R115ISR0.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "c77729a6b3d7be1539b14e5983177a70b88bed73",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115ISR0.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115ISR0.copy",
+      "member": "R115ISR0",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115ISR0.copy",
+        "line": 79,
+        "member": "R115ISR0",
+        "parent": "FTFCK100",
+        "parent_path": "src/FTFCK100.src",
+        "replacing": false
+      },
+      "sha256": "8fad70045297da8c6a1cbaf384c7106292d15b4e60c84aed1ff8eafc6589d720",
+      "size": 10611,
+      "source_path": "copybook/R115ISR0.copy"
+    },
+    {
+      "copied_to": "copybook/R115L020.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "44d24311171d89cb934683617fa32e778cfe8a40",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115L020.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115L020.copy",
+      "member": "R115L020",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115L020.copy",
+        "line": 73,
+        "member": "R115L020",
+        "parent": "F115L020",
+        "parent_path": "src/F115L020.src",
+        "replacing": false
+      },
+      "sha256": "bcd30f1c9c3d1f834c7909e8097b24712411f8d1899e672c359afe43fdda9ac4",
+      "size": 4941,
+      "source_path": "copybook/R115L020.copy"
+    },
+    {
+      "copied_to": "copybook/R115L030.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "e62035f2366d1f5e1c4ba8e0a30a324b52d608c3",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115L030.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115L030.copy",
+      "member": "R115L030",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115L030.copy",
+        "line": 99,
+        "member": "R115L030",
+        "parent": "FTFCL100",
+        "parent_path": "src/FTFCL100.src",
+        "replacing": false
+      },
+      "sha256": "5b9a91d3cee9f53cf4d93bbd69ca417c928c68a09a2141af346f41af6e579987",
+      "size": 4374,
+      "source_path": "copybook/R115L030.copy"
+    },
+    {
+      "copied_to": "copybook/R115L040.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "0064ae521e8313f615395f0ee30b8c4892a3de62",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115L040.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115L040.copy",
+      "member": "R115L040",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115L040.copy",
+        "line": 100,
+        "member": "R115L040",
+        "parent": "FTFCL100",
+        "parent_path": "src/FTFCL100.src",
+        "replacing": false
+      },
+      "sha256": "7dd40128183acd048aa7182fb2319c7900326e9e48572aaf6b40579221a16679",
+      "size": 4860,
+      "source_path": "copybook/R115L040.copy"
+    },
+    {
+      "copied_to": "copybook/R115L050.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "5e64cafdedfed6c5ae187388ba9324adf9916803",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115L050.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115L050.copy",
+      "member": "R115L050",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115L050.copy",
+        "line": 81,
+        "member": "R115L050",
+        "parent": "FTFCK100",
+        "parent_path": "src/FTFCK100.src",
+        "replacing": false
+      },
+      "sha256": "bf14c445b1041067ac542233124543263fa7af4bf9128f2393711d8b4e194f2e",
+      "size": 3645,
+      "source_path": "copybook/R115L050.copy"
+    },
+    {
+      "copied_to": "copybook/R115L090.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "6c27b4d01653aa77b4fd32b67378eb70a93739ea",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115L090.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115L090.copy",
+      "member": "R115L090",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115L090.copy",
+        "line": 33,
+        "member": "R115L090",
+        "parent": "F115L090",
+        "parent_path": "src/F115L090.src",
+        "replacing": false
+      },
+      "sha256": "62c41f3419790ef495863fccdae56705e7c21cf1ed727551ef579a769216a8d0",
+      "size": 2592,
+      "source_path": "copybook/R115L090.copy"
+    },
+    {
+      "copied_to": "copybook/R115X000.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "6beafc0306756a051e826babf92978de1101eafd",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R115X000.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R115X000.copy",
+      "member": "R115X000",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R115X000.copy",
+        "line": 44,
+        "member": "R115X000",
+        "parent": "F115L090",
+        "parent_path": "src/F115L090.src",
+        "replacing": false
+      },
+      "sha256": "035a0423ec1395ff20195c54a3a15db640818e54da95535bee01d00dff1e4819",
+      "size": 5913,
+      "source_path": "copybook/R115X000.copy"
+    },
+    {
+      "copied_to": "copybook/R400CH02.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "0444e1a4d6c8002a58096c164e9a2f273405abdf",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R400CH02.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R400CH02.copy",
+      "member": "R400CH02",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R400CH02.copy",
+        "line": 74,
+        "member": "R400CH02",
+        "parent": "FTFCH100",
+        "parent_path": "src/FTFCH100.src",
+        "replacing": false
+      },
+      "sha256": "f1b6485c63511cc89bb332b876cb936f958b84d0eca0f2e78ea14cfadeb759f3",
+      "size": 8911,
+      "source_path": "copybook/R400CH02.copy"
+    },
+    {
+      "copied_to": "copybook/R7918030.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "cdd9a6b9c1e484d797f6673e508ab4a17d9f6c9b",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7918030.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7918030.copy",
+      "member": "R7918030",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7918030.copy",
+        "line": 79,
+        "member": "R7918030",
+        "parent": "F115L020",
+        "parent_path": "src/F115L020.src",
+        "replacing": false
+      },
+      "sha256": "8b057e29c72c859773f6e8f0131bb10528b565e743f31b08f063f8eab1072a01",
+      "size": 11269,
+      "source_path": "copybook/R7918030.copy"
+    },
+    {
+      "copied_to": "copybook/R7919010.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "0d1c55ada687112d5c365c74dde9433c0a714e6b",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919010.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919010.copy",
+      "member": "R7919010",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919010.copy",
+        "line": 52,
+        "member": "R7919010",
+        "parent": "F7919010",
+        "parent_path": "src/F7919010.src",
+        "replacing": false
+      },
+      "sha256": "e4ea46a8d6b01d5fb75c64ae47ff3dfaffeb2f94d614b194a25d3444ef753651",
+      "size": 4228,
+      "source_path": "copybook/R7919010.copy"
+    },
+    {
+      "copied_to": "copybook/R791901G.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "c2f2ee734b9c63192a74d6aa1c7061174ef8579e",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791901G.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791901G.copy",
+      "member": "R791901G",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791901G.copy",
+        "line": 71,
+        "member": "R791901G",
+        "parent": "F7919010",
+        "parent_path": "src/F7919010.src",
+        "replacing": false
+      },
+      "sha256": "decab864267a06d06b46f2e81dbed07dc74e6d200f4da7367414eb2e0b49e942",
+      "size": 2843,
+      "source_path": "copybook/R791901G.copy"
+    },
+    {
+      "copied_to": "copybook/R791901P.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "499d91d71fbe870ffe30f011deb0169c904031f2",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791901P.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791901P.copy",
+      "member": "R791901P",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791901P.copy",
+        "line": 95,
+        "member": "R791901P",
+        "parent": "F7919010",
+        "parent_path": "src/F7919010.src",
+        "replacing": false
+      },
+      "sha256": "ea13daaa42dae9086e993f650939b14ef286fba250e0372c95e0e82f98a47421",
+      "size": 44598,
+      "source_path": "copybook/R791901P.copy"
+    },
+    {
+      "copied_to": "copybook/R791901W.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "30907757b79827d47ba325400bc6b911d65be6a4",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791901W.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791901W.copy",
+      "member": "R791901W",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791901W.copy",
+        "line": 53,
+        "member": "R791901W",
+        "parent": "F7919010",
+        "parent_path": "src/F7919010.src",
+        "replacing": false
+      },
+      "sha256": "910eb0d9be09deda9103bb15e078274a8e9f214a4d4e63147c94283269bd9075",
+      "size": 6164,
+      "source_path": "copybook/R791901W.copy"
+    },
+    {
+      "copied_to": "copybook/R7919020.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "1ad42ea15c28554e35b186b75350a31de69da296",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919020.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919020.copy",
+      "member": "R7919020",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919020.copy",
+        "line": 184,
+        "member": "R7919020",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "2c31697919f30151686e2bcc9a7c4e2a8a17645649c91440a86d353d0e68099f",
+      "size": 4797,
+      "source_path": "copybook/R7919020.copy"
+    },
+    {
+      "copied_to": "copybook/R791902P.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "b1bfa9bf7e424d776ca39c95bcf5c0928c7f3c9d",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791902P.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791902P.copy",
+      "member": "R791902P",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791902P.copy",
+        "line": 1062,
+        "member": "R791902P",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "56e2429b6d450d50254bacecc3254110614ec22ac1d5009c7449a3a3749d56c7",
+      "size": 40126,
+      "source_path": "copybook/R791902P.copy"
+    },
+    {
+      "copied_to": "copybook/R791902W.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "d1f4e4e2cb0149988ca993004a1a3bba6f39482d",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791902W.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791902W.copy",
+      "member": "R791902W",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791902W.copy",
+        "line": 185,
+        "member": "R791902W",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "5a8992919622f0d2fa68ecb494c6e12bb4fc5a414ccf891ed1a47ec25bc97fb2",
+      "size": 3004,
+      "source_path": "copybook/R791902W.copy"
+    },
+    {
+      "copied_to": "copybook/R7919040.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "eec5fed673f226485207aca73872d51d1539d670",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919040.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919040.copy",
+      "member": "R7919040",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919040.copy",
+        "line": 187,
+        "member": "R7919040",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "ac473aa7741f5baac08ccf6906ada2daff6beb5962754122b5a51a555f21f304",
+      "size": 3410,
+      "source_path": "copybook/R7919040.copy"
+    },
+    {
+      "copied_to": "copybook/R791904P.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "f48c13bd48f1af7384f53c61b2c3dfd99859d652",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791904P.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791904P.copy",
+      "member": "R791904P",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791904P.copy",
+        "line": 1063,
+        "member": "R791904P",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "19ffe2a2d409b1b5025d409abe82f0cadc0b83d603fc7a403bf7af8976e11c93",
+      "size": 10781,
+      "source_path": "copybook/R791904P.copy"
+    },
+    {
+      "copied_to": "copybook/R791904W.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "76edb49554eee2457152d9a8d07a1bde33544e17",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791904W.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791904W.copy",
+      "member": "R791904W",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791904W.copy",
+        "line": 188,
+        "member": "R791904W",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "c779a375e65c6569c08070a2b0a5d62d1386966d54bb991a7baa969f5754e0c8",
+      "size": 2275,
+      "source_path": "copybook/R791904W.copy"
+    },
+    {
+      "copied_to": "copybook/R7919050.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "9cffd74a54cc63cb97b9d18366321ac81e95a627",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919050.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919050.copy",
+      "member": "R7919050",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919050.copy",
+        "line": 190,
+        "member": "R7919050",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "c07d530fe9c89a3cd870b2ef485b616b4e603c3a5db889b20d32e304ed8cb51c",
+      "size": 4959,
+      "source_path": "copybook/R7919050.copy"
+    },
+    {
+      "copied_to": "copybook/R791905P.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "2002988eddfa70c83ead879e2e31863375bedfa1",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791905P.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791905P.copy",
+      "member": "R791905P",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791905P.copy",
+        "line": 1064,
+        "member": "R791905P",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "f4f57eda5a8d82267b4a16aae7b9d69d15cde965d4c49430a120bfb1c4c70de9",
+      "size": 19695,
+      "source_path": "copybook/R791905P.copy"
+    },
+    {
+      "copied_to": "copybook/R791905W.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "2d8e6db98d6ae87e20690b8f51a57760568dff86",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791905W.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791905W.copy",
+      "member": "R791905W",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791905W.copy",
+        "line": 191,
+        "member": "R791905W",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "4373988ca331f58d330eba2b7d41fa197965f4d432bea18daf1e3a6ce3d89d9a",
+      "size": 3815,
+      "source_path": "copybook/R791905W.copy"
+    },
+    {
+      "copied_to": "copybook/R7919060.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "baebb2804b439b362fec6196998017c862e560c0",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919060.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919060.copy",
+      "member": "R7919060",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919060.copy",
+        "line": 55,
+        "member": "R7919060",
+        "parent": "F7919010",
+        "parent_path": "src/F7919010.src",
+        "replacing": false
+      },
+      "sha256": "1ce1f2589456309270159412d71b2b2a4c432c841aea771f57fe6bcf9acb7073",
+      "size": 3333,
+      "source_path": "copybook/R7919060.copy"
+    },
+    {
+      "copied_to": "copybook/R791906P.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "6c0af63fcfa01ed98ac08be9fca9400f5d2f3685",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791906P.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791906P.copy",
+      "member": "R791906P",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791906P.copy",
+        "line": 96,
+        "member": "R791906P",
+        "parent": "F7919010",
+        "parent_path": "src/F7919010.src",
+        "replacing": false
+      },
+      "sha256": "65507afc6f16f8029641c6bac98a4b62a41cccdd96866cd7bbaab4b8a0bffb9d",
+      "size": 8926,
+      "source_path": "copybook/R791906P.copy"
+    },
+    {
+      "copied_to": "copybook/R791906W.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "b4fafefb2e0f690fd97ccccb544beeaa9bc176ec",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791906W.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791906W.copy",
+      "member": "R791906W",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791906W.copy",
+        "line": 56,
+        "member": "R791906W",
+        "parent": "F7919010",
+        "parent_path": "src/F7919010.src",
+        "replacing": false
+      },
+      "sha256": "5a18cbfd434f7fd8459c1a3cfd7539250c2a35b817c315caac1d9b20daeb49e0",
+      "size": 2114,
+      "source_path": "copybook/R791906W.copy"
+    },
+    {
+      "copied_to": "copybook/R7919070.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "a444213b4e692905c1465197a1e8a4d6a55cbe24",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919070.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919070.copy",
+      "member": "R7919070",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919070.copy",
+        "line": 98,
+        "member": "R7919070",
+        "parent": "F7919070",
+        "parent_path": "src/F7919070.src",
+        "replacing": false
+      },
+      "sha256": "04ef6125198f555afe295508deff9191c69453106997f67e5589d78fc931c259",
+      "size": 5371,
+      "source_path": "copybook/R7919070.copy"
+    },
+    {
+      "copied_to": "copybook/R791907G.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "f9d500785f45b3ce1cc7900b72e1f5efb14af281",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791907G.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791907G.copy",
+      "member": "R791907G",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791907G.copy",
+        "line": 113,
+        "member": "R791907G",
+        "parent": "F7919070",
+        "parent_path": "src/F7919070.src",
+        "replacing": false
+      },
+      "sha256": "179e3f089f29bb0276d80e3a79ff4266fd078a89b208e16edd27bbdd48aaa2d6",
+      "size": 3330,
+      "source_path": "copybook/R791907G.copy"
+    },
+    {
+      "copied_to": "copybook/R7919090.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "e60782da23ca646e797482ba7f32e4cfd996178b",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919090.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919090.copy",
+      "member": "R7919090",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919090.copy",
+        "line": 48,
+        "member": "R7919090",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "5e006635a2bd834602950818a7a530db0eb31e20eab41bff982409aa373109f2",
+      "size": 7239,
+      "source_path": "copybook/R7919090.copy"
+    },
+    {
+      "copied_to": "copybook/R791909G.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "1246bd93c5b4949a7d6f565ea4094b796a490ea2",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791909G.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791909G.copy",
+      "member": "R791909G",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791909G.copy",
+        "line": 209,
+        "member": "R791909G",
+        "parent": "F7919090",
+        "parent_path": "src/F7919090.src",
+        "replacing": false
+      },
+      "sha256": "27d084c93c3d996d89ca09a615b368af022a1652ccb78c79e487b53a34cb4c9e",
+      "size": 5841,
+      "source_path": "copybook/R791909G.copy"
+    },
+    {
+      "copied_to": "copybook/R7919270.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "68049fe665f844f19d5ab1f539e79aa76f1ed97a",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919270.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919270.copy",
+      "member": "R7919270",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919270.copy",
+        "line": 60,
+        "member": "R7919270",
+        "parent": "F7919270",
+        "parent_path": "src/F7919270.src",
+        "replacing": false
+      },
+      "sha256": "04255eda04330c6b2db5dc09498367e8aa4e6b32dd935a2bbd9f550a2f1457f3",
+      "size": 6829,
+      "source_path": "copybook/R7919270.copy"
+    },
+    {
+      "copied_to": "copybook/R791927G.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "021f51e7163f773b1842f49ca06d3e71b248ecb9",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791927G.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791927G.copy",
+      "member": "R791927G",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791927G.copy",
+        "line": 139,
+        "member": "R791927G",
+        "parent": "F7919270",
+        "parent_path": "src/F7919270.src",
+        "replacing": false
+      },
+      "sha256": "2edc96593b65f60e8f8479ead29a42ecaa8fee82391cadd1bea6b0929cc20a22",
+      "size": 8519,
+      "source_path": "copybook/R791927G.copy"
+    },
+    {
+      "copied_to": "copybook/R7919999.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "c5fb1ede3c9cfa98f26a57313b8830f38ca30287",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R7919999.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R7919999.copy",
+      "member": "R7919999",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R7919999.copy",
+        "line": 87,
+        "member": "R7919999",
+        "parent": "F115L020",
+        "parent_path": "src/F115L020.src",
+        "replacing": false
+      },
+      "sha256": "2c6201d3be678d02925eefad6c209015820133ee53d0097b19151d2a3d163080",
+      "size": 4459,
+      "source_path": "copybook/R7919999.copy"
+    },
+    {
+      "copied_to": "copybook/R791TRAC.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "1dc4103593ef98cd4e3ea79706d1ff4451e9203f",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/R791TRAC.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/R791TRAC.copy",
+      "member": "R791TRAC",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/R791TRAC.copy",
+        "line": 66,
+        "member": "R791TRAC",
+        "parent": "FTFCH100",
+        "parent_path": "src/FTFCH100.src",
+        "replacing": false
+      },
+      "sha256": "496f01111d5f0d4f69d08ec46e67112260d48ffa33710feec8338d5c7e7e765c",
+      "size": 2514,
+      "source_path": "copybook/R791TRAC.copy"
+    },
+    {
+      "copied_to": "copybook/RTFCE100.copy",
+      "depth": 1,
+      "encoding": "utf-8",
+      "inventory_blob": "f3cb293a6369768d0f6b82d1923151432a8e4f34",
+      "inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+      "inventory_path": "copybook/RTFCE100.copy",
+      "kind": "copybook",
+      "legacy_source_path": "onehop/copybook/RTFCE100.copy",
+      "member": "RTFCE100",
+      "parent_copy": {
+        "depth": 1,
+        "inventory_path": "copybook/RTFCE100.copy",
+        "line": 79,
+        "member": "RTFCE100",
+        "parent": "FTFCH100",
+        "parent_path": "src/FTFCH100.src",
+        "replacing": false
+      },
+      "sha256": "e867e34a5aa891580bdb3ab879655c2b62bac9430c235c2ce03582e5b45c8cff",
+      "size": 16206,
+      "source_path": "copybook/RTFCE100.copy"
+    }
+  ],
+  "provenance": {
+    "closure_version": "2026-06-24-closure-v1",
+    "copy_resolution": "COPY and COPY ... REPLACING resolved from imported onehop files; external CALLs recorded only",
+    "importer": "cob2jav.corpus.build_tfc10_manifest",
+    "legacy_inventory_commit": "8ccdc24c6ed26687cec07f672955d1507877edba",
+    "legacy_manifest": {
+      "relative_path": "STG/TFC10/corpus-manifest.json",
+      "repository": "o.cob2jav",
+      "sha256": "ecadcf9a75c883a792c377e131e9cbcb8f1a0eecc0545b40d8e6b981ca4f3630"
+    },
+    "requested_source_root": "../old.cob2jav",
+    "resolved_source_root": "../o.cob2jav",
+    "source_bytes": "verified byte-for-byte; no text transcoding",
+    "source_repository": "o.cob2jav"
+  },
+  "schema_version": "1.0",
+  "scope": {
+    "canonical_corpus": "onehop",
+    "copybook_directory": "copybook",
+    "external_calls_are_boundaries": true,
+    "min_is_tutorial_only": true,
+    "source_directory": "src",
+    "source_members": [
+      "F115L020",
+      "F115L090",
+      "F7919010",
+      "F7919070",
+      "F7919090",
+      "F7919270",
+      "FTFCH100",
+      "FTFCK100",
+      "FTFCL100"
+    ]
+  },
+  "unresolved_copybooks": []
+}
